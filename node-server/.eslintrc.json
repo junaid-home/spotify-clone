@@ -10,6 +10,9 @@
     "ecmaVersion": "latest"
   },
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "warn",
+    "linebreak-style": "off",
+    "semi": "off",
+    "comma-dangle": "off"
   }
 }
