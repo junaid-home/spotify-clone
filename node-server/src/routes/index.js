@@ -1,7 +1,7 @@
-const userRouter = require('./user-router')
+const userRouter = require('./auth-router')
 
 function register(app) {
-  app.use('/user', userRouter)
+  app.use('/auth', userRouter)
 }
 
 module.exports = { register }
