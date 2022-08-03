@@ -3,25 +3,31 @@ import styled from '@emotion/styled/macro'
 import colors from 'styles/colors'
 import FbIcon from 'icons/fb'
 import GoogleIcon from 'icons/google'
+import Spinner from './spinner'
 
-function Button({children, variant, ...props}) {
+function Button({children, variant, loading, ...props}) {
   return (
     <ButtonWrapper variant={variant} {...props}>
-      {variant === 'fb' && (
+      {!loading && variant === 'fb' && (
         <FbIcon css={{window: 20, height: 20, padding: 0, marginRight: 10}} />
       )}
-      {variant === 'google' && (
+      {!loading && variant === 'google' && (
         <GoogleIcon
           css={{window: 19, height: 19, padding: 0, marginRight: 10}}
         />
       )}
-      {children}
+      {loading ? (
+        <Spinner color={variant === 'fb' ? null : colors.black} />
+      ) : (
+        children
+      )}
     </ButtonWrapper>
   )
 }
 
 const ButtonWrapper = styled.button(
   {
+    position: 'relative',
     fontFamily: 'Roboto, Arial',
     fontSize: 14,
     fontWeight: 'bold',
