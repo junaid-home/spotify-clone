@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import {useState} from 'react'
-import Logo from 'components/logo'
+import {useState, useLayoutEffect} from 'react'
 import styled from '@emotion/styled/macro'
-import colors from 'styles/colors'
+import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
+import {Link} from 'react-router-dom'
+import Header from 'components/header'
 import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
-import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
+import colors from 'styles/colors'
 
 function Login() {
   const [name, setName] = useState('')
@@ -27,11 +28,13 @@ function Login() {
     console.log(email, pass, name, gender, country, timestamp)
   }
 
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <div>
-      <Header>
-        <Logo />
-      </Header>
+      <Header />
       <MainSection>
         <Typography variant="label" css={{marginBottom: 10}}>
           Sign up for free to start listening.
@@ -109,11 +112,13 @@ function Login() {
           as="h2"
           css={{display: 'inline-block', margin: '20px 0'}}
         >
-          Have an account?
+          Already have an account?
         </Typography>
-        <Button fullWidth css={{marginTop: 8}} type="submit">
-          LOG IN WITH SPOTIFY
-        </Button>
+        <Link to="/login">
+          <Button fullWidth css={{marginTop: 8}} type="submit">
+            LOG IN WITH SPOTIFY
+          </Button>
+        </Link>
       </MainSection>
     </div>
   )
@@ -137,15 +142,6 @@ const MainSection = styled.div({
   padding: '40px 20px',
   margin: '0 auto',
   maxWidth: 500,
-})
-
-const Header = styled.div({
-  minWidth: '100%',
-  borderBottom: `1px solid ${colors.lightGrey}`,
-  padding: 25,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
 })
 
 export default Login

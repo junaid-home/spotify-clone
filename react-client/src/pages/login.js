@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import {useState} from 'react'
-import Logo from 'components/logo'
+import {useLayoutEffect, useState} from 'react'
 import styled from '@emotion/styled/macro'
+import {Link} from 'react-router-dom'
 import colors from 'styles/colors'
+import Header from 'components/header'
 import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
@@ -18,11 +19,13 @@ function Login() {
     console.log(email, pass)
   }
 
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <div>
-      <Header>
-        <Logo />
-      </Header>
+      <Header />
       <MainSection>
         <Typography variant="label" css={{marginBottom: 10}}>
           To continue, log in to Spotify.
@@ -60,9 +63,11 @@ function Login() {
         >
           Don't have an account?
         </Typography>
-        <Button fullWidth css={{marginTop: 8}} type="submit">
-          SIGN UP FOR SPOTIFY
-        </Button>
+        <Link to="/signup">
+          <Button fullWidth css={{marginTop: 8}} type="submit">
+            SIGN UP FOR SPOTIFY
+          </Button>
+        </Link>
       </MainSection>
     </div>
   )
@@ -86,15 +91,6 @@ const MainSection = styled.div({
   padding: '40px 20px',
   margin: '0 auto',
   maxWidth: 500,
-})
-
-const Header = styled.div({
-  minWidth: '100%',
-  borderBottom: `1px solid ${colors.lightGrey}`,
-  padding: 25,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
 })
 
 export default Login
