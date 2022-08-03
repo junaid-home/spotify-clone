@@ -7,15 +7,24 @@ import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
+import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
 
 function Login() {
+  const [name, setName] = useState('')
+  const [dob, setDob] = useState('')
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
+  const [gender, setGender] = useState('male')
+  const [country, setCountry] = useState('')
 
   const handleFormSubmission = e => {
     e.preventDefault()
 
-    console.log(email, pass)
+    const date = dob.split('-')
+    const jsDate = new Date(date[0], date[1], date[2])
+    const timestamp = jsDate.getTime()
+
+    console.log(email, pass, name, gender, country, timestamp)
   }
 
   return (
@@ -25,32 +34,74 @@ function Login() {
       </Header>
       <MainSection>
         <Typography variant="label" css={{marginBottom: 10}}>
-          To continue, log in to Spotify.
+          Sign up for free to start listening.
         </Typography>
         <Button fullWidth variant="fb">
-          CONTINUE WITH FACEBOOK
+          SIGN UP WITH FACEBOOK
         </Button>
         <Button fullWidth variant="google" css={{marginTop: 8}}>
-          CONTINUE WITH GOOGLE
+          SIGN UP WITH GOOGLE
         </Button>
         <SectionSeparator text="or" css={{padding: 12}} />
         <Form onSubmit={handleFormSubmission}>
           <FormGroup
-            label="Email address or username"
+            label="What's your email?"
+            placeholder="Email address or username."
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
           <FormGroup
-            label="Password"
+            label="Create a password"
+            placeholder="Create a password."
             type="password"
             css={{marginTop: 12}}
             value={pass}
             onChange={e => setPass(e.target.value)}
           />
-          <Typography css={{marginTop: 12}}>Forgot your password?</Typography>
+          <FormGroup
+            label="What should we call you?"
+            placeholder="Enter your profile name."
+            type="text"
+            css={{marginTop: 12}}
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+          <FormGroup
+            label="What are you from?"
+            placeholder="Enter your country name."
+            type="text"
+            css={{marginTop: 12}}
+            value={country}
+            onChange={e => setCountry(e.target.value)}
+          />
+          <Typography
+            variant="label"
+            as="p"
+            css={{marginTop: 12, marginBottom: 3}}
+          >
+            What's your gender?
+          </Typography>
+          <RadioGroup
+            value={gender}
+            onChange={value => setGender(value)}
+            horizontal
+          >
+            <ReversedRadioButton value="male">Male</ReversedRadioButton>
+            <ReversedRadioButton value="female">Female</ReversedRadioButton>
+          </RadioGroup>
+          <FormGroup
+            label="What's your date of birth?"
+            placeholder="Enter your date of birth."
+            type="date"
+            css={{marginTop: 12}}
+            value={dob}
+            onChange={e => setDob(e.target.value)}
+          />
           <ButtonArea>
-            <Button variant="primary">LOG IN</Button>
+            <Button variant="primary" fullWidth>
+              SIGN UP WITH SPOTIFY
+            </Button>
           </ButtonArea>
         </Form>
         <Typography
@@ -58,10 +109,10 @@ function Login() {
           as="h2"
           css={{display: 'inline-block', margin: '20px 0'}}
         >
-          Don't have an account?
+          Have an account?
         </Typography>
         <Button fullWidth css={{marginTop: 8}} type="submit">
-          SIGN UP FOR SPOTIFY
+          LOG IN WITH SPOTIFY
         </Button>
       </MainSection>
     </div>

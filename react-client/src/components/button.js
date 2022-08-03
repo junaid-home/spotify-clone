@@ -20,7 +20,7 @@ function Button({children, variant, ...props}) {
   )
 }
 
-const ButtonWrapper = styled.p(
+const ButtonWrapper = styled.button(
   {
     fontFamily: 'Roboto, Arial',
     fontSize: 14,
@@ -57,6 +57,12 @@ const ButtonWrapper = styled.p(
       ? {
           color: colors.darkest,
           background: colors.primary,
+        }
+      : null,
+  ({fullWidth}) =>
+    fullWidth
+      ? {
+          width: '100%',
         }
       : null,
 )

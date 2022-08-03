@@ -3,14 +3,14 @@ import styled from '@emotion/styled/macro'
 import Input from './input'
 import Typography from './typography'
 
-function FormGroup({label, value, onChange, type, ...props}) {
+function FormGroup({label, placeholder, value, onChange, type, ...props}) {
   return (
     <Wrapper {...props}>
       <Typography variant="label" as="label" css={{marginBottom: 3}}>
         {label}
       </Typography>
       <Input
-        placeholder={label}
+        placeholder={placeholder ? placeholder : label}
         value={value}
         type={type}
         onChange={onChange}
