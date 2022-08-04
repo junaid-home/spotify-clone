@@ -8,15 +8,31 @@ import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
+import {
+  useGetFbLoginUriMutation,
+  useGetGoogleLoginUriMutation,
+} from 'services/auth'
 
 function Login() {
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
+  const [getFbLoginUri, {isLoading: isLoadingFbUri}] =
+    useGetFbLoginUriMutation()
+  const [getGoogleLoginUri, {isLoading: isLoadingGoogleUri}] =
+    useGetGoogleLoginUriMutation()
 
-  const handleFormSubmission = e => {
+  const handleFormSubmission = async e => {
     e.preventDefault()
+  }
 
-    console.log(email, pass)
+  const handleFbLogin = async e => {
+    const result = await getFbLoginUri().unwrap()
+    window.location.href = result.data
+  }
+
+  const handleGoogleLogin = async e => {
+    const result = await getGoogleLoginUri().unwrap()
+    window.location.href = result.data
   }
 
   useLayoutEffect(() => {
@@ -30,10 +46,23 @@ function Login() {
         <Typography variant="label" css={{marginBottom: 10}}>
           To continue, log in to Spotify.
         </Typography>
-        <Button fullWidth variant="fb">
+        <Button
+          onClick={handleFbLogin}
+          loading={isLoadingFbUri}
+          disabled={isLoadingFbUri}
+          fullWidth
+          variant="fb"
+        >
           CONTINUE WITH FACEBOOK
         </Button>
-        <Button fullWidth variant="google" css={{marginTop: 8}}>
+        <Button
+          onClick={handleGoogleLogin}
+          loading={isLoadingGoogleUri}
+          disabled={isLoadingGoogleUri}
+          fullWidth
+          variant="google"
+          css={{marginTop: 8}}
+        >
           CONTINUE WITH GOOGLE
         </Button>
         <SectionSeparator text="or" css={{padding: 12}} />

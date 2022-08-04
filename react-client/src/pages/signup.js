@@ -9,6 +9,10 @@ import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
 import colors from 'styles/colors'
+import {
+  useGetFbLoginUriMutation,
+  useGetGoogleLoginUriMutation,
+} from 'services/auth'
 
 function Login() {
   const [name, setName] = useState('')
@@ -17,6 +21,10 @@ function Login() {
   const [pass, setPass] = useState('')
   const [gender, setGender] = useState('male')
   const [country, setCountry] = useState('')
+  const [getFbLoginUri, {isLoading: isLoadingFbUri}] =
+    useGetFbLoginUriMutation()
+  const [getGoogleLoginUri, {isLoading: isLoadingGoogleUri}] =
+    useGetGoogleLoginUriMutation()
 
   const handleFormSubmission = e => {
     e.preventDefault()
@@ -26,6 +34,16 @@ function Login() {
     const timestamp = jsDate.getTime()
 
     console.log(email, pass, name, gender, country, timestamp)
+  }
+
+  const handleFbLogin = async e => {
+    const result = await getFbLoginUri().unwrap()
+    window.location.href = result.data
+  }
+
+  const handleGoogleLogin = async e => {
+    const result = await getGoogleLoginUri().unwrap()
+    window.location.href = result.data
   }
 
   useLayoutEffect(() => {
@@ -39,10 +57,23 @@ function Login() {
         <Typography variant="label" css={{marginBottom: 10}}>
           Sign up for free to start listening.
         </Typography>
-        <Button fullWidth variant="fb">
+        <Button
+          onClick={handleFbLogin}
+          loading={isLoadingFbUri}
+          disabled={isLoadingFbUri}
+          fullWidth
+          variant="fb"
+        >
           SIGN UP WITH FACEBOOK
         </Button>
-        <Button fullWidth variant="google" css={{marginTop: 8}}>
+        <Button
+          onClick={handleGoogleLogin}
+          loading={isLoadingGoogleUri}
+          disabled={isLoadingGoogleUri}
+          fullWidth
+          variant="google"
+          css={{marginTop: 8}}
+        >
           SIGN UP WITH GOOGLE
         </Button>
         <SectionSeparator text="or" css={{padding: 12}} />
