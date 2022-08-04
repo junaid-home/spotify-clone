@@ -30,10 +30,15 @@ const sessionMiddleware = cookieSession({
 })
 
 const corsMiddleware = cors({
-  credentials: true,
-  allowedHeaders: true,
+  allowedHeaders: [
+    'Content-Type',
+    'Access-Control-Allow-Headers',
+    'ACCESS-CONTROL-ALLOW-METHODS',
+    'ACCESS-CONTROL-ALLOW-ORIGIN',
+  ],
   origin: $CORS_ORIGIN,
-  methods: ['POST', 'PUT', 'GET', 'PATCH', 'DELETE'],
+  preflightContinue: true,
+  methods: ['OPTIONS', 'POST', 'PUT', 'GET', 'PATCH', 'DELETE'],
 })
 
 const app = express()
