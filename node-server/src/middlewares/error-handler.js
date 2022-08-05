@@ -4,9 +4,9 @@ async function centralErrorHandler(err, _req, res, next) {
   if (!ErrorHandler.isTrustedError(err)) {
     next(err)
   }
-  const { name, status, statusCode, message } = err
+  const { name, status, statusCode = 500, message } = err
 
-  return res.json({ status, statusCode, name, message })
+  return res.status(statusCode).json({ status, statusCode, name, message })
 }
 
 async function handleUncaughtErrors(error) {

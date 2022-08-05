@@ -32,7 +32,6 @@ const createNewUser = async (req, res) => {
     password: hashedPassword.hash,
     salt: hashedPassword.salt,
   })
-  newUser.save()
 
   const userSlice = safeUser(newUser)
   req.session.user = userSlice
@@ -96,14 +95,14 @@ const authenticateWithGoogleAccount = async (req, res) => {
   const user = await googleOauth2.getGoogleUser({ code: parsedQuery.code })
 
   const isUserAlreadyExist = await userModel.findOne({
-    where: { email: user.email },
+    where: { email: user?.email },
   })
 
   const { email, name, picture } = user
-  const newUser = { email, name, picture }
+  const newUser = await userModel.create({ email, name, picture })
 
-  if (!isUserAlreadyExist) {
-    await (await userModel.create(newUser)).save()
+  if (user?.email && !isUserAlreadyExist) {
+    await newUser.save()
   }
 
   req.session.user = newUser
@@ -150,8 +149,8 @@ const authenticateWithFacebookAccount = async (req, res) => {
     email: `${user.id}@facebook.com`,
   }
 
-  if (!isUserAlreadyExist) {
-    await (await userModel.create(newUser)).save()
+  if (user?.id && !isUserAlreadyExist) {
+    await userModel.create(newUser)
   }
 
   req.session.user = newUser

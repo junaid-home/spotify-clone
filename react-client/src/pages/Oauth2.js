@@ -1,13 +1,15 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState, useTransition} from 'react'
 import {Navigate} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import Spinner from 'components/spinner'
 import {useLoginWithOauth2Mutation} from 'services/auth'
 
 function Oauth2() {
+  const requested = useRef(false)
+  const [, startTransition] = useTransition()
   const [redirect, setRedirect] = useState(false)
   const [query] = useState(() => window.location.href.split('?')[1])
-  const [loginWithOauth2, {isLoading}] = useLoginWithOauth2Mutation()
+  const [loginWithOauth2] = useLoginWithOauth2Mutation()
 
   const saveAndRedirect = data => {
     localStorage.setItem('user', JSON.stringify(data?.data?.user))
@@ -20,31 +22,31 @@ function Oauth2() {
   }
 
   useEffect(() => {
-    if (isLoading) {
-      return
+    if (!requested.current) {
+      if (window.location.href.includes('facebook/redirect')) {
+        loginWithOauth2({uri: '/facebook/login', data: query}).then(result => {
+          const data = result.data
+
+          if (data?.data?.user) {
+            return saveAndRedirect(result.data)
+          }
+
+          startTransition(() => emitErrorAndRedirect())
+        })
+      } else if (window.location.href.includes('google/redirect')) {
+        loginWithOauth2({uri: '/google/login', data: query}).then(result => {
+          const data = result.data
+
+          if (data?.data?.user) {
+            return saveAndRedirect(result.data)
+          }
+
+          startTransition(() => emitErrorAndRedirect())
+        })
+      }
     }
 
-    if (window.location.href.includes('facebook/redirect')) {
-      loginWithOauth2({uri: '/facebook/login', data: query}).then(result => {
-        const data = result.data
-
-        if (data?.data?.user) {
-          return saveAndRedirect(result.data)
-        }
-
-        return emitErrorAndRedirect()
-      })
-    } else if (window.location.href.includes('google/redirect')) {
-      loginWithOauth2({uri: '/google/login', data: query}).then(result => {
-        const data = result.data
-
-        if (data?.data?.user) {
-          return saveAndRedirect(result.data)
-        }
-
-        return emitErrorAndRedirect()
-      })
-    }
+    requested.current = true
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
