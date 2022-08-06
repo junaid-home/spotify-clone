@@ -2,7 +2,7 @@
 import {useState, useLayoutEffect} from 'react'
 import styled from '@emotion/styled/macro'
 import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Header from 'components/header'
 import Typography from 'components/typography'
 import Button from 'components/button'
@@ -12,6 +12,7 @@ import colors from 'utils/colors'
 import {
   useGetFbLoginUriMutation,
   useGetGoogleLoginUriMutation,
+  useSignUpWithPersonalDetailsMutation,
 } from 'store/api/auth'
 
 function Login() {
@@ -21,19 +22,32 @@ function Login() {
   const [pass, setPass] = useState('')
   const [gender, setGender] = useState('male')
   const [country, setCountry] = useState('')
+  const navigate = useNavigate()
   const [getFbLoginUri, {isLoading: isLoadingFbUri}] =
     useGetFbLoginUriMutation()
   const [getGoogleLoginUri, {isLoading: isLoadingGoogleUri}] =
     useGetGoogleLoginUriMutation()
+  const [signUpWithPersonalDetails, {isLoading: isSigningUp}] =
+    useSignUpWithPersonalDetailsMutation()
 
-  const handleFormSubmission = e => {
+  const handleFormSubmission = async e => {
     e.preventDefault()
 
     const date = dob.split('-')
     const jsDate = new Date(date[0], date[1], date[2])
-    const timestamp = jsDate.getTime()
 
-    console.log(email, pass, name, gender, country, timestamp)
+    const result = await signUpWithPersonalDetails({
+      name,
+      email,
+      password: pass,
+      dob: jsDate.getTime(),
+      country,
+      gender,
+    })
+
+    if (result?.data?.data?.user) {
+      return navigate('/', {replace: true})
+    }
   }
 
   const handleFbLogin = async e => {
@@ -133,7 +147,12 @@ function Login() {
             onChange={e => setDob(e.target.value)}
           />
           <ButtonArea>
-            <Button variant="primary" fullWidth>
+            <Button
+              disabled={isSigningUp}
+              loading={isSigningUp}
+              variant="primary"
+              fullWidth
+            >
               SIGN UP WITH SPOTIFY
             </Button>
           </ButtonArea>

@@ -6,6 +6,7 @@ import {restoreUser} from 'store/reducers/auth'
 import LoginPage from 'pages/login'
 import SignupPage from 'pages/signup'
 import Oauth2Page from 'pages/Oauth2'
+import HomePage from 'pages/home'
 
 function App() {
   const dispatch = useDispatch()
@@ -17,6 +18,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/facebook/redirect" element={<Oauth2Page />} />

@@ -11,38 +11,27 @@ function Oauth2() {
   const [query] = useState(() => window.location.href.split('?')[1])
   const [loginWithOauth2] = useLoginWithOauth2Mutation()
 
-  const saveAndRedirect = data => {
-    localStorage.setItem('user', JSON.stringify(data?.data?.user))
-    setRedirect(true)
-  }
-
-  const emitErrorAndRedirect = () => {
-    window.alert('Failed to Login, Something went wrong!')
-    setRedirect(true)
+  const saveAndRedirect = result => {
+    const data = result.data
+    if (data?.data?.user) {
+      return setRedirect(true)
+    }
+    startTransition(() => {
+      window.alert('Failed to Login, Something went wrong!')
+      setRedirect(true)
+    })
   }
 
   useEffect(() => {
     if (!requested.current) {
       if (window.location.href.includes('facebook/redirect')) {
-        loginWithOauth2({uri: '/facebook/login', data: query}).then(result => {
-          const data = result.data
-
-          if (data?.data?.user) {
-            return saveAndRedirect(result.data)
-          }
-
-          startTransition(() => emitErrorAndRedirect())
-        })
+        loginWithOauth2({uri: '/facebook/login', data: query}).then(result =>
+          saveAndRedirect(result),
+        )
       } else if (window.location.href.includes('google/redirect')) {
-        loginWithOauth2({uri: '/google/login', data: query}).then(result => {
-          const data = result.data
-
-          if (data?.data?.user) {
-            return saveAndRedirect(result.data)
-          }
-
-          startTransition(() => emitErrorAndRedirect())
-        })
+        loginWithOauth2({uri: '/google/login', data: query}).then(result =>
+          saveAndRedirect(result),
+        )
       }
     }
 
