@@ -2,7 +2,7 @@
 import {useLayoutEffect, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {Link} from 'react-router-dom'
-import colors from 'styles/colors'
+import colors from 'utils/colors'
 import Header from 'components/header'
 import Typography from 'components/typography'
 import Button from 'components/button'
@@ -11,7 +11,7 @@ import FormGroup from 'components/form-group'
 import {
   useGetFbLoginUriMutation,
   useGetGoogleLoginUriMutation,
-} from 'services/auth'
+} from 'store/api/auth'
 
 function Login() {
   const [email, setEmail] = useState('')

@@ -8,11 +8,11 @@ import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
-import colors from 'styles/colors'
+import colors from 'utils/colors'
 import {
   useGetFbLoginUriMutation,
   useGetGoogleLoginUriMutation,
-} from 'services/auth'
+} from 'store/api/auth'
 
 function Login() {
   const [name, setName] = useState('')

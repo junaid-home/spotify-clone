@@ -1,6 +1,6 @@
 import styled from '@emotion/styled/macro'
 import Logo from 'components/logo'
-import colors from 'styles/colors'
+import colors from 'utils/colors'
 
 function Header(props) {
   return (

@@ -99,10 +99,10 @@ const authenticateWithGoogleAccount = async (req, res) => {
   })
 
   const { email, name, picture } = user
-  const newUser = await userModel.create({ email, name, picture })
+  const newUser = { email, name, picture }
 
   if (user?.email && !isUserAlreadyExist) {
-    await newUser.save()
+    await userModel.create(newUser)
   }
 
   req.session.user = newUser

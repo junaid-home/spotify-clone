@@ -2,7 +2,7 @@ import {useEffect, useRef, useState, useTransition} from 'react'
 import {Navigate} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import Spinner from 'components/spinner'
-import {useLoginWithOauth2Mutation} from 'services/auth'
+import {useLoginWithOauth2Mutation} from 'store/api/auth'
 
 function Oauth2() {
   const requested = useRef(false)
