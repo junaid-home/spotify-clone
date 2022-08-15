@@ -8,6 +8,9 @@ import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
+import Tooltip from 'components/tooltip'
+import {useDispatch, useSelector} from 'react-redux'
+import {resetError} from 'store/reducers/auth'
 import {
   useGetFbLoginUriMutation,
   useGetGoogleLoginUriMutation,
@@ -15,6 +18,8 @@ import {
 } from 'store/api/auth'
 
 function Login() {
+  const error = useSelector(state => state.auth.error)
+  const dispatch = useDispatch()
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const navigate = useNavigate()
@@ -27,6 +32,7 @@ function Login() {
 
   const handleFormSubmission = async e => {
     e.preventDefault()
+    dispatch(resetError())
 
     const result = await loginWithEmailAndPassword({email, password: pass})
     if (result?.data?.data?.user) {
@@ -46,7 +52,8 @@ function Login() {
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
-  }, [])
+    dispatch(resetError())
+  }, [dispatch])
 
   return (
     <div>
@@ -55,6 +62,9 @@ function Login() {
         <Typography variant="label" css={{marginBottom: 10}}>
           To continue, log in to Spotify.
         </Typography>
+        {error && (
+          <Tooltip css={{marginBottom: 12}} message={error} type="danger" />
+        )}
         <Button
           onClick={handleFbLogin}
           loading={isLoadingFbUri}

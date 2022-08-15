@@ -18,12 +18,12 @@ const validPassword = joi
 
 function validateNewUser(obj) {
   const schema = joi.object({
-    name: joi.string().min(3).max(30).required(),
     email: validEmail,
     password: validPassword,
+    name: joi.string().min(3).max(30).required(),
+    country: joi.string().min(3).max(30).required(),
     gender: joi.string().valid('male', 'female').required(),
     dob: joi.date().timestamp().required(),
-    country: joi.string().min(3).max(30).required(),
   })
 
   return schema.validate(obj)

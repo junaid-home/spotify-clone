@@ -3,12 +3,15 @@ import {useState, useLayoutEffect} from 'react'
 import styled from '@emotion/styled/macro'
 import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
 import {Link, useNavigate} from 'react-router-dom'
+import colors from 'utils/colors'
 import Header from 'components/header'
 import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
-import colors from 'utils/colors'
+import Tooltip from 'components/tooltip'
+import {useDispatch, useSelector} from 'react-redux'
+import {resetError} from 'store/reducers/auth'
 import {
   useGetFbLoginUriMutation,
   useGetGoogleLoginUriMutation,
@@ -16,6 +19,8 @@ import {
 } from 'store/api/auth'
 
 function Login() {
+  const error = useSelector(state => state.auth.error)
+  const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [dob, setDob] = useState('')
   const [email, setEmail] = useState('')
@@ -32,17 +37,18 @@ function Login() {
 
   const handleFormSubmission = async e => {
     e.preventDefault()
+    dispatch(resetError())
 
     const date = dob.split('-')
     const jsDate = new Date(date[0], date[1], date[2])
 
     const result = await signUpWithPersonalDetails({
-      name,
       email,
       password: pass,
-      dob: jsDate.getTime(),
+      name,
       country,
       gender,
+      dob: jsDate.getTime(),
     })
 
     if (result?.data?.data?.user) {
@@ -62,7 +68,8 @@ function Login() {
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
-  }, [])
+    dispatch(resetError())
+  }, [dispatch])
 
   return (
     <div>
@@ -71,6 +78,9 @@ function Login() {
         <Typography variant="label" css={{marginBottom: 10}}>
           Sign up for free to start listening.
         </Typography>
+        {error && (
+          <Tooltip css={{marginBottom: 12}} message={error} type="danger" />
+        )}
         <Button
           onClick={handleFbLogin}
           loading={isLoadingFbUri}

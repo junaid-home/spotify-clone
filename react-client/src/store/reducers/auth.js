@@ -4,6 +4,7 @@ import {authApi} from '../api/auth'
 const initialState = {
   user: {},
   isAuthenticated: false,
+  error: null,
 }
 
 const authSlice = createSlice({
@@ -19,6 +20,10 @@ const authSlice = createSlice({
 
       state.isAuthenticated = true
       state.user = user
+      state.error = null
+    },
+    resetError: (state, _action) => {
+      state.error = null
     },
   },
   extraReducers: builder => {
@@ -33,6 +38,7 @@ const authSlice = createSlice({
             )
 
             state.isAuthenticated = true
+            state.error = null
             state.user = action?.payload?.data?.user
           }
         },
@@ -47,8 +53,15 @@ const authSlice = createSlice({
             )
 
             state.isAuthenticated = true
+            state.error = null
             state.user = action.payload?.data?.user
           }
+        },
+      )
+      .addMatcher(
+        authApi.endpoints.signUpWithPersonalDetails.matchRejected,
+        (state, action) => {
+          state.error = action.payload.data.message
         },
       )
       .addMatcher(
@@ -61,8 +74,15 @@ const authSlice = createSlice({
             )
 
             state.isAuthenticated = true
+            state.error = null
             state.user = action.payload?.data?.user
           }
+        },
+      )
+      .addMatcher(
+        authApi.endpoints.loginWithEmailAndPassword.matchRejected,
+        (state, action) => {
+          state.error = action.payload.data.message
         },
       )
       .addMatcher(authApi.endpoints.logout.matchFulfilled, (state, action) => {
@@ -74,5 +94,5 @@ const authSlice = createSlice({
   },
 })
 
-export const {restoreUser} = authSlice.actions
+export const {restoreUser, resetError} = authSlice.actions
 export default authSlice.reducer
