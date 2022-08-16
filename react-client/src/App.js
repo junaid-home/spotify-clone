@@ -1,28 +1,25 @@
 import 'the-new-css-reset/css/reset.css'
-import {useEffect} from 'react'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import {useDispatch} from 'react-redux'
-import {restoreUser} from 'store/reducers/auth'
+import PrivateRoute from 'components/private-route'
+import UnAuthRoute from 'components/un-auth-route'
 import LoginPage from 'pages/login'
 import SignupPage from 'pages/signup'
 import Oauth2Page from 'pages/Oauth2'
 import HomePage from 'pages/home'
 
 function App() {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(restoreUser())
-  }, [dispatch])
-
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/facebook/redirect" element={<Oauth2Page />} />
-        <Route path="/google/redirect" element={<Oauth2Page />} />
+        <Route path="/" element={<PrivateRoute />}>
+          <Route exact path="/" element={<HomePage />} />
+        </Route>
+        <Route path="/" element={<UnAuthRoute />}>
+          <Route exact path="/login" element={<LoginPage />} />
+          <Route exact path="/signup" element={<SignupPage />} />
+          <Route exact path="/facebook/redirect" element={<Oauth2Page />} />
+          <Route exact path="/google/redirect" element={<Oauth2Page />} />
+        </Route>
       </Routes>
     </Router>
   )
