@@ -1,12 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import Header from 'components/header'
-import {Fragment} from 'react'
 
 function Home() {
   return (
-    <Fragment>
-      <Header />
-    </Fragment>
+    <div>
+      <span>Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+    </div>
   )
 }
 

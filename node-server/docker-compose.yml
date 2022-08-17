@@ -12,7 +12,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /mnt/x/react/projects/spotify-clone/node-server/src:/code/src
+      - /code/spotify-clone/node-server/src:/code/src
 
   db:
     container_name: postgres

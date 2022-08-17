@@ -6,13 +6,20 @@ import LoginPage from 'pages/login'
 import SignupPage from 'pages/signup'
 import Oauth2Page from 'pages/Oauth2'
 import HomePage from 'pages/home'
+import Layout from 'components/layout'
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<PrivateRoute />}>
-          <Route exact path="/" element={<HomePage />} />
+          <Route path="/" element={<Layout />}>
+            <Route exact path="/" element={<HomePage />} />
+            <Route exact path="/search" element={<HomePage />} />
+            <Route exact path="/library" element={<HomePage />} />
+            <Route exact path="/playlist" element={<HomePage />} />
+            <Route exact path="/favorites" element={<HomePage />} />
+          </Route>
         </Route>
         <Route path="/" element={<UnAuthRoute />}>
           <Route exact path="/login" element={<LoginPage />} />

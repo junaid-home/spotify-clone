@@ -27,6 +27,17 @@ const Typography = styled.p(
           color: colors.darkest,
         }
       : null,
+  ({variant}) =>
+    variant === 'link'
+      ? {
+          fontWeight: 'bold',
+          fontSize: 14,
+
+          '&:hover': {
+            color: colors.white,
+          },
+        }
+      : null,
 )
 
 export default Typography

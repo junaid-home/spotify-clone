@@ -53,6 +53,10 @@ const AuthWrapper = styled.div({
   alignItems: 'center',
   background: colors.dark,
   color: colors.white,
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  zIndex: 100,
 })
 
 const UserArea = styled.div({
