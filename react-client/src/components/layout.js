@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import {Outlet} from 'react-router-dom'
 import Header from 'components/header'
@@ -28,10 +27,10 @@ const Wrapper = styled.div({
 const MainArea = styled.div({
   flex: 1,
   position: 'relative',
+  marginLeft: 242,
 })
 
 const SideBar = styled.div({
-  width: 242,
   position: 'relative',
 })
 

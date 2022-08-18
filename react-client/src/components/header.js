@@ -15,12 +15,13 @@ import PersonIcon from 'icons/person'
 import Typography from './typography'
 import {useNavigate} from 'react-router-dom'
 import {useLogoutMutation} from 'store/api/auth'
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useDeferredValue} from 'react'
 
 function Header() {
   const navigate = useNavigate()
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const [solidHeader, setSolidHeader] = useState(false)
+  const deferredSolidHeaderValue = useDeferredValue(solidHeader)
   const isAuth = useSelector(s => s.auth.isAuthenticated)
   const user = useSelector(s => s.auth.user)
   const [logout] = useLogoutMutation()
@@ -96,7 +97,9 @@ function Header() {
     </UnAuthWrapper>
   ) : (
     <AuthWrapper
-      css={{background: solidHeader ? colors.darkest : 'transparent'}}
+      css={{
+        background: deferredSolidHeaderValue ? colors.darkest : 'transparent',
+      }}
     >
       <div css={{marginLeft: 232}}>
         <FilledLeftArrowIcon css={{marginRight: 25}} />
