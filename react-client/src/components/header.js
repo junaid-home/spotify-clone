@@ -10,13 +10,17 @@ import Logo from 'components/logo'
 import LeftArrowIcon from 'icons/left-arrow'
 import RightArrowIcon from 'icons/right-arrow'
 import ArrowDownIcon from 'icons/arrow-down'
+import ArrowUpIcon from 'icons/arrow-up'
 import PersonIcon from 'icons/person'
 import Typography from './typography'
 import {useNavigate} from 'react-router-dom'
 import {useLogoutMutation} from 'store/api/auth'
+import {useEffect, useState} from 'react'
 
 function Header() {
   const navigate = useNavigate()
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false)
+  const [solidHeader, setSolidHeader] = useState(false)
   const isAuth = useSelector(s => s.auth.isAuthenticated)
   const user = useSelector(s => s.auth.user)
   const [logout] = useLogoutMutation()
@@ -25,7 +29,6 @@ function Header() {
     if (key !== '/logout') {
       navigate(key)
     }
-
     await logout().unwrap()
   }
 
@@ -73,17 +76,38 @@ function Header() {
     </ClassNames>
   )
 
+  function scrollHandler(e) {
+    if (window.scrollY > 60) {
+      setSolidHeader(true)
+    } else {
+      setSolidHeader(false)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler)
+
+    return () => window.removeEventListener('scroll', scrollHandler)
+  }, [])
+
   return !isAuth ? (
     <UnAuthWrapper>
       <Logo />
     </UnAuthWrapper>
   ) : (
-    <AuthWrapper>
-      <div>
-        <LeftArrowIcon css={{marginRight: 20}} />
-        <RightArrowIcon />
+    <AuthWrapper
+      css={{background: solidHeader ? colors.darkest : 'transparent'}}
+    >
+      <div css={{marginLeft: 232}}>
+        <FilledLeftArrowIcon css={{marginRight: 25}} />
+        <FilledRightArrowIcon />
       </div>
-      <Dropdown trigger={['click']} overlay={menu} animation="slide-up">
+      <Dropdown
+        onVisibleChange={() => setIsDropDownOpen(prev => !prev)}
+        trigger={['click']}
+        overlay={menu}
+        animation="slide-up"
+      >
         <UserArea>
           <PersonIconContainer>
             <PersonFilledIcon css={{marginRight: 10}} />
@@ -91,7 +115,7 @@ function Header() {
               {user.name.split(' ')[0].toLowerCase()}
             </Typography>
           </PersonIconContainer>
-          <ArrowDownIcon />
+          {isDropDownOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </UserArea>
       </Dropdown>
     </AuthWrapper>
@@ -108,17 +132,16 @@ const UnAuthWrapper = styled.div({
 })
 
 const AuthWrapper = styled.div({
-  minWidth: '100%',
   padding: '13px 40px',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  background: colors.dark,
   color: colors.white,
-  position: 'absolute',
+  position: 'fixed',
   top: 0,
   right: 0,
   zIndex: 100,
+  width: '100%',
 })
 
 const UserArea = styled.div({
@@ -129,7 +152,7 @@ const UserArea = styled.div({
   cursor: 'pointer',
 
   '&:hover': {
-    backgroundColor: colors.darkest,
+    backgroundColor: colors.black,
     borderRadius: 100,
   },
 })
@@ -138,6 +161,18 @@ const PersonIconContainer = styled.span({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+})
+
+const FilledLeftArrowIcon = styled(LeftArrowIcon)({
+  backgroundColor: colors.darkest,
+  padding: 4,
+  borderRadius: 100,
+})
+
+const FilledRightArrowIcon = styled(RightArrowIcon)({
+  backgroundColor: colors.darkest,
+  padding: 4,
+  borderRadius: 100,
 })
 
 const PersonFilledIcon = styled(PersonIcon)({

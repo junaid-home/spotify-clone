@@ -6,8 +6,8 @@ function LeftArrow({...props}) {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      height="20"
-      width="20"
+      height="30"
+      width="30"
       viewBox="0 0 24 24"
       cursor="pointer"
       {...props}
