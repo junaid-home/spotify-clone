@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react/macro'
+import {css, keyframes} from '@emotion/react/macro'
 import styled from '@emotion/styled/macro'
 import colors from 'utils/colors'
 import Typography from './typography'
@@ -7,60 +7,117 @@ import PlayIcon from 'icons/play'
 import PauseIcon from 'icons/pause'
 import {useState} from 'react'
 
-const song = {
-  title:
-    "Janib (Duet)' FULL AUDIO Song | Arijit Singh | Divyendu Sharma | Dilliwaali Zaalim Girlfriend",
-  description:
-    'Dilliwaali Zaalim Girlfriend, Janib Duet FULL AUDIO Song, Arijit Singh, Divyendu Sharma',
-  thumbnail: '/album.jpg',
-}
-
-const artist = {
-  name: 'Atif Aslam',
-  picture: '/artist.jpg',
-}
-
-function Card({type}) {
+function Card({data, kind = 'song'}) {
   const [displayPlayPause, setDisplayPlayPause] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [shouldAnimate, setShouldAnimate] = useState(true)
+
+  const displayData = getDisplayableData(kind, data)
+  const buttonStyles = {display: 'inline-block', opacity: 1}
+
+  const handlePlay = () => {
+    setIsPlaying(true)
+  }
+  const handlePause = () => {
+    setIsPlaying(false)
+  }
+
+  const playPauseIcons = isPlaying ? (
+    <FilledPauseIcon
+      css={displayPlayPause || isPlaying ? buttonStyles : null}
+      onClick={handlePause}
+    />
+  ) : (
+    <FilledPlayIcon
+      css={
+        displayPlayPause
+          ? {...buttonStyles, animation: shouldAnimate && `${slideUpward} 0.5s`}
+          : null
+      }
+      onClick={handlePlay}
+    />
+  )
 
   return (
     <Wrapper
-      onMouseEnter={() => setDisplayPlayPause(true)}
-      onMouseLeave={() => setDisplayPlayPause(false)}
+      onMouseEnter={() => {
+        setDisplayPlayPause(true)
+        setTimeout(() => {
+          setShouldAnimate(false)
+        }, 300)
+      }}
+      onMouseLeave={() => {
+        setDisplayPlayPause(false)
+        setShouldAnimate(true)
+      }}
     >
-      {isPlaying ? (
-        <FilledPauseIcon
-          css={{display: displayPlayPause ? 'inline-block' : 'none'}}
-          onClick={() => setIsPlaying(false)}
-        />
-      ) : (
-        <FilledPlayIcon
-          css={{display: displayPlayPause ? 'inline-block' : 'none'}}
-          onClick={() => setIsPlaying(true)}
-        />
-      )}
+      {playPauseIcons}
       <Album
-        artist={type === 'artist'}
-        src={type === 'artist' ? artist.picture : song.thumbnail}
-        alt={artist.name}
+        artist={kind === 'artist'}
+        src={displayData.picture}
+        alt={displayData.title}
       />
       <Typography variant="one-line" css={{marginTop: 10}}>
-        {type === 'artist' ? artist.name : song.title}
+        {displayData.title}
       </Typography>
-      <Typography
-        variant={type !== 'artist' ? 'two-line' : null}
-        css={{marginTop: 10, color: colors.grey}}
-      >
-        {type === 'artist'
-          ? 'Artist'
-          : song.description.length > 40
-          ? `${song.description.slice(0, 39)}...`
-          : song.description}
+      <Typography variant="two-line" css={{marginTop: 10, color: colors.grey}}>
+        {displayData.desc}
       </Typography>
     </Wrapper>
   )
 }
+
+const formatSongDesc = desc => {
+  if (desc.length > 40) return `${desc.slice(0, 39)}...`
+  else return desc
+}
+
+const getDisplayableData = (kind, data) => {
+  const isSong = kind === 'song'
+  const isArtist = kind === 'artist'
+  const isPlaylist = kind === 'playlist'
+
+  return {
+    picture: isSong || isPlaylist ? data.thumbnail : data.picture,
+    title: isSong ? data.title : isPlaylist ? `#${data.name}` : data.name,
+    desc: isSong
+      ? formatSongDesc(data.description)
+      : isArtist
+      ? 'Artist'
+      : `By: ${data.owner}`,
+  }
+}
+
+const slideUpward = keyframes`
+  0% {
+    opacity: 0;
+    top: 45%;
+  }
+
+  100% {
+    opacity: 1;
+    top: 40%;
+  }
+`
+
+const filledPlayPauseStyles = css({
+  backgroundColor: colors.primary,
+  padding: 12,
+  width: 50,
+  height: 50,
+  borderRadius: 100,
+  cursor: 'default',
+  boxShadow: '1px 5px 5px rgba(0,0,0,.5)',
+  position: 'absolute',
+  top: '40%',
+  right: '15%',
+  display: 'none',
+  zIndex: 98,
+  opacity: 0,
+  transition: 'all 3s ease-in',
+
+  animationIterationCount: 1,
+})
 
 const Wrapper = styled.div({
   padding: 20,
@@ -72,6 +129,7 @@ const Wrapper = styled.div({
   cursor: 'pointer',
   position: 'relative',
   userSelect: 'none',
+  transition: 'all 0.3s linear',
 
   '&:hover': {
     background: colors.black,
@@ -91,23 +149,7 @@ const Album = styled.img(
   ({artist}) => (artist ? {borderRadius: 100} : null),
 )
 
-const filledPlayPauseStyles = css({
-  backgroundColor: colors.primary,
-  padding: 12,
-  width: 50,
-  height: 50,
-  borderRadius: 100,
-  cursor: 'default',
-  boxShadow: '1px 5px 5px rgba(0,0,0,.5)',
-  position: 'absolute',
-  top: '40%',
-  right: '15%',
-  display: 'none',
-  zIndex: 98,
-})
-
 const FilledPlayIcon = styled(PlayIcon)(filledPlayPauseStyles)
-
 const FilledPauseIcon = styled(PauseIcon)(filledPlayPauseStyles)
 
 export default Card

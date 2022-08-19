@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux'
 import Card from 'components/card'
 import styled from '@emotion/styled/macro'
 import colors from 'utils/colors'
+import {artists, playlists, songs} from 'utils/data'
 
 function Home() {
   const user = useSelector(s => s.auth.user)
@@ -12,101 +13,87 @@ function Home() {
     <div css={{color: colors.white}}>
       <Typography variant="h1">Made for {user.name}</Typography>
       <ListContainer>
-        <Card />
+        <Card data={songs[0]} />
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Popular albums
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Trending now
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Mood
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Popular new releases
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Late night listenings
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Popular artists
       </Typography>
       <ListContainer>
-        <Card type="artist" />
-        <Card type="artist" />
-        <Card type="artist" />
-        <Card type="artist" />
-        <Card type="artist" />
+        {artists.map(artist => (
+          <Card kind="artist" data={artist} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         International emerging artists
       </Typography>
       <ListContainer>
-        <Card type="artist" />
-        <Card type="artist" />
-        <Card type="artist" />
-        <Card type="artist" />
-        <Card type="artist" />
+        {artists.map(artist => (
+          <Card kind="artist" data={artist} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Sleep
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Your playlists
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
+        {playlists.map(playlist => (
+          <Card kind="playlist" data={playlist} />
+        ))}
       </ListContainer>
       <Typography css={{marginTop: 40}} variant="h1">
         Focus
       </Typography>
       <ListContainer>
-        <Card />
-        <Card />
+        {songs.map(song => (
+          <Card data={song} />
+        ))}
       </ListContainer>
     </div>
   )
