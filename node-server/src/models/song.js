@@ -1,47 +1,30 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
-const Song = require('./song')
 
-const User = sequelize.define('User', {
+const Song = sequelize.define('Song', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     unique: true,
   },
-  name: {
+  title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
+  description: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
-  password: {
+  thumbnail: {
     type: DataTypes.STRING,
   },
-  salt: {
+  src: {
     type: DataTypes.STRING,
   },
-  dob: {
+  duration: {
     type: DataTypes.DATE,
   },
-  gender: {
-    type: DataTypes.STRING,
-  },
-  country: {
-    type: DataTypes.STRING,
-  },
-  picture: {
-    type: DataTypes.STRING,
-  },
 })
 
-User.hasMany(Song, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
-})
-
-module.exports = User
+module.exports = Song

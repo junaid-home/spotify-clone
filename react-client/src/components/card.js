@@ -44,7 +44,7 @@ function Card({data, kind = 'song'}) {
         setDisplayPlayPause(true)
         setTimeout(() => {
           setShouldAnimate(false)
-        }, 300)
+        }, 500)
       }}
       onMouseLeave={() => {
         setDisplayPlayPause(false)
