@@ -1,10 +1,9 @@
 const { Sequelize } = require('sequelize')
 const logger = require('../utils/console')
 
-const $IS_DEV = process.env.NODE_ENV !== 'production'
 const $POSTGRES_DATABASE_URL =
   process.env.POSTGRES_DATABASE_URL ||
-  'postgres://postgres:abc123@postgres:5432/postgres'
+  'postgres://postgres:abc123@localhost:5432/postgres'
 
 const sequelize = new Sequelize($POSTGRES_DATABASE_URL)
 
@@ -15,7 +14,7 @@ const authenticate = async () => {
       infoText: 'database log',
     })
 
-    await sequelize.sync({ force: $IS_DEV })
+    await sequelize.sync({ force: false })
     logger.log('All models are synchronized!', {
       infoText: 'database migrations',
       infoTextColor: 'green',

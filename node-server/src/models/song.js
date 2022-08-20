@@ -24,7 +24,7 @@ const Song = sequelize.define('Song', {
     type: DataTypes.STRING,
   },
   duration: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
   },
 })
 
