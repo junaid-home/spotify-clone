@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
+const Playlist = require('./playlist')
 
 const Song = sequelize.define('Song', {
   id: {
@@ -26,5 +27,7 @@ const Song = sequelize.define('Song', {
     type: DataTypes.DATE,
   },
 })
+
+Song.belongsToMany(Playlist, { through: 'SongPlaylists' })
 
 module.exports = Song

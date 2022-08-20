@@ -1,28 +1,21 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
-const Color = require('./color')
 
-const Playlist = sequelize.define('Playlist', {
+const Color = sequelize.define('Color', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     unique: true,
   },
-  name: {
+  code1: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  picture: {
+  code2: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 })
 
-Playlist.hasOne(Color, {
-  foreignKey: 'playlist_id',
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
-})
-
-module.exports = Playlist
+module.exports = Color

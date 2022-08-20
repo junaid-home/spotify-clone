@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
+const Playlist = require('./playlist')
+const Song = require('./song')
 
 const User = sequelize.define('User', {
   id: {
@@ -35,6 +37,13 @@ const User = sequelize.define('User', {
   picture: {
     type: DataTypes.STRING,
   },
+})
+
+User.belongsToMany(Song, { through: 'Likes' })
+User.hasMany(Playlist, {
+  foreignKey: 'user_id',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
 })
 
 module.exports = User
