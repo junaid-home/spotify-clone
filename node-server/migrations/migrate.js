@@ -11,8 +11,7 @@ const { upload } = require('../src/config/cloudinary')
 
 db.authenticate()
 
-const SongModel = require('../src/models/song')
-const ArtistModel = require('../src/models/artist')
+const { songModel, artistModel } = require('../src/models')
 
 const migrateData = async () => {
   log('Migration Started!', {
@@ -26,17 +25,11 @@ const migrateData = async () => {
       'pictures',
       `${artist.slug}.jpg`
     )
-    log(`uploading artist profile image. ${pictureFilePath}`, {
-      infoText: 'migration log',
-    })
     const { url: artistImageUri } = await upload(pictureFilePath)
 
-    const newArtist = await ArtistModel.create({
+    const newArtist = await artistModel.create({
       name: artist.name,
       picture: artistImageUri,
-    })
-    log(`added artist in db: ${newArtist.id}`, {
-      infoText: 'migration log',
     })
 
     /* eslint-disable no-await-in-loop */
@@ -49,9 +42,6 @@ const migrateData = async () => {
         'audios',
         `${song.slug}.mp3`
       )
-      log(`uploading song mp3 file. ${audioFilePath}`, {
-        infoText: 'migration log',
-      })
       const { url: songImageUrl } = await upload(audioFilePath)
 
       const thumbnailFilePath = path.resolve(
@@ -59,21 +49,15 @@ const migrateData = async () => {
         'thumbnails',
         `${song.slug}.jpg`
       )
-      log(`uploading song thumbnail. ${thumbnailFilePath}`, {
-        infoText: 'migration log',
-      })
       const { url: thumbnailImageUrl } = await upload(thumbnailFilePath)
 
-      const newSong = await SongModel.create({
+      await songModel.create({
         title: song.title,
         description: song.description,
         duration: song.duration,
         src: songImageUrl,
         thumbnail: thumbnailImageUrl,
         artist_id: newArtist.id,
-      })
-      log(`added song in db: ${newSong.id}`, {
-        infoText: 'migration log',
       })
     }
   })

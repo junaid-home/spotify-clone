@@ -4,7 +4,7 @@ const serializeResponse = require('../utils/response-serializer')
 const validator = require('../validators/auth')
 const errors = require('../utils/error')
 const hasher = require('../utils/hasher')
-const userModel = require('../models/user')
+const { userModel } = require('../models')
 const googleOauth2 = require('../utils/google-Oath2.0')
 const fbOauth2 = require('../utils/facebook-Oauth2.0')
 

@@ -3,7 +3,7 @@ const logger = require('../utils/console')
 
 const $POSTGRES_DATABASE_URL =
   process.env.POSTGRES_DATABASE_URL ||
-  'postgres://postgres:abc123@localhost:5432/postgres'
+  'postgres://postgres:abc123@postgres:5432/postgres'
 
 const sequelize = new Sequelize($POSTGRES_DATABASE_URL)
 
