@@ -6,6 +6,7 @@ import Typography from './typography'
 import PlayIcon from 'icons/play'
 import PauseIcon from 'icons/pause'
 import {useState} from 'react'
+import * as mq from 'utils/media-query'
 
 function Card({data, kind = 'song'}) {
   const [displayPlayPause, setDisplayPlayPause] = useState(false)
@@ -57,7 +58,7 @@ function Card({data, kind = 'song'}) {
         src={displayData.picture}
         alt={displayData.title}
       />
-      <Typography variant="one-line" css={{marginTop: 10}}>
+      <Typography variant="one-line" css={{marginTop: 15}}>
         {displayData.title}
       </Typography>
       <Typography variant="two-line" css={{marginTop: 10, color: colors.grey}}>
@@ -138,15 +139,27 @@ const Wrapper = styled.div({
 
 const Album = styled.img(
   {
+    height: 170,
     width: '100%',
-    height: 160,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     borderRadius: 3,
     boxShadow: '2px 2px 5px rgba(0,0,0,.3)',
   },
-  ({artist}) => (artist ? {borderRadius: 100} : null),
+  ({artist}) =>
+    artist
+      ? {
+          display: 'block',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          borderRadius: 1000,
+          [mq.lg]: {
+            height: 240,
+            width: 240,
+          },
+        }
+      : null,
 )
 
 const FilledPlayIcon = styled(PlayIcon)(filledPlayPauseStyles)

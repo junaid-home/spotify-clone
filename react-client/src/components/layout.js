@@ -1,17 +1,15 @@
 import styled from '@emotion/styled'
 import {Outlet} from 'react-router-dom'
 import Header from 'components/header'
-import SidebarNavigator from 'components/sidebar-navigator'
+
 import colors from 'utils/colors'
+import * as mq from 'utils/media-query'
 
 function Layout() {
   return (
     <Wrapper>
-      <SideBar>
-        <SidebarNavigator />
-      </SideBar>
+      <Header />
       <MainArea>
-        <Header />
         <ContentArea>
           <Outlet />
         </ContentArea>
@@ -28,10 +26,10 @@ const MainArea = styled.div({
   flex: 1,
   position: 'relative',
   marginLeft: 242,
-})
 
-const SideBar = styled.div({
-  position: 'relative',
+  [mq.md]: {
+    marginLeft: 0,
+  },
 })
 
 const ContentArea = styled.div({

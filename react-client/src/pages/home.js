@@ -8,6 +8,7 @@ import {useGetHomeDataQuery} from 'store/api/home'
 import Tooltip from 'components/tooltip'
 import Spinner from 'components/spinner'
 import {Fragment} from 'react'
+import * as mq from 'utils/media-query'
 
 function Home() {
   const user = useSelector(s => s.auth.user)
@@ -131,6 +132,19 @@ const ListContainer = styled.div({
   display: 'grid',
   gridTemplateColumns: 'repeat(5, 1fr)',
   gap: 20,
+
+  [mq.xl]: {
+    gridTemplateColumns: 'repeat(4, 1fr)',
+  },
+  [mq.lg]: {
+    gridTemplateColumns: 'repeat(3, 1fr)',
+  },
+  [mq.md]: {
+    gridTemplateColumns: 'repeat(2, 1fr)',
+  },
+  [mq.sm]: {
+    gridTemplateColumns: 'repeat(1, 1fr)',
+  },
 })
 
 const CenteredContent = styled.div({

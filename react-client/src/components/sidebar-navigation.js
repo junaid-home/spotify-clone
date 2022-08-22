@@ -11,10 +11,11 @@ import LibraryIcon from 'icons/library'
 import LibraryActiveIcon from 'icons/library-active'
 import PlusIcon from 'icons/plus'
 import HeartIcon from 'icons/heart'
+import * as mq from 'utils/media-query'
 
-function SidebarNavigator() {
+function SidebarNavigation({openMenu}) {
   return (
-    <Wrapper>
+    <Wrapper openMenu={openMenu}>
       <Logo
         variant="light"
         css={{width: 135, alignSelf: 'center', margin: 20}}
@@ -65,18 +66,33 @@ function SidebarNavigator() {
   )
 }
 
-const Wrapper = styled.div({
-  background: colors.darkest,
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  left: 0,
-  bottom: 0,
-  zIndex: 101,
-  width: 242,
-  minHeight: '100vh',
-  overflow: 'hidden',
-})
+const Wrapper = styled.div(
+  {
+    background: colors.darkest,
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    zIndex: 101,
+    minHeight: '100vh',
+    overflow: 'hidden',
+    width: 242,
+    transition: 'left 0.3s ease-in-out',
+
+    [mq.md]: {
+      left: -242,
+    },
+  },
+  ({openMenu}) =>
+    openMenu
+      ? {
+          [mq.md]: {
+            left: 0,
+          },
+        }
+      : null,
+)
 
 const PlusFilledIcon = styled(PlusIcon)({
   background: colors.white,
@@ -94,4 +110,4 @@ const HeartFilledIcon = styled(HeartIcon)({
   borderRadius: 2,
 })
 
-export default SidebarNavigator
+export default SidebarNavigation

@@ -1,91 +1,31 @@
 /** @jsxImportSource @emotion/react */
 import 'rc-dropdown/assets/index.css'
-import {ClassNames} from '@emotion/react/macro'
-import styled from '@emotion/styled/macro'
+import {useEffect, useState, useDeferredValue, Fragment} from 'react'
 import {useSelector} from 'react-redux'
-import Dropdown from 'rc-dropdown'
-import Menu, {Item as MenuItem} from 'rc-menu'
-import colors from 'utils/colors'
-import Logo from 'components/logo'
+import styled from '@emotion/styled/macro'
 import LeftArrowIcon from 'icons/left-arrow'
 import RightArrowIcon from 'icons/right-arrow'
-import ArrowDownIcon from 'icons/arrow-down'
-import ArrowUpIcon from 'icons/arrow-up'
-import PersonIcon from 'icons/person'
-import Typography from './typography'
-import {useNavigate} from 'react-router-dom'
-import {useLogoutMutation} from 'store/api/auth'
-import {useEffect, useState, useDeferredValue} from 'react'
+import MenuIcon from 'icons/menu'
+import SidebarNavigation from './sidebar-navigation'
+import UserMenuDropDown from './user-menu-dropdown'
+import Logo from './logo'
+import colors from 'utils/colors'
+import * as mq from 'utils/media-query'
 
 function Header() {
-  const navigate = useNavigate()
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false)
+  const [openSideMenu, setOpenSideMenu] = useState(false)
   const [solidHeader, setSolidHeader] = useState(false)
   const deferredSolidHeaderValue = useDeferredValue(solidHeader)
   const isAuth = useSelector(s => s.auth.isAuthenticated)
-  const user = useSelector(s => s.auth.user)
-  const [logout] = useLogoutMutation()
-
-  async function onSelect({key}) {
-    if (key !== '/logout') {
-      navigate(key)
-    }
-    await logout().unwrap()
-  }
-
-  const menu = (
-    <ClassNames>
-      {({cx, css}) => {
-        const menuStyles = css({
-          backgroundColor: `${colors.darkest} !important`,
-          color: `${colors.white} !important`,
-          boxShadow: `none !important`,
-          border: `1px solid ${colors.grey} !important`,
-        })
-
-        const menuItemStyles = css({
-          padding: `10px !important`,
-          fontSize: `12px !important`,
-          cursor: `pointer !important`,
-          fontFamily: 'inherit !important',
-          color: `${colors.lightGrey} !important`,
-
-          '&:not(:last-child)': {
-            borderBottom: `1px solid ${colors.grey} !important`,
-          },
-
-          '&:hover': {
-            backgroundColor: `${colors.dark} !important`,
-            color: `${colors.white} !important`,
-          },
-        })
-
-        return (
-          <Menu rootClassName={cx(menuStyles)} onSelect={onSelect}>
-            <MenuItem key="/accounts" className={cx(menuItemStyles)}>
-              My Account
-            </MenuItem>
-            <MenuItem key="/profile" className={cx(menuItemStyles)}>
-              Profile
-            </MenuItem>
-            <MenuItem key="/logout" className={cx(menuItemStyles)}>
-              Logout
-            </MenuItem>
-          </Menu>
-        )
-      }}
-    </ClassNames>
-  )
-
-  function scrollHandler(e) {
-    if (window.scrollY > 60) {
-      setSolidHeader(true)
-    } else {
-      setSolidHeader(false)
-    }
-  }
 
   useEffect(() => {
+    function scrollHandler(e) {
+      if (window.scrollY > 60) {
+        setSolidHeader(true)
+      } else {
+        setSolidHeader(false)
+      }
+    }
     window.addEventListener('scroll', scrollHandler)
 
     return () => window.removeEventListener('scroll', scrollHandler)
@@ -96,32 +36,22 @@ function Header() {
       <Logo />
     </UnAuthWrapper>
   ) : (
-    <AuthWrapper
-      css={{
-        background: deferredSolidHeaderValue ? colors.darkest : 'transparent',
-      }}
-    >
-      <div css={{marginLeft: 232}}>
-        <FilledLeftArrowIcon css={{marginRight: 25}} />
-        <FilledRightArrowIcon />
-      </div>
-      <Dropdown
-        onVisibleChange={() => setIsDropDownOpen(prev => !prev)}
-        trigger={['click']}
-        overlay={menu}
-        animation="slide-up"
+    <Fragment>
+      <Overlay open={openSideMenu} onClick={() => setOpenSideMenu(false)} />
+      <SidebarNavigation openMenu={openSideMenu} />
+      <AuthWrapper
+        css={{
+          background: deferredSolidHeaderValue ? colors.darkest : 'transparent',
+        }}
       >
-        <UserArea>
-          <PersonIconContainer>
-            <PersonFilledIcon css={{marginRight: 10}} />
-            <Typography css={{color: 'white', marginRight: 10}}>
-              {user.name.split(' ')[0].toLowerCase()}
-            </Typography>
-          </PersonIconContainer>
-          {isDropDownOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-        </UserArea>
-      </Dropdown>
-    </AuthWrapper>
+        <div css={{marginLeft: 232, [mq.md]: {marginLeft: 0}}}>
+          <MenuFilledIcon onClick={() => setOpenSideMenu(true)} />
+          <FilledLeftArrowIcon css={{marginRight: 25}} />
+          <FilledRightArrowIcon />
+        </div>
+        <UserMenuDropDown />
+      </AuthWrapper>
+    </Fragment>
   )
 }
 
@@ -143,47 +73,63 @@ const AuthWrapper = styled.div({
   position: 'fixed',
   top: 0,
   right: 0,
-  zIndex: 100,
+  zIndex: 98,
   width: '100%',
-})
+  userSelect: 'none',
 
-const UserArea = styled.div({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 3,
-  cursor: 'pointer',
-
-  '&:hover': {
-    backgroundColor: colors.black,
-    borderRadius: 100,
+  [mq.md]: {
+    padding: '13px 30px',
   },
-})
-
-const PersonIconContainer = styled.span({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
 })
 
 const FilledLeftArrowIcon = styled(LeftArrowIcon)({
   backgroundColor: colors.darkest,
   padding: 4,
   borderRadius: 100,
+  display: 'inline-block',
+
+  [mq.md]: {
+    display: 'none',
+  },
 })
 
 const FilledRightArrowIcon = styled(RightArrowIcon)({
   backgroundColor: colors.darkest,
   padding: 4,
   borderRadius: 100,
+  display: 'inline-block',
+
+  [mq.md]: {
+    display: 'none',
+  },
 })
 
-const PersonFilledIcon = styled(PersonIcon)({
-  backgroundColor: colors.grey,
+const MenuFilledIcon = styled(MenuIcon)({
+  backgroundColor: colors.darkest,
   padding: 6,
   borderRadius: 100,
-  width: 30,
-  height: 30,
+  width: 36,
+  height: 36,
+  display: 'none',
+  WebkitTapHighlightColor: 'transparent',
+  [mq.md]: {
+    display: 'inline-block',
+  },
 })
+
+const Overlay = styled.div(({open}) =>
+  open
+    ? {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        zIndex: 99,
+        background: 'rgba(255,255,255,.5)',
+        transition: 'background .5s ease-in',
+      }
+    : null,
+)
 
 export default Header
