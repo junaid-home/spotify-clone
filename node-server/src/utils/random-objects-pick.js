@@ -1,9 +1,19 @@
 const getRandomObjectsFromArray = (array, count) => {
   const randoms = []
 
-  for (let i = 0; i < count; i += 1) {
+  while (randoms.length < count) {
     const x = array[Math.floor(Math.random() * array.length)]
-    randoms.push(x)
+
+    let unique = true
+    randoms.forEach((y) => {
+      if (y.id === x.id) {
+        unique = false
+      }
+    })
+
+    if (unique) {
+      randoms.push(x)
+    }
   }
 
   return randoms

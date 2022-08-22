@@ -3,12 +3,10 @@ const serializeResponse = require('../utils/response-serializer')
 const getRandomObjectsFromArray = require('../utils/random-objects-pick')
 
 async function getHomeData(req, res) {
-  const userId = '123e4567-e89b-12d3-a456-426614174000'
-
   const songs = await songModel.findAll({ limit: 20, include: 'Artist' })
   const artists = await artistModel.findAll({ limit: 10 })
   const playlists = await playlistModel.findAll({
-    where: { user_id: userId },
+    where: { user_id: req.session.user.id },
     limit: 5,
   })
 
@@ -23,7 +21,7 @@ async function getHomeData(req, res) {
     focus: getRandomObjectsFromArray(songs, 5),
     playlists,
     artists: artists.slice(0, 5),
-    international_artists: artists.slice(5, 10),
+    internationalArtists: artists.slice(5, 10),
   })
 }
 

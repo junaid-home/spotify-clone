@@ -4,9 +4,9 @@ import styled from '@emotion/styled/macro'
 import colors from 'utils/colors'
 import Typography from './typography'
 
-function Tooltip({message, type, ...props}) {
+function Tooltip({message, type, noMargin, ...props}) {
   return (
-    <Container type={type} {...props}>
+    <Container type={type} {...props} noMargin={noMargin}>
       {type === 'danger' && <AlertIcon />}
       <Typography css={{color: colors.white, marginLeft: 10}}>
         {message}
@@ -25,6 +25,7 @@ const Container = styled.div(
     // textAlign: 'left',
   },
   ({type}) => (type === 'danger' ? {backgroundColor: colors.danger} : null),
+  ({noMargin}) => (noMargin ? {borderRadius: 0} : null),
 )
 
 export default Tooltip

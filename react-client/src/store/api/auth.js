@@ -9,11 +9,17 @@ export const authApi = createApi({
   endpoints: builder => {
     return {
       getFbLoginUri: builder.mutation({
-        query: () => ({url: '/facebook/uri', method: 'GET'}),
+        query: () => ({
+          url: '/facebook/uri',
+          method: 'GET',
+        }),
       }),
 
       getGoogleLoginUri: builder.mutation({
-        query: () => ({url: '/google/uri', method: 'GET'}),
+        query: () => ({
+          url: '/google/uri',
+          method: 'GET',
+        }),
       }),
 
       loginWithOauth2: builder.mutation({
@@ -21,6 +27,7 @@ export const authApi = createApi({
           return {
             url: payload.uri,
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -34,6 +41,7 @@ export const authApi = createApi({
           return {
             url: '/login',
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -47,6 +55,7 @@ export const authApi = createApi({
           return {
             url: '/signup',
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },

@@ -36,6 +36,7 @@ const corsMiddleware = cors({
     'ACCESS-CONTROL-ALLOW-METHODS',
     'ACCESS-CONTROL-ALLOW-ORIGIN',
   ],
+  credentials: true,
   origin: $CORS_ORIGIN,
   preflightContinue: true,
   methods: ['OPTIONS', 'POST', 'PUT', 'GET', 'PATCH', 'DELETE'],
