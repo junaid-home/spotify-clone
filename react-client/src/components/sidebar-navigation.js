@@ -13,7 +13,7 @@ import PlusIcon from 'icons/plus'
 import HeartIcon from 'icons/heart'
 import * as mq from 'utils/media-query'
 
-function SidebarNavigation({openMenu}) {
+function SidebarNavigation({openMenu, setOpenMenu}) {
   return (
     <Wrapper openMenu={openMenu}>
       <Logo
@@ -26,6 +26,7 @@ function SidebarNavigation({openMenu}) {
         text="Home"
         link="/"
         css={{marginBottom: 8}}
+        onClick={() => setOpenMenu(false)}
       />
       <NavLink
         icon={SearchIcon}
@@ -33,6 +34,7 @@ function SidebarNavigation({openMenu}) {
         text="Search"
         link="/search"
         css={{marginBottom: 8}}
+        onClick={() => setOpenMenu(false)}
       />
       <NavLink
         icon={LibraryIcon}
@@ -40,6 +42,7 @@ function SidebarNavigation({openMenu}) {
         text="Your Library"
         link="/library"
         css={{marginBottom: 50}}
+        onClick={() => setOpenMenu(false)}
       />
       <NavLink
         icon={PlusFilledIcon}
@@ -47,6 +50,7 @@ function SidebarNavigation({openMenu}) {
         text="Create Playlist"
         link="/playlist"
         css={{marginBottom: 8}}
+        onClick={() => setOpenMenu(false)}
       />
       <NavLink
         icon={HeartFilledIcon}
@@ -54,6 +58,7 @@ function SidebarNavigation({openMenu}) {
         text="Liked Songs"
         link="/favorites"
         css={{marginBottom: 18}}
+        onClick={() => setOpenMenu(false)}
       />
       <div
         css={{

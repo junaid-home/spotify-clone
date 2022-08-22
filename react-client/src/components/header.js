@@ -38,7 +38,10 @@ function Header() {
   ) : (
     <Fragment>
       <Overlay open={openSideMenu} onClick={() => setOpenSideMenu(false)} />
-      <SidebarNavigation openMenu={openSideMenu} />
+      <SidebarNavigation
+        openMenu={openSideMenu}
+        setOpenMenu={setOpenSideMenu}
+      />
       <AuthWrapper
         css={{
           background: deferredSolidHeaderValue ? colors.darkest : 'transparent',

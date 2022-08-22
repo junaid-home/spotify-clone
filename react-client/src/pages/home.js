@@ -157,9 +157,13 @@ const CenteredContent = styled.div({
 
 const FixedPositionContent = styled.div({
   position: 'fixed',
-  top: 62,
+  top: 63,
   left: 242,
   right: 0,
+
+  [mq.md]: {
+    left: 0,
+  },
 })
 
 export default Home
