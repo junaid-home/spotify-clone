@@ -113,7 +113,7 @@ const filledPlayPauseStyles = css({
   top: '40%',
   right: '15%',
   display: 'none',
-  zIndex: 98,
+  zIndex: 90,
   opacity: 0,
   transition: 'all 3s ease-in',
 

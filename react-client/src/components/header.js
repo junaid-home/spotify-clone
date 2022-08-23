@@ -2,10 +2,12 @@
 import 'rc-dropdown/assets/index.css'
 import {useEffect, useState, useDeferredValue, Fragment} from 'react'
 import {useSelector} from 'react-redux'
+import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import LeftArrowIcon from 'icons/left-arrow'
 import RightArrowIcon from 'icons/right-arrow'
 import MenuIcon from 'icons/menu'
+import Input from './input'
 import SidebarNavigation from './sidebar-navigation'
 import UserMenuDropDown from './user-menu-dropdown'
 import Logo from './logo'
@@ -13,10 +15,17 @@ import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
 function Header() {
+  const location = useLocation()
+  const isAuth = useSelector(s => s.auth.isAuthenticated)
   const [openSideMenu, setOpenSideMenu] = useState(false)
   const [solidHeader, setSolidHeader] = useState(false)
   const deferredSolidHeaderValue = useDeferredValue(solidHeader)
-  const isAuth = useSelector(s => s.auth.isAuthenticated)
+  const [query, setQuery] = useState('')
+  const defferedQuery = useDeferredValue(query, {})
+
+  useEffect(() => {
+    console.log('running agina...')
+  }, [defferedQuery])
 
   useEffect(() => {
     function scrollHandler(e) {
@@ -47,11 +56,27 @@ function Header() {
           background: deferredSolidHeaderValue ? colors.darkest : 'transparent',
         }}
       >
-        <div css={{marginLeft: 232, [mq.md]: {marginLeft: 0}}}>
+        <ContentContainer>
           <MenuFilledIcon onClick={() => setOpenSideMenu(true)} />
           <FilledLeftArrowIcon css={{marginRight: 25}} />
           <FilledRightArrowIcon />
-        </div>
+          {location.pathname === '/search' && (
+            <Input
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              variant="search"
+              placeholder="Artists, Songs, or Playlists"
+              css={{
+                marginLeft: 30,
+                flex: 1,
+                maxWidth: '55%',
+                [mq.md]: {
+                  display: 'none',
+                },
+              }}
+            />
+          )}
+        </ContentContainer>
         <UserMenuDropDown />
       </AuthWrapper>
     </Fragment>
@@ -83,6 +108,13 @@ const AuthWrapper = styled.div({
   [mq.md]: {
     padding: '13px 30px',
   },
+})
+
+const ContentContainer = styled.div({
+  marginLeft: 232,
+  display: 'flex',
+  flex: 1,
+  [mq.md]: {marginLeft: 0},
 })
 
 const FilledLeftArrowIcon = styled(LeftArrowIcon)({
