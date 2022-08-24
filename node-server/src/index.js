@@ -27,6 +27,7 @@ const sessionMiddleware = cookieSession({
   secure: $ENVIRONMENT === 'production',
   httpOnly: true,
   secret: $SESSION_KEY,
+  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 })
 
 const corsMiddleware = cors({
