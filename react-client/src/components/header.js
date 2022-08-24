@@ -13,6 +13,7 @@ import UserMenuDropDown from './user-menu-dropdown'
 import Logo from './logo'
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+import {useQueryDataMutation} from 'store/api/search'
 
 function Header() {
   const location = useLocation()
@@ -21,11 +22,12 @@ function Header() {
   const [solidHeader, setSolidHeader] = useState(false)
   const deferredSolidHeaderValue = useDeferredValue(solidHeader)
   const [query, setQuery] = useState('')
-  const defferedQuery = useDeferredValue(query, {})
+  const defferedQuery = useDeferredValue(query)
+  const [searchQuery] = useQueryDataMutation()
 
   useEffect(() => {
-    console.log('running agina...')
-  }, [defferedQuery])
+    searchQuery({query: defferedQuery.toLowerCase()})
+  }, [defferedQuery, searchQuery])
 
   useEffect(() => {
     function scrollHandler(e) {
