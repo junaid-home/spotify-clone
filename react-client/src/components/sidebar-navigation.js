@@ -3,6 +3,7 @@ import styled from '@emotion/styled/macro'
 import Logo from 'components/logo'
 import colors from 'utils/colors'
 import NavLink from './nav-link'
+
 import HomeIcon from 'icons/home'
 import HomeActiveIcon from 'icons/home-active'
 import SearchIcon from 'icons/search'
@@ -13,7 +14,7 @@ import PlusIcon from 'icons/plus'
 import HeartIcon from 'icons/heart'
 import * as mq from 'utils/media-query'
 
-function SidebarNavigation({openMenu, setOpenMenu}) {
+function SidebarNavigation({openMenu, setOpenMenu, setOpenModal}) {
   return (
     <Wrapper openMenu={openMenu}>
       <Logo
@@ -48,9 +49,12 @@ function SidebarNavigation({openMenu, setOpenMenu}) {
         icon={PlusFilledIcon}
         activeIcon={PlusFilledIcon}
         text="Create Playlist"
-        link="/playlist"
+        link="#"
         css={{marginBottom: 8}}
-        onClick={() => setOpenMenu(false)}
+        onClick={() => {
+          setOpenModal(true)
+          setOpenMenu(false)
+        }}
       />
       <NavLink
         icon={HeartFilledIcon}

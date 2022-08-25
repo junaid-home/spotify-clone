@@ -1,20 +1,30 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled/macro'
 import {Outlet} from 'react-router-dom'
-import Header from 'components/header'
+import Header from './header'
+import CreatePlaylistModal from './create-playlist-modal'
 
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+import {Fragment, useState} from 'react'
 
 function Layout() {
+  const [openModal, setOpenModal] = useState()
+
   return (
-    <Wrapper>
-      <Header />
-      <MainArea>
-        <ContentArea>
-          <Outlet />
-        </ContentArea>
-      </MainArea>
-    </Wrapper>
+    <Fragment>
+      <CreatePlaylistModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+      />
+      <Wrapper>
+        <Header setOpenModal={setOpenModal} />
+        <MainArea>
+          <ContentArea>
+            <Outlet />
+          </ContentArea>
+        </MainArea>
+      </Wrapper>
+    </Fragment>
   )
 }
 

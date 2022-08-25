@@ -15,7 +15,7 @@ import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 import {useQueryDataMutation} from 'store/api/search'
 
-function Header() {
+function Header({setOpenModal}) {
   const location = useLocation()
   const isAuth = useSelector(s => s.auth.isAuthenticated)
   const [openSideMenu, setOpenSideMenu] = useState(false)
@@ -52,6 +52,7 @@ function Header() {
       <SidebarNavigation
         openMenu={openSideMenu}
         setOpenMenu={setOpenSideMenu}
+        setOpenModal={setOpenModal}
       />
       <AuthWrapper
         css={{
