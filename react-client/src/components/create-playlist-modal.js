@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {useCallback} from 'react'
+import {useCallback, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import Modal from 'react-modal'
 import {useDropzone} from 'react-dropzone'
@@ -11,26 +11,22 @@ import Button from './button'
 import * as mq from 'utils/media-query'
 
 function CreatePlaylistModal({open, onClose}) {
+  const [, setImage] = useState(null)
+  const [imageSrc, setImageSrc] = useState('')
   const onDrop = useCallback(acceptedFiles => {
-    // Do something with the files
-    console.log(acceptedFiles)
+    setImage(acceptedFiles[0])
+
+    const fileReader = new FileReader()
+    fileReader.onload = e => {
+      setImageSrc(e.target.result)
+    }
+    fileReader.readAsDataURL(acceptedFiles[0])
   }, [])
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
     maxFiles: 1,
   })
-
-  const customStyles = {
-    content: {
-      background: colors.dark,
-      color: colors.white,
-      padding: 20,
-      inset: 20,
-    },
-    overlay: {
-      zIndex: 1000,
-    },
-  }
 
   return (
     <Modal
@@ -41,7 +37,7 @@ function CreatePlaylistModal({open, onClose}) {
     >
       <FilledCloseIcon onClick={() => onClose()} />
       <DropZoneSection css={{marginTop: 30}}>
-        <div {...getRootProps()}>
+        <div {...getRootProps()} css={{padding: '120px 20px'}}>
           <input {...getInputProps()} />
           {isDragActive ? (
             <p>Drop the playlist image file here ...</p>
@@ -51,20 +47,15 @@ function CreatePlaylistModal({open, onClose}) {
         </div>
       </DropZoneSection>
       <BottomContainer>
-        <FilledPlaylistIcon css={{marginTop: 40}} />
+        {imageSrc ? (
+          <PlaylistImage src={imageSrc} alt="Playlist" css={{marginTop: 30}} />
+        ) : (
+          <FilledPlaylistIcon css={{marginTop: 30}} />
+        )}
         <div css={{flex: 1, paddingRight: 20, [mq.md]: {paddingRight: 0}}}>
-          <Input
-            placeholder="Playlist Name"
-            css={{marginTop: 40, marginLeft: 20, [mq.md]: {marginLeft: 0}}}
-          />
-          <Input
-            placeholder="Color code 1 (e.g #FFFFFF)"
-            css={{marginTop: 20, marginLeft: 20, [mq.md]: {marginLeft: 0}}}
-          />
-          <Input
-            placeholder="Color code 2 (e.g #000000)"
-            css={{marginTop: 20, marginLeft: 20, [mq.md]: {marginLeft: 0}}}
-          />
+          <StyledInput placeholder="Playlist Name" />
+          <StyledInput placeholder="Color code 1 (e.g #FFFFFF)" />
+          <StyledInput placeholder="Color code 2 (e.g #000000)" />
         </div>
       </BottomContainer>
       <Button variant="primary" css={{marginTop: 20}}>
@@ -74,16 +65,32 @@ function CreatePlaylistModal({open, onClose}) {
   )
 }
 
+const customStyles = {
+  content: {
+    background: colors.dark,
+    color: colors.white,
+    padding: 20,
+    inset: 10,
+    borderColor: colors.darkest,
+    borderWidth: 2,
+  },
+  overlay: {
+    zIndex: 1000,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+}
+
 const FilledCloseIcon = styled(CloseIcon)({
   width: 30,
   height: 30,
-  background: colors.lightGrey,
+  background: colors.grey,
   borderRadius: 100,
-  padding: 8,
+  padding: 5,
   position: 'absolute',
   right: 10,
   top: 10,
   cursor: 'pointer',
+  border: `2px solid ${colors.darkest}`,
 })
 
 const DropZoneSection = styled.section({
@@ -91,7 +98,7 @@ const DropZoneSection = styled.section({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '30px',
+  cursor: 'grab',
   borderWidth: 2,
   borderRadius: 2,
   borderColor: colors.lightGrey,
@@ -102,6 +109,17 @@ const DropZoneSection = styled.section({
   transition: 'border .24s ease-in-out',
 })
 
+const StyledInput = styled(Input)({
+  marginTop: 20,
+  marginLeft: 20,
+  color: colors.lightGrey,
+  [mq.md]: {marginLeft: 0},
+
+  '&:focus': {
+    borderColor: colors.white,
+  },
+})
+
 const BottomContainer = styled.div({
   display: 'flex',
   alignItems: 'center',
@@ -110,11 +128,18 @@ const BottomContainer = styled.div({
     flexDirection: 'column',
   },
 })
+
 const FilledPlaylistIcon = styled(PlaylistIcon)({
   background: colors.darkest,
   height: 200,
   width: 199,
   padding: 40,
+  borderRadius: 3,
+})
+
+const PlaylistImage = styled.img({
+  height: 200,
+  width: 199,
   borderRadius: 3,
 })
 
