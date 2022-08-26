@@ -4,7 +4,7 @@ const serializeResponse = require('../utils/response-serializer')
 const validator = require('../validators/auth')
 const errors = require('../utils/error')
 const hasher = require('../utils/hasher')
-const { userModel } = require('../models')
+const { userModel, playlistModel } = require('../models')
 const googleOauth2 = require('../utils/google-Oath2.0')
 const fbOauth2 = require('../utils/facebook-Oauth2.0')
 
@@ -36,7 +36,7 @@ const createNewUser = async (req, res) => {
   const userSlice = safeUser(newUser)
   req.session.user = userSlice
 
-  return serializeResponse(res, { user: userSlice })
+  return serializeResponse(res, { user: { ...userSlice, playlists: [] } })
 }
 
 // Login handler
@@ -47,10 +47,11 @@ const authenticateUser = async (req, res) => {
   const user = await userModel.findOne({
     where: { email: req.body.email },
   })
-
   if (!user) {
     throw new errors.NotFoundError("User don't exist, please signup!")
   }
+
+  const playlists = await playlistModel.findAll({ where: { user_id: user.id } })
 
   const hashedPassword = hasher.hashify(req.body.password, user.salt)
   if (hashedPassword.hash !== user.password) {
@@ -60,7 +61,7 @@ const authenticateUser = async (req, res) => {
   const userSlice = safeUser(user)
   req.session.user = userSlice
 
-  return serializeResponse(res, { user: userSlice })
+  return serializeResponse(res, { user: { ...userSlice, playlists } })
 }
 
 // Logout handler
@@ -101,8 +102,16 @@ const authenticateWithGoogleAccount = async (req, res) => {
   const { email, name, picture } = user
   const newUser = { email, name, picture }
 
+  if (isUserAlreadyExist) {
+    const playlists = await playlistModel.findAll({
+      where: { user_id: isUserAlreadyExist.id },
+    })
+    newUser.playlists = playlists
+  }
+
   if (user?.email && !isUserAlreadyExist) {
     await userModel.create(newUser)
+    newUser.playlists = []
   }
 
   req.session.user = newUser
@@ -149,8 +158,16 @@ const authenticateWithFacebookAccount = async (req, res) => {
     email: `${user.id}@facebook.com`,
   }
 
+  if (isUserAlreadyExist) {
+    const playlists = await playlistModel.findAll({
+      where: { user_id: isUserAlreadyExist.id },
+    })
+    newUser.playlists = playlists
+  }
+
   if (user?.id && !isUserAlreadyExist) {
     await userModel.create(newUser)
+    user.playlists = []
   }
 
   req.session.user = newUser

@@ -31,7 +31,7 @@ async function searchByQuery(req, res) {
       ),
     },
   })
-  const playlists = await playlistModel.findAll({
+  const playlistsIds = await playlistModel.findAll({
     limit,
     where: {
       name: sequelize.where(
@@ -40,7 +40,19 @@ async function searchByQuery(req, res) {
         `%${req.body.query}%`
       ),
     },
+    attributes: ['id'],
   })
+
+  const playlists = await Promise.all(
+    playlistsIds.map(async (p) => {
+      const playlist = await playlistModel.findOne({
+        where: { id: p.id },
+        include: 'User',
+      })
+
+      return playlist
+    })
+  )
 
   return serializeResponse(res, {
     playlists,

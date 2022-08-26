@@ -15,7 +15,6 @@ const Typography = styled.p(
           fontSize: 13,
           fontWeight: 700,
           letterSpacing: 0.3,
-          color: colors.darkest,
         }
       : null,
   ({variant}) =>

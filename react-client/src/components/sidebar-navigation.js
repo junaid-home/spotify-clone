@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
-import Logo from 'components/logo'
-import colors from 'utils/colors'
+import {useSelector} from 'react-redux'
+
+import Logo from './logo'
 import NavLink from './nav-link'
 
 import HomeIcon from 'icons/home'
@@ -12,9 +13,15 @@ import LibraryIcon from 'icons/library'
 import LibraryActiveIcon from 'icons/library-active'
 import PlusIcon from 'icons/plus'
 import HeartIcon from 'icons/heart'
+
+import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+import Typography from './typography'
+import {Link} from 'react-router-dom'
 
 function SidebarNavigation({openMenu, setOpenMenu, setOpenModal}) {
+  const playlists = useSelector(s => s.auth.user.playlists)
+
   return (
     <Wrapper openMenu={openMenu}>
       <Logo
@@ -71,6 +78,18 @@ function SidebarNavigation({openMenu, setOpenMenu, setOpenModal}) {
           borderBottom: `1px solid ${colors.dark}`,
         }}
       />
+      <div css={{color: colors.grey, padding: 20}}>
+        {playlists.map(p => (
+          <Link key={p.id} to={`/playlist/${p.id}`}>
+            <Typography
+              css={{cursor: 'pointer', marginBottom: 15}}
+              variant="label"
+            >
+              #{p.name}
+            </Typography>
+          </Link>
+        ))}
+      </div>
     </Wrapper>
   )
 }
