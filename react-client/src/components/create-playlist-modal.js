@@ -1,32 +1,47 @@
 /** @jsxImportSource @emotion/react */
-import {useCallback, useState} from 'react'
+import {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import Modal from 'react-modal'
 import {useDropzone} from 'react-dropzone'
 import colors from 'utils/colors'
 import CloseIcon from 'icons/close'
-import PlaylistIcon from 'icons/playlist'
 import Input from './input'
 import Button from './button'
 import * as mq from 'utils/media-query'
+import {useCreatePlaylistMutation} from 'store/api/playlist'
+import useDropzoneImage from 'hooks/use-dropzone-image'
 
 function CreatePlaylistModal({open, onClose}) {
-  const [, setImage] = useState(null)
-  const [imageSrc, setImageSrc] = useState('')
-  const onDrop = useCallback(acceptedFiles => {
-    setImage(acceptedFiles[0])
-
-    const fileReader = new FileReader()
-    fileReader.onload = e => {
-      setImageSrc(e.target.result)
-    }
-    fileReader.readAsDataURL(acceptedFiles[0])
-  }, [])
-
+  const navigate = useNavigate()
+  const [name, setName] = useState('')
+  const [color1, setColor1] = useState('')
+  const [color2, setColor2] = useState('')
+  const {onDrop, image, imageSrc} = useDropzoneImage()
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
     maxFiles: 1,
+    accept: {
+      'image/jpeg': ['.jpg', '.jpeg', '.png'],
+    },
   })
+  const [createPlaylist, {isLoading, isError}] = useCreatePlaylistMutation()
+
+  const handleFormSubmission = async e => {
+    e.preventDefault()
+
+    const formData = new FormData()
+
+    formData.append('name', name)
+    formData.append('color1', color1)
+    formData.append('color2', color2)
+    formData.append('picture', image)
+
+    const result = await createPlaylist(formData)
+    if (!isError) {
+      navigate(`/playlist/${result.data?.data?.id}`)
+    }
+  }
 
   return (
     <Modal
@@ -46,21 +61,38 @@ function CreatePlaylistModal({open, onClose}) {
           )}
         </div>
       </DropZoneSection>
-      <BottomContainer>
+      <Form onSubmit={handleFormSubmission}>
         {imageSrc ? (
-          <PlaylistImage src={imageSrc} alt="Playlist" css={{marginTop: 30}} />
-        ) : (
-          <FilledPlaylistIcon css={{marginTop: 30}} />
-        )}
+          <PlaylistImage src={imageSrc} alt="Playlist" css={{marginTop: 20}} />
+        ) : null}
         <div css={{flex: 1, paddingRight: 20, [mq.md]: {paddingRight: 0}}}>
-          <StyledInput placeholder="Playlist Name" />
-          <StyledInput placeholder="Color code 1 (e.g #FFFFFF)" />
-          <StyledInput placeholder="Color code 2 (e.g #000000)" />
+          <div>
+            <StyledInput
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Playlist Name"
+            />
+            <StyledInput
+              value={color1}
+              onChange={e => setColor1(e.target.value)}
+              placeholder="Color code 1 (e.g #FFFFFF)"
+            />
+            <StyledInput
+              value={color2}
+              onChange={e => setColor2(e.target.value)}
+              placeholder="Color code 2 (e.g #000000)"
+            />
+          </div>
+          <Button
+            type="submit"
+            loading={isLoading}
+            variant="primary"
+            css={{marginTop: 20, marginLeft: 20}}
+          >
+            Save
+          </Button>
         </div>
-      </BottomContainer>
-      <Button variant="primary" css={{marginTop: 20}}>
-        Save
-      </Button>
+      </Form>
     </Modal>
   )
 }
@@ -120,21 +152,14 @@ const StyledInput = styled(Input)({
   },
 })
 
-const BottomContainer = styled.div({
+const Form = styled.form({
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
 
   [mq.md]: {
     flexDirection: 'column',
+    alignItems: 'center',
   },
-})
-
-const FilledPlaylistIcon = styled(PlaylistIcon)({
-  background: colors.darkest,
-  height: 200,
-  width: 199,
-  padding: 40,
-  borderRadius: 3,
 })
 
 const PlaylistImage = styled.img({
