@@ -79,13 +79,13 @@ const getDisplayableData = (kind, data) => {
   const isPlaylist = kind === 'playlist'
 
   return {
-    picture: isSong || isPlaylist ? data.thumbnail : data.picture,
+    picture: isSong ? data.thumbnail : data.picture,
     title: isSong ? data.title : isPlaylist ? `#${data.name}` : data.name,
     desc: isSong
       ? formatSongDesc(data.description)
       : isArtist
       ? 'Artist'
-      : `By: ${data.owner}`,
+      : `By: ${data.User.name}`,
   }
 }
 

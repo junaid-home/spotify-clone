@@ -8,6 +8,7 @@ async function getHomeData(req, res) {
   const playlists = await playlistModel.findAll({
     where: { user_id: req.session.user.id },
     limit: 5,
+    include: 'User',
   })
 
   return serializeResponse(res, {

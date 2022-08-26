@@ -8,6 +8,7 @@ import colors from 'utils/colors'
 import CloseIcon from 'icons/close'
 import Input from './input'
 import Button from './button'
+import Tooltip from './tooltip'
 import * as mq from 'utils/media-query'
 import {useCreatePlaylistMutation} from 'store/api/playlist'
 import useDropzoneImage from 'hooks/use-dropzone-image'
@@ -25,7 +26,8 @@ function CreatePlaylistModal({open, onClose}) {
       'image/jpeg': ['.jpg', '.jpeg', '.png'],
     },
   })
-  const [createPlaylist, {isLoading, isError}] = useCreatePlaylistMutation()
+  const [createPlaylist, {isLoading, isError, error}] =
+    useCreatePlaylistMutation()
 
   const handleFormSubmission = async e => {
     e.preventDefault()
@@ -33,12 +35,12 @@ function CreatePlaylistModal({open, onClose}) {
     const formData = new FormData()
 
     formData.append('name', name)
-    formData.append('color1', color1)
-    formData.append('color2', color2)
+    formData.append('code1', color1)
+    formData.append('code2', color2)
     formData.append('picture', image)
 
     const result = await createPlaylist(formData)
-    if (!isError) {
+    if (!result.data.id) {
       navigate(`/playlist/${result.data?.data?.id}`)
     }
   }
@@ -50,8 +52,14 @@ function CreatePlaylistModal({open, onClose}) {
       style={customStyles}
       ariaHideApp={false}
     >
+      {isError ? (
+        <Tooltip
+          type="danger"
+          message={error?.data?.message || error.message}
+        />
+      ) : null}
       <FilledCloseIcon onClick={() => onClose()} />
-      <DropZoneSection css={{marginTop: 30}}>
+      <DropZoneSection css={{marginTop: isError ? 10 : 30}}>
         <div {...getRootProps()} css={{padding: '120px 20px'}}>
           <input {...getInputProps()} />
           {isDragActive ? (

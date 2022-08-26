@@ -12,9 +12,6 @@ export const playlistApi = createApi({
         url: '/create',
         method: 'POST',
         body: data,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
         credentials: 'include',
       }),
     }),
