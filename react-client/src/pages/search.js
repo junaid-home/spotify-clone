@@ -17,7 +17,9 @@ function Search() {
   const [searchQuery] = useQueryDataMutation()
 
   useEffect(() => {
-    searchQuery({query: defferedQuery.toLowerCase()})
+    if (defferedQuery.length) {
+      searchQuery({query: defferedQuery.toLowerCase()})
+    }
   }, [defferedQuery, searchQuery])
 
   return (
