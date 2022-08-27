@@ -2,7 +2,9 @@ export const song = {
   title: 'Janib Song',
   description:
     'Aye jye teri janib, ana jana lag ta hai wajib, dil musafir hai tera ishq mein',
-  thumbnail: '/album.jpg',
+  thumbnail: '/playlist.jpg',
+  createdAt: new Date().toISOString(),
+  duration: '05:07',
 }
 
 export const artist = {

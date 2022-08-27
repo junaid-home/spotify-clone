@@ -21,6 +21,7 @@ function Home() {
           type="danger"
           noMargin
           message={error?.data?.message || error.error}
+          css={{position: 'fixed', top: 63, left: 242, right: 0}}
         />
       </FixedPositionContent>
     )
@@ -32,7 +33,13 @@ function Home() {
     )
 
   return (
-    <div css={{color: colors.white}}>
+    <div
+      css={{
+        color: colors.white,
+        padding: '80px 30px',
+        background: colors.background,
+      }}
+    >
       <Typography variant="h1">Made for {user.name}</Typography>
       <ListContainer>
         {data.data.special.map(song => (
@@ -156,10 +163,9 @@ const CenteredContent = styled.div({
 })
 
 const FixedPositionContent = styled.div({
-  position: 'fixed',
-  top: 63,
-  left: 242,
-  right: 0,
+  background: colors.background,
+  minHeight: '120vh',
+  color: colors.white,
 
   [mq.md]: {
     left: 0,

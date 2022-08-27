@@ -6,7 +6,7 @@ const colors = {
   white: '#fff',
   card: 'linear-gradient(0deg, rgba(33,33,33,1) 0%, rgba(24,24,24,1) 100%)',
   background:
-    ' linear-gradient(0deg, rgba(18,18,18,1) 89%, rgba(33,33,33,1) 95%)',
+    'linear-gradient(0deg, rgba(18,18,18,1) 90%, rgba(33,33,33,1) 95%)',
   darkest: '#000',
   dark: '#222',
   primary: '#1ED760',

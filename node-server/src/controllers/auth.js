@@ -51,7 +51,10 @@ const authenticateUser = async (req, res) => {
     throw new errors.NotFoundError("User don't exist, please signup!")
   }
 
-  const playlists = await playlistModel.findAll({ where: { user_id: user.id } })
+  const playlists = await playlistModel.findAll({
+    where: { user_id: user.id },
+    include: ['Color', 'User'],
+  })
 
   const hashedPassword = hasher.hashify(req.body.password, user.salt)
   if (hashedPassword.hash !== user.password) {
@@ -105,6 +108,7 @@ const authenticateWithGoogleAccount = async (req, res) => {
   if (isUserAlreadyExist) {
     const playlists = await playlistModel.findAll({
       where: { user_id: isUserAlreadyExist.id },
+      include: ['Color', 'User'],
     })
     newUser.playlists = playlists
   }
@@ -161,6 +165,7 @@ const authenticateWithFacebookAccount = async (req, res) => {
   if (isUserAlreadyExist) {
     const playlists = await playlistModel.findAll({
       where: { user_id: isUserAlreadyExist.id },
+      include: ['Color', 'User'],
     })
     newUser.playlists = playlists
   }

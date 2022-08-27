@@ -23,7 +23,14 @@ function Search() {
   }, [defferedQuery, searchQuery])
 
   return (
-    <div css={{color: colors.white}}>
+    <div
+      css={{
+        color: colors.white,
+        padding: '80px 30px',
+        background: `linear-gradient(0deg, rgba(18,18,18,1) 50%, rgba(33,33,33,1) 95%)`,
+        minHeight: '100vh',
+      }}
+    >
       <Input
         value={query}
         variant="search"

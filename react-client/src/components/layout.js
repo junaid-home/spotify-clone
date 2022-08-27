@@ -1,9 +1,9 @@
 import styled from '@emotion/styled/macro'
 import {Outlet} from 'react-router-dom'
+
 import Header from './header'
 import CreatePlaylistModal from './create-playlist-modal'
 
-import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 import {Fragment, useState} from 'react'
 
@@ -19,9 +19,7 @@ function Layout() {
       <Wrapper>
         <Header setOpenModal={setOpenModal} />
         <MainArea>
-          <ContentArea>
-            <Outlet />
-          </ContentArea>
+          <Outlet />
         </MainArea>
       </Wrapper>
     </Fragment>
@@ -40,12 +38,6 @@ const MainArea = styled.div({
   [mq.md]: {
     marginLeft: 0,
   },
-})
-
-const ContentArea = styled.div({
-  padding: '80px 30px',
-  background: colors.background,
-  minHeight: '120vh',
 })
 
 export default Layout

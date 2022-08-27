@@ -107,7 +107,7 @@ const Wrapper = styled.div(
     overflow: 'hidden',
     width: 242,
     transition: 'left 0.3s ease-in-out',
-
+    userSelect: 'none',
     [mq.md]: {
       left: -242,
     },

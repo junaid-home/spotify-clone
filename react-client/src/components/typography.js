@@ -12,9 +12,18 @@ const Typography = styled.p(
   ({variant}) =>
     variant === 'label'
       ? {
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: 700,
           letterSpacing: 0.3,
+        }
+      : null,
+  ({variant}) =>
+    variant === 'h0'
+      ? {
+          fontSize: 100,
+          fontWeight: 900,
+          letterSpacing: 0.3,
+          color: 'inherit',
         }
       : null,
   ({variant}) =>
