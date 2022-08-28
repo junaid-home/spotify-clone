@@ -1,37 +1,31 @@
 /** @jsxImportSource @emotion/react */
-import {useCallback, useState} from 'react'
+import {useCallback, useMemo, useState} from 'react'
 import {useLocation} from 'react-router-dom'
-import {useSelector} from 'react-redux'
-import {createSelector} from '@reduxjs/toolkit'
 import styled from '@emotion/styled/macro'
 import {css} from '@emotion/react/macro'
 import Typography from 'components/typography'
+import Tooltip from 'components/tooltip'
+import Spinner from 'components/spinner'
 import PlayIcon from 'icons/play'
 import PauseIcon from 'icons/pause'
 import ClockIcon from 'icons/clock'
 import MoreIcon from 'icons/more'
 import HeartIcon from 'icons/heart'
-import HeartOutlineIcon from 'icons/heart-outline'
+// import HeartOutlineIcon from 'icons/heart-outline'
 import colors from 'utils/colors'
 import formatDate from 'utils/date-formatter'
-import {songs} from 'utils/data'
+import {useGetPlaylistByIdQuery} from 'store/api/playlist'
+import * as mq from 'utils/media-query'
 
 function Playlist() {
   const location = useLocation()
-  const state = useSelector(s => s)
   const [isPlaying, setIsplaying] = useState(false)
   const [focustedSong, setFocusedSong] = useState(null)
-
-  const selectPlaylists = state => state.auth.user.playlists
-  const selectPlaylistId = _state =>
-    location.pathname.split('/')[location.pathname.split('/').length - 1]
-  const playlistSelector = createSelector(
-    selectPlaylists,
-    selectPlaylistId,
-    (playlists, playlistId) => playlists.find(x => x.id === playlistId),
+  const {data, isLoading, isError, error} = useGetPlaylistByIdQuery(
+    location.pathname.split('/')[location.pathname.split('/').length - 1],
   )
 
-  const playlist = playlistSelector(state)
+  const playlist = useMemo(() => data.data, [data])
   const formatDateMemoized = useCallback(isoString => formatDate(isoString), [])
 
   const handleSongFocus = index => {
@@ -40,6 +34,24 @@ function Playlist() {
   const handleSongUnFocus = index => {
     setFocusedSong(null)
   }
+
+  if (isError)
+    return (
+      <FixedPositionContent>
+        <Tooltip
+          type="danger"
+          noMargin
+          message={error?.data?.message || error.error}
+          css={{position: 'fixed', top: 63, left: 242, right: 0}}
+        />
+      </FixedPositionContent>
+    )
+  if (isLoading)
+    return (
+      <CenteredContent>
+        <Spinner />
+      </CenteredContent>
+    )
 
   return (
     <ContentContainer>
@@ -55,7 +67,7 @@ function Playlist() {
           </Typography>
           <Typography variant="h0">{playlist.name}</Typography>
           <Typography css={{marginTop: 30, marginLeft: 5}} variant="label">
-            {playlist.User.name} - 0 songs
+            {playlist.User.name} - {playlist.Songs.length} songs
           </Typography>
         </div>
       </MainWrapper>
@@ -92,11 +104,12 @@ function Playlist() {
             <ClockIcon css={{marginRight: 40}} />
           </SongListDurationItem>
         </SongListContainer>
-        {songs.map((s, i) => (
+        {playlist.Songs.map((s, i) => (
           <SongListContainer
             onMouseEnter={() => handleSongFocus(i)}
             onMouseLeave={() => handleSongUnFocus(i)}
             css={{marginBottom: 10}}
+            key={s.id}
           >
             <SongListIndexItem>
               {focustedSong === i ? (
@@ -221,6 +234,24 @@ const SongListDurationItem = styled.div({
 const SongImage = styled.img({
   width: 45,
   height: 45,
+})
+
+const CenteredContent = styled.div({
+  width: '100%',
+  height: '90vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+})
+
+const FixedPositionContent = styled.div({
+  background: colors.background,
+  minHeight: '120vh',
+  color: colors.white,
+
+  [mq.md]: {
+    left: 0,
+  },
 })
 
 export default Playlist

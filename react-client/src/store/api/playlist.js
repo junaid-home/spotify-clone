@@ -15,7 +15,15 @@ export const playlistApi = createApi({
         credentials: 'include',
       }),
     }),
+
+    getPlaylistById: builder.query({
+      query: id => ({
+        url: `/get/${id}`,
+        method: 'GET',
+        credentials: 'include',
+      }),
+    }),
   }),
 })
 
-export const {useCreatePlaylistMutation} = playlistApi
+export const {useCreatePlaylistMutation, useGetPlaylistByIdQuery} = playlistApi
