@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {useState} from 'react'
+import {useCallback, useState} from 'react'
 import {useLocation} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import {createSelector} from '@reduxjs/toolkit'
@@ -32,6 +32,7 @@ function Playlist() {
   )
 
   const playlist = playlistSelector(state)
+  const formatDateMemoized = useCallback(isoString => formatDate(isoString), [])
 
   const handleSongFocus = index => {
     setFocusedSong(index)
@@ -122,7 +123,9 @@ function Playlist() {
               <Typography variant="label">Playlist</Typography>
             </SongListTypeItem>
             <SongListDateItem>
-              <Typography variant="label">{formatDate(s.createdAt)}</Typography>
+              <Typography variant="label">
+                {formatDateMemoized(s.createdAt)}
+              </Typography>
             </SongListDateItem>
             <SongListDurationItem>
               <HeartIcon css={{marginRight: 25}} />
