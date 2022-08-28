@@ -9,5 +9,6 @@ router.post(
   upload.single('picture'),
   playlistController.createPlaylist
 )
+router.get('/get/:id', checkAuth, playlistController.getPlaylistById)
 
 module.exports = router

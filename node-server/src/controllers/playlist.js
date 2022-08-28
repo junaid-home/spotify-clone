@@ -1,9 +1,10 @@
 const fs = require('fs/promises')
-const { playlistModel, colorModel } = require('../models/index')
+const { playlistModel, colorModel, songModel } = require('../models/index')
 const { upload } = require('../config/cloudinary')
 const { validatePlaylist } = require('../validators/playlist')
 const serializeResponse = require('../utils/response-serializer')
 const errors = require('../utils/error')
+const safeUser = require('../utils/safe-user')
 
 async function createPlaylist(req, res) {
   const { error } = validatePlaylist(req.body)
@@ -48,4 +49,21 @@ async function createPlaylist(req, res) {
   })
 }
 
-module.exports = { createPlaylist }
+async function getPlaylistById(req, res) {
+  const playlist = await playlistModel.findOne({
+    where: { id: req.params.id },
+    include: ['User', 'Color', { model: songModel, through: 'SongPlaylists' }],
+  })
+  if (!playlist) {
+    throw new errors.BadRequestError(
+      `No playlist found with the id: ${req.params.id}`
+    )
+  }
+
+  return serializeResponse(res, {
+    ...playlist.get({ plain: true }),
+    User: safeUser(playlist.User),
+  })
+}
+
+module.exports = { createPlaylist, getPlaylistById }

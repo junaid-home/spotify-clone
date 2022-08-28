@@ -1,4 +1,3 @@
-const pick = require('lodash.pick')
 const querystring = require('querystring')
 const serializeResponse = require('../utils/response-serializer')
 const validator = require('../validators/auth')
@@ -7,9 +6,7 @@ const hasher = require('../utils/hasher')
 const { userModel, playlistModel } = require('../models')
 const googleOauth2 = require('../utils/google-Oath2.0')
 const fbOauth2 = require('../utils/facebook-Oauth2.0')
-
-const safeUser = (user) =>
-  pick(user, ['id', 'name', 'email', 'gender', 'dob', 'country'])
+const safeUser = require('../utils/safe-user')
 
 // signup handler
 const createNewUser = async (req, res) => {
