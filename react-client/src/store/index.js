@@ -6,6 +6,7 @@ import {searchApi} from './api/search'
 import {playlistApi} from './api/playlist'
 import authReducer from './reducers/auth'
 import searchReducer from './reducers/search'
+import {artistApi} from './api/artist'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [homeApi.reducerPath]: homeApi.reducer,
     [searchApi.reducerPath]: searchApi.reducer,
     [playlistApi.reducerPath]: playlistApi.reducer,
+    [artistApi.reducerPath]: artistApi.reducer,
     auth: authReducer,
     search: searchReducer,
   },
@@ -22,6 +24,7 @@ export const store = configureStore({
       homeApi.middleware,
       searchApi.middleware,
       playlistApi.middleware,
+      artistApi.middleware,
     ),
 })
 

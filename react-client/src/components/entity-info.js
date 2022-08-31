@@ -2,31 +2,46 @@
 import styled from '@emotion/styled/macro'
 import Typography from 'components/typography'
 
-function EntityInfo({data}) {
+function EntityInfo({kind = 'playlist', data}) {
+  const displayData = getDisplayableData(kind, data)
+
   return (
     <Wrapper
       css={{
-        background: `linear-gradient(0deg, ${data.Color.code2} 20%, ${data.Color.code1} 110%)`,
+        background: `linear-gradient(0deg, ${displayData.code2} 20%, ${displayData.code1} 110%)`,
       }}
     >
-      <PlaylistImage src={data.picture} alt={data.name} />
+      <PlaylistImage src={displayData.picture} alt={displayData.title} />
       <div css={{marginLeft: 30}}>
         <Typography css={{marginLeft: 5}} variant="label">
           PLAYLIST
         </Typography>
-        <Typography variant="h0">{data.name}</Typography>
+        <Typography variant="h0">{displayData.title}</Typography>
         <Typography css={{marginTop: 30, marginLeft: 5}} variant="label">
-          {data.User.name} - {data.Songs.length} songs
+          {displayData.title.split(' ')[0]} - {data.Songs.length} songs
         </Typography>
       </div>
     </Wrapper>
   )
 }
 
+const getDisplayableData = (kind, data) => {
+  const isArtist = kind === 'artist'
+  const isPlaylist = kind === 'playlist'
+
+  return {
+    picture: data.picture,
+    title: isPlaylist ? `#${data.name}` : data.name,
+    desc: isArtist ? 'Artist' : `By: ${data.User.name}`,
+    code1: isPlaylist ? data.Color.code1 : '#CE9FFC',
+    code2: isPlaylist ? data.Color.code2 : '#7367F0',
+  }
+}
+
 const Wrapper = styled.div({
   display: 'flex',
   justifyContent: 'flex-start',
-  alignItems: 'flex-end',
+  alignItems: 'center',
   padding: '80px 30px 30px 30px',
   userSelect: 'none',
 })

@@ -8,6 +8,7 @@ import Oauth2Page from 'pages/Oauth2'
 import HomePage from 'pages/home'
 import SerachPage from 'pages/search'
 import PlaylistPage from 'pages/playlist'
+import ArtistPage from 'pages/artist'
 import Layout from 'components/layout'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route exact path="/" element={<HomePage />} />
             <Route exact path="/search" element={<SerachPage />} />
             <Route exact path="/playlist/:id" element={<PlaylistPage />} />
+            <Route exact path="/artist/:id" element={<ArtistPage />} />
             <Route exact path="/library" element={<HomePage />} />
             <Route exact path="/favorites" element={<HomePage />} />
           </Route>

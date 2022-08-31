@@ -6,17 +6,17 @@ import Tooltip from 'components/tooltip'
 import Spinner from 'components/spinner'
 import EntityInfo from 'components/entity-info'
 import colors from 'utils/colors'
-import {useGetPlaylistByIdQuery} from 'store/api/playlist'
 import * as mq from 'utils/media-query'
 import SongList from 'components/song-list'
+import {useGetArtistByIdQuery} from 'store/api/artist'
 
-function Playlist() {
+function Artist() {
   const location = useLocation()
-  const {data, isLoading, isError, error} = useGetPlaylistByIdQuery(
+  const {data, isLoading, isError, error} = useGetArtistByIdQuery(
     location.pathname.split('/')[location.pathname.split('/').length - 1],
   )
 
-  const playlist = useMemo(() => data?.data, [data])
+  const artist = useMemo(() => data?.data, [data])
 
   if (isError)
     return (
@@ -39,8 +39,8 @@ function Playlist() {
 
   return (
     <ContentContainer>
-      <EntityInfo data={playlist} />
-      <SongList data={playlist.Songs} color={playlist.Color.code2} />
+      <EntityInfo data={artist} kind="artist" />
+      <SongList data={artist.Songs} />
     </ContentContainer>
   )
 }
@@ -71,4 +71,4 @@ const FixedPositionContent = styled.div({
   },
 })
 
-export default Playlist
+export default Artist

@@ -11,8 +11,9 @@ import HeartIcon from 'icons/heart'
 // import HeartOutlineIcon from 'icons/heart-outline'
 import colors from 'utils/colors'
 import formatDate from 'utils/date-formatter'
+import SongMenuDropdown from './song-menu-dropdown'
 
-function SongList({data}) {
+function SongList({color = '#7367F0', data}) {
   const [isPlaying, setIsplaying] = useState(false)
   const [focustedSong, setFocusedSong] = useState(null)
   const formatDateMemoized = useCallback(isoString => formatDate(isoString), [])
@@ -26,7 +27,7 @@ function SongList({data}) {
   return (
     <SongListSection
       css={{
-        background: `linear-gradient(0deg, rgba(0,0,0,.9) 20%, ${data.Color.code2} 200%)`,
+        background: `linear-gradient(0deg, rgba(0,0,0,.9) 20%, ${color} 200%)`,
       }}
     >
       {isPlaying ? (
@@ -44,7 +45,7 @@ function SongList({data}) {
         <SongListIndexItem>
           <Typography variant="label">#</Typography>
         </SongListIndexItem>
-        <SongListTitleItem css={{flex: 12}}>
+        <SongListTitleItem>
           <Typography variant="label">TITLE</Typography>
         </SongListTitleItem>
         <SongListTypeItem>
@@ -57,7 +58,7 @@ function SongList({data}) {
           <ClockIcon css={{marginRight: 40}} />
         </SongListDurationItem>
       </SongListContainer>
-      {data.Songs.map((s, i) => (
+      {data.map((s, i) => (
         <SongListContainer
           onMouseEnter={() => handleSongFocus(i)}
           onMouseLeave={() => handleSongUnFocus(i)}
@@ -74,12 +75,15 @@ function SongList({data}) {
           <SongListTitleItem>
             <SongImage src={s.thumbnail} alt={s.title} />
             <div css={{marginLeft: 15}}>
-              <Typography variant="link" css={{marginBottom: 5}}>
+              <Typography
+                variant="link"
+                css={{marginBottom: 5, maxWidth: '80%'}}
+              >
                 {s.title}
               </Typography>
               <Typography
                 variant="one-line"
-                css={{fontWeight: 'normal', width: '85%'}}
+                css={{fontWeight: 'normal', maxWidth: 350}}
               >
                 {s.description}
               </Typography>
@@ -96,13 +100,15 @@ function SongList({data}) {
           <SongListDurationItem>
             <HeartIcon css={{marginRight: 25}} />
             <Typography variant="label">{s.duration}</Typography>
-            <MoreIcon
-              css={{
-                marginLeft: 20,
-                cursor: 'pointer',
-                opacity: focustedSong === i ? 1 : 0,
-              }}
-            />
+            <SongMenuDropdown>
+              <MoreIcon
+                css={{
+                  marginLeft: 20,
+                  cursor: 'pointer',
+                  opacity: focustedSong === i ? 1 : 0,
+                }}
+              />
+            </SongMenuDropdown>
           </SongListDurationItem>
         </SongListContainer>
       ))}

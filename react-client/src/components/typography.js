@@ -20,7 +20,7 @@ const Typography = styled.p(
   ({variant}) =>
     variant === 'h0'
       ? {
-          fontSize: 100,
+          fontSize: 90,
           fontWeight: 900,
           letterSpacing: 0.3,
           color: 'inherit',
