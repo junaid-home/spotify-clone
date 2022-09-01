@@ -10,5 +10,6 @@ router.post(
   playlistController.createPlaylist
 )
 router.get('/get/:id', checkAuth, playlistController.getPlaylistById)
+router.post('/add-song', checkAuth, playlistController.addSongToPlaylist)
 
 module.exports = router

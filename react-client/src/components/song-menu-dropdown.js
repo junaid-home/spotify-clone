@@ -1,12 +1,25 @@
 /** @jsxImportSource @emotion/react */
 import {ClassNames, css} from '@emotion/react/macro'
 import Menu, {Item as MenuItem} from 'rc-menu'
+import {useSelector} from 'react-redux'
+import {toast} from 'react-toastify'
 import PlusIcon from 'icons/plus'
 import Dropdown from 'rc-dropdown'
 import colors from 'utils/colors'
+import {useAddSongToPlaylistMutation} from 'store/api/playlist'
 
-function SongMenuDropdown({children}) {
-  async function onSelect({key}) {}
+function SongMenuDropdown({children, song}) {
+  const playlists = useSelector(s => s.auth.user.playlists)
+  const [addSongToPlaylist] = useAddSongToPlaylistMutation()
+
+  async function onSelect({key}) {
+    const result = await addSongToPlaylist({songId: song, playlistId: key})
+    if (result.data?.data?.PlaylistId === key) {
+      toast.success('Song added to the playlist')
+    } else {
+      toast.error(result.error?.data?.message || result.error.error)
+    }
+  }
 
   const menu = (
     <ClassNames>
@@ -15,7 +28,7 @@ function SongMenuDropdown({children}) {
           <MenuItem
             key="/accounts"
             disabled
-            className={cx(css(menuItemStyles))}
+            className={cx(css(menuItemStyles, {backgroundColor: colors.black}))}
           >
             <PlusIcon
               fill="#FFF"
@@ -25,6 +38,11 @@ function SongMenuDropdown({children}) {
             />{' '}
             Add To Playlist
           </MenuItem>
+          {playlists.map(p => (
+            <MenuItem key={p.id} className={cx(css(menuItemStyles))}>
+              {p.name}
+            </MenuItem>
+          ))}
         </Menu>
       )}
     </ClassNames>
@@ -51,7 +69,7 @@ const menuItemStyles = css({
   fontFamily: 'inherit !important',
   color: `${colors.lightGrey} !important`,
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   alignItems: 'center',
 
   '&:not(:last-child)': {

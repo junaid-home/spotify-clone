@@ -1,4 +1,5 @@
 import 'the-new-css-reset/css/reset.css'
+import 'react-toastify/dist/ReactToastify.css'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import PrivateRoute from 'components/private-route'
 import UnAuthRoute from 'components/un-auth-route'

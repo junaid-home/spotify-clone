@@ -5,7 +5,6 @@ function MoreIcon({...props}) {
     <svg
       xmlnsXlink="http://www.w3.org/1999/xlink"
       xmlns="http://www.w3.org/2000/svg"
-      role="img"
       height="16"
       width="16"
       viewBox="0 0 16 16"

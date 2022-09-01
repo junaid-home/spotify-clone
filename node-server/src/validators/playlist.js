@@ -10,4 +10,13 @@ function validatePlaylist(obj) {
   return schema.validate(obj)
 }
 
-module.exports = { validatePlaylist }
+function validateSongPlaylist(obj) {
+  const schema = joi.object({
+    songId: joi.string().uuid().required(),
+    playlistId: joi.string().uuid().required(),
+  })
+
+  return schema.validate(obj)
+}
+
+module.exports = { validatePlaylist, validateSongPlaylist }

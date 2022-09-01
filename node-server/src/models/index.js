@@ -114,6 +114,8 @@ const Color = sequelize.define('Color', {
   },
 })
 
+const SongPlaylist = sequelize.define('SongPlaylist', {})
+
 User.belongsToMany(Song, { through: 'Likes' })
 Song.belongsToMany(User, { through: 'Likes' })
 
@@ -124,8 +126,8 @@ User.hasMany(Playlist, {
 })
 Playlist.belongsTo(User, { foreignKey: 'user_id' })
 
-Song.belongsToMany(Playlist, { through: 'SongPlaylists' })
-Playlist.belongsToMany(Song, { through: 'SongPlaylists' })
+Song.belongsToMany(Playlist, { through: SongPlaylist })
+Playlist.belongsToMany(Song, { through: SongPlaylist })
 
 Playlist.hasOne(Color, {
   foreignKey: 'playlist_id',
@@ -147,4 +149,5 @@ module.exports = {
   artistModel: Artist,
   playlistModel: Playlist,
   colorModel: Color,
+  songPlaylistModel: SongPlaylist,
 }

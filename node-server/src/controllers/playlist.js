@@ -1,10 +1,19 @@
 const fs = require('fs/promises')
-const { playlistModel, colorModel, songModel } = require('../models/index')
+const {
+  playlistModel,
+  colorModel,
+  songModel,
+  songPlaylistModel,
+} = require('../models/index')
 const { upload } = require('../config/cloudinary')
-const { validatePlaylist } = require('../validators/playlist')
 const serializeResponse = require('../utils/response-serializer')
 const errors = require('../utils/error')
 const safeUser = require('../utils/safe-user')
+const responseSerializer = require('../utils/response-serializer')
+const {
+  validatePlaylist,
+  validateSongPlaylist,
+} = require('../validators/playlist')
 
 async function createPlaylist(req, res) {
   const { error } = validatePlaylist(req.body)
@@ -66,4 +75,41 @@ async function getPlaylistById(req, res) {
   })
 }
 
-module.exports = { createPlaylist, getPlaylistById }
+async function addSongToPlaylist(req, res) {
+  const { error } = validateSongPlaylist(req.body)
+  if (error) throw new errors.BadRequestError(error.message)
+
+  const { playlistId, songId } = req.body
+
+  const playlistCount = await playlistModel.count({ where: { id: playlistId } })
+  if (!playlistCount) {
+    throw new errors.BadRequestError(`No playlist exist with id: ${playlistId}`)
+  }
+
+  const songCount = await songModel.count({ where: { id: songId } })
+  if (!songCount) {
+    throw new errors.BadRequestError(`No song exist with id: ${songId}`)
+  }
+
+  const songPlaylistCount = await songPlaylistModel.count({
+    where: {
+      SongId: songId,
+      PlaylistId: playlistId,
+    },
+  })
+  if (songPlaylistCount) {
+    throw new errors.BadRequestError('Song Already exist in the playlist!')
+  }
+
+  const data = await songPlaylistModel.create({
+    SongId: songId,
+    PlaylistId: playlistId,
+  })
+  if (!data) {
+    throw new errors.ApiError(null, 500, 'Failed to add song to the playlist')
+  }
+
+  return responseSerializer(res, data)
+}
+
+module.exports = { createPlaylist, getPlaylistById, addSongToPlaylist }

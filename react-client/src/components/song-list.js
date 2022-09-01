@@ -100,7 +100,7 @@ function SongList({color = '#7367F0', data}) {
           <SongListDurationItem>
             <HeartIcon css={{marginRight: 25}} />
             <Typography variant="label">{s.duration}</Typography>
-            <SongMenuDropdown>
+            <SongMenuDropdown song={s.id}>
               <MoreIcon
                 css={{
                   marginLeft: 20,

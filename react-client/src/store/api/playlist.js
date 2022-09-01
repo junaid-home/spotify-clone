@@ -23,7 +23,20 @@ export const playlistApi = createApi({
         credentials: 'include',
       }),
     }),
+
+    addSongToPlaylist: builder.mutation({
+      query: data => ({
+        url: '/add-song',
+        method: 'POST',
+        body: data,
+        credentials: 'include',
+      }),
+    }),
   }),
 })
 
-export const {useCreatePlaylistMutation, useGetPlaylistByIdQuery} = playlistApi
+export const {
+  useCreatePlaylistMutation,
+  useGetPlaylistByIdQuery,
+  useAddSongToPlaylistMutation,
+} = playlistApi
