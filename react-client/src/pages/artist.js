@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {useMemo} from 'react'
+import {useLayoutEffect, useMemo} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import Tooltip from 'components/tooltip'
@@ -17,6 +17,10 @@ function Artist() {
   )
 
   const artist = useMemo(() => data?.data, [data])
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   if (isError)
     return (
@@ -51,6 +55,7 @@ const ContentContainer = styled.div({
   flexDirection: 'column',
   minHeight: '100vh',
   userSelect: 'none',
+  background: colors.background,
 })
 
 const CenteredContent = styled.div({

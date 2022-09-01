@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {useMemo} from 'react'
+import {useMemo, useLayoutEffect} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import Tooltip from 'components/tooltip'
@@ -17,6 +17,10 @@ function Playlist() {
   )
 
   const playlist = useMemo(() => data?.data, [data])
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   if (isError)
     return (

@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import {useState} from 'react'
+import {Link} from 'react-router-dom'
 import {css, keyframes} from '@emotion/react/macro'
 import styled from '@emotion/styled/macro'
 import colors from 'utils/colors'
 import Typography from './typography'
 import PlayIcon from 'icons/play'
 import PauseIcon from 'icons/pause'
-import {useState} from 'react'
 import * as mq from 'utils/media-query'
 
 function Card({data, kind = 'song'}) {
@@ -53,17 +54,22 @@ function Card({data, kind = 'song'}) {
       }}
     >
       {playPauseIcons}
-      <Album
-        artist={kind === 'artist'}
-        src={displayData.picture}
-        alt={displayData.title}
-      />
-      <Typography variant="one-line" css={{marginTop: 15}}>
-        {displayData.title}
-      </Typography>
-      <Typography variant="two-line" css={{marginTop: 10, color: colors.grey}}>
-        {displayData.desc}
-      </Typography>
+      <Link to={displayData.link}>
+        <Album
+          artist={kind === 'artist'}
+          src={displayData.picture}
+          alt={displayData.title}
+        />
+        <Typography variant="one-line" css={{marginTop: 15}}>
+          {displayData.title}
+        </Typography>
+        <Typography
+          variant="two-line"
+          css={{marginTop: 10, color: colors.grey}}
+        >
+          {displayData.desc}
+        </Typography>
+      </Link>
     </Wrapper>
   )
 }
@@ -86,6 +92,11 @@ const getDisplayableData = (kind, data) => {
       : isArtist
       ? 'Artist'
       : `By: ${data.User.name}`,
+    link: isSong
+      ? `/artist/${data.artist_id}`
+      : isPlaylist
+      ? `/playlist/${data.id}`
+      : `/artist/${data.id}`,
   }
 }
 
