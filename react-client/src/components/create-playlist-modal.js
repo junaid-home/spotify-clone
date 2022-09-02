@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
 import styled from '@emotion/styled/macro'
 import Modal from 'react-modal'
 import {useDropzone} from 'react-dropzone'
@@ -22,9 +23,6 @@ function CreatePlaylistModal({open, onClose}) {
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
     maxFiles: 1,
-    accept: {
-      'image/jpeg': ['.jpg', '.jpeg', '.png'],
-    },
   })
   const [createPlaylist, {isLoading, isError, error}] =
     useCreatePlaylistMutation()
@@ -40,8 +38,15 @@ function CreatePlaylistModal({open, onClose}) {
     formData.append('picture', image)
 
     const result = await createPlaylist(formData)
-    if (!result.data.id) {
+    if (result.data?.data.id) {
+      setColor1('')
+      setColor2('')
+      setName('')
+      toast.success('Song added to the playlist')
+      onClose()
       navigate(`/playlist/${result.data?.data?.id}`)
+    } else {
+      toast.error(result.error?.data?.message || result.error.error)
     }
   }
 

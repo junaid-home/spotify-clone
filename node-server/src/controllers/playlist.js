@@ -4,6 +4,8 @@ const {
   colorModel,
   songModel,
   songPlaylistModel,
+  userModel,
+  likedPlaylistModel,
 } = require('../models/index')
 const { upload } = require('../config/cloudinary')
 const serializeResponse = require('../utils/response-serializer')
@@ -14,6 +16,7 @@ const {
   validatePlaylist,
   validateSongPlaylist,
 } = require('../validators/playlist')
+const { validatePlaylistLike } = require('../validators/like')
 
 async function createPlaylist(req, res) {
   const { error } = validatePlaylist(req.body)
@@ -112,4 +115,42 @@ async function addSongToPlaylist(req, res) {
   return responseSerializer(res, data)
 }
 
-module.exports = { createPlaylist, getPlaylistById, addSongToPlaylist }
+async function addLike(req, res) {
+  const { error } = validatePlaylistLike(req.body)
+  if (error) throw new errors.BadRequestError(error.message)
+
+  const { userId, playlistId } = req.body
+
+  const playlistCount = await playlistModel.count({ where: { id: playlistId } })
+  if (!playlistCount) {
+    throw new errors.BadRequestError(`No playlist exist with id: ${playlistId}`)
+  }
+
+  const userCount = await userModel.count({ where: { id: userId } })
+  if (!userCount) {
+    throw new errors.BadRequestError(`No User exist with id: ${userId}`)
+  }
+
+  const playlistLikesCount = await likedPlaylistModel.count({
+    where: {
+      UserId: userId,
+      PlaylistId: playlistId,
+    },
+  })
+  if (playlistLikesCount) {
+    await likedPlaylistModel.destroy({
+      where: { UserId: userId, PlaylistId: playlistId },
+    })
+
+    return responseSerializer(res, { message: 'Unliked successfully!' })
+  }
+
+  await likedPlaylistModel.create({
+    UserId: userId,
+    PlaylistId: playlistId,
+  })
+
+  return responseSerializer(res, { message: 'liked successfully!' })
+}
+
+module.exports = { createPlaylist, getPlaylistById, addSongToPlaylist, addLike }

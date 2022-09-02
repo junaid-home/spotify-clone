@@ -11,5 +11,6 @@ router.post(
 )
 router.get('/get/:id', checkAuth, playlistController.getPlaylistById)
 router.post('/add-song', checkAuth, playlistController.addSongToPlaylist)
+router.post('/like', checkAuth, playlistController.addLike)
 
 module.exports = router

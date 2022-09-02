@@ -172,8 +172,8 @@ const authenticateWithFacebookAccount = async (req, res) => {
 
   if (user?.id && !isUserAlreadyExist) {
     const createdUser = await userModel.create(newUser)
-    user.playlists = []
-    user.id = createdUser.id
+    newUser.playlists = []
+    newUser.id = createdUser.id
   }
 
   req.session.user = newUser
