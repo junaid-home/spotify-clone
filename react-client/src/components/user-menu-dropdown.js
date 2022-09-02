@@ -53,7 +53,15 @@ function UserMenuDropDown() {
     >
       <UserArea>
         <PersonIconContainer>
-          <PersonFilledIcon css={{marginRight: 10}} />
+          {user.picture ? (
+            <PersonImage
+              src={user.picture}
+              alt={user.name}
+              css={{marginRight: 10}}
+            />
+          ) : (
+            <PersonFilledIcon css={{marginRight: 10}} />
+          )}
           <Typography css={{color: 'white', marginRight: 10}}>
             {user.name.split(' ')[0].toLowerCase()}
           </Typography>
@@ -111,6 +119,12 @@ const PersonIconContainer = styled.span({
 const PersonFilledIcon = styled(PersonIcon)({
   backgroundColor: colors.grey,
   padding: 6,
+  borderRadius: 100,
+  width: 30,
+  height: 30,
+})
+
+const PersonImage = styled.img({
   borderRadius: 100,
   width: 30,
   height: 30,

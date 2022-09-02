@@ -108,11 +108,13 @@ const authenticateWithGoogleAccount = async (req, res) => {
       include: ['Color', 'User'],
     })
     newUser.playlists = playlists
+    newUser.id = isUserAlreadyExist.id
   }
 
   if (user?.email && !isUserAlreadyExist) {
-    await userModel.create(newUser)
+    const createdUser = await userModel.create(newUser)
     newUser.playlists = []
+    newUser.id = createdUser.id
   }
 
   req.session.user = newUser
@@ -165,11 +167,13 @@ const authenticateWithFacebookAccount = async (req, res) => {
       include: ['Color', 'User'],
     })
     newUser.playlists = playlists
+    newUser.id = isUserAlreadyExist.id
   }
 
   if (user?.id && !isUserAlreadyExist) {
-    await userModel.create(newUser)
+    const createdUser = await userModel.create(newUser)
     user.playlists = []
+    user.id = createdUser.id
   }
 
   req.session.user = newUser
