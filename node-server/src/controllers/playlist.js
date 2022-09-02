@@ -10,8 +10,8 @@ const {
 const { upload } = require('../config/cloudinary')
 const serializeResponse = require('../utils/response-serializer')
 const errors = require('../utils/error')
-const safeUser = require('../utils/safe-user')
 const responseSerializer = require('../utils/response-serializer')
+const safeUser = require('../utils/safe-user')
 const {
   validatePlaylist,
   validateSongPlaylist,
