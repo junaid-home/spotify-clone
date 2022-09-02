@@ -10,6 +10,8 @@ import HomePage from 'pages/home'
 import SerachPage from 'pages/search'
 import PlaylistPage from 'pages/playlist'
 import ArtistPage from 'pages/artist'
+import FavouritesPage from 'pages/favourites'
+import LibraryPage from 'pages/library'
 import Layout from 'components/layout'
 
 function App() {
@@ -22,8 +24,8 @@ function App() {
             <Route exact path="/search" element={<SerachPage />} />
             <Route exact path="/playlist/:id" element={<PlaylistPage />} />
             <Route exact path="/artist/:id" element={<ArtistPage />} />
-            <Route exact path="/library" element={<HomePage />} />
-            <Route exact path="/favorites" element={<HomePage />} />
+            <Route exact path="/library" element={<LibraryPage />} />
+            <Route exact path="/favorites" element={<FavouritesPage />} />
           </Route>
         </Route>
         <Route path="/" element={<UnAuthRoute />}>

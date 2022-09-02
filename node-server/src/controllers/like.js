@@ -32,7 +32,8 @@ async function getAllLiked(req, res) {
 
   const populatedLikedPlaylists = await Promise.all(
     likedPlaylistIds.map(
-      (p) => playlistModel.findOne({ where: { id: p.PlaylistId } })
+      (p) =>
+        playlistModel.findOne({ where: { id: p.PlaylistId }, include: 'User' })
       // eslint-disable-next-line function-paren-newline
     )
   )
