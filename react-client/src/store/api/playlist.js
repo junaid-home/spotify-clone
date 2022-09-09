@@ -32,6 +32,15 @@ export const playlistApi = createApi({
         credentials: 'include',
       }),
     }),
+
+    likePlaylist: builder.mutation({
+      query: data => ({
+        url: '/like',
+        method: 'POST',
+        body: {playlistId: data},
+        credentials: 'include',
+      }),
+    }),
   }),
 })
 
@@ -39,4 +48,5 @@ export const {
   useCreatePlaylistMutation,
   useGetPlaylistByIdQuery,
   useAddSongToPlaylistMutation,
+  useLikePlaylistMutation,
 } = playlistApi

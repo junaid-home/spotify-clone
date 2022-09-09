@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
 import Typography from 'components/typography'
+import * as mq from 'utils/media-query'
 
 function EntityInfo({kind = 'playlist', data}) {
   const displayData = getDisplayableData(kind, data)
@@ -12,7 +13,13 @@ function EntityInfo({kind = 'playlist', data}) {
       }}
     >
       <PlaylistImage src={displayData.picture} alt={displayData.title} />
-      <div css={{marginLeft: 30}}>
+      <div
+        css={{
+          paddingLeft: 30,
+          width: '100%',
+          [mq.md]: {paddingLeft: 0, marginTop: 35},
+        }}
+      >
         <Typography css={{marginLeft: 5}} variant="label">
           PLAYLIST
         </Typography>
@@ -44,12 +51,19 @@ const Wrapper = styled.div({
   alignItems: 'center',
   padding: '80px 30px 30px 30px',
   userSelect: 'none',
+  [mq.lg]: {
+    flexDirection: 'column',
+  },
 })
 
 const PlaylistImage = styled.img({
   width: 220,
   height: 220,
   boxShadow: `0px 0px 10px rgba(0,0,0,1)`,
+
+  [mq.md]: {
+    marginTop: 40,
+  },
 })
 
 export default EntityInfo

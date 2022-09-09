@@ -6,8 +6,11 @@ import Tooltip from 'components/tooltip'
 import Spinner from 'components/spinner'
 import EntityInfo from 'components/entity-info'
 import colors from 'utils/colors'
-import {useGetPlaylistByIdQuery} from 'store/api/playlist'
-import {useGetLikedSongsQuery} from 'store/api/like'
+import {
+  useGetPlaylistByIdQuery,
+  useLikePlaylistMutation,
+} from 'store/api/playlist'
+import {useGetAllLikedItemsQuery} from 'store/api/like'
 import * as mq from 'utils/media-query'
 import SongList from 'components/song-list'
 
@@ -17,11 +20,12 @@ function Playlist() {
     location.pathname.split('/')[location.pathname.split('/').length - 1],
   )
   const {
-    data: likedSongs,
+    data: likedData,
     isLoading: isLikedSongs,
     isError: isLikedError,
-    refetch: refetchLikedSongs,
-  } = useGetLikedSongsQuery()
+    refetch: refetchLikes,
+  } = useGetAllLikedItemsQuery()
+  const [likePlaylist] = useLikePlaylistMutation()
 
   const playlist = useMemo(() => data?.data, [data])
 
@@ -52,10 +56,12 @@ function Playlist() {
     <ContentContainer>
       <EntityInfo data={playlist} />
       <SongList
-        data={playlist.Songs}
+        data={playlist}
         color={playlist.Color.code2}
-        likedSongs={likedSongs.data}
-        refetchLikedSongs={refetchLikedSongs}
+        likedSongs={likedData.data.songs}
+        likedEntities={likedData.data.playlists}
+        refetchLikes={refetchLikes}
+        likeEntity={likePlaylist}
       />
     </ContentContainer>
   )

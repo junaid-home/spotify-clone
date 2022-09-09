@@ -14,7 +14,16 @@ export const artistApi = createApi({
         credentials: 'include',
       }),
     }),
+
+    likeArtist: builder.mutation({
+      query: data => ({
+        url: '/like',
+        method: 'POST',
+        body: {artistId: data},
+        credentials: 'include',
+      }),
+    }),
   }),
 })
 
-export const {useGetArtistByIdQuery} = artistApi
+export const {useGetArtistByIdQuery, useLikeArtistMutation} = artistApi

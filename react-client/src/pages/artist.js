@@ -8,8 +8,8 @@ import EntityInfo from 'components/entity-info'
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 import SongList from 'components/song-list'
-import {useGetArtistByIdQuery} from 'store/api/artist'
-import {useGetLikedSongsQuery} from 'store/api/like'
+import {useGetArtistByIdQuery, useLikeArtistMutation} from 'store/api/artist'
+import {useGetAllLikedItemsQuery} from 'store/api/like'
 
 function Artist() {
   const location = useLocation()
@@ -17,11 +17,12 @@ function Artist() {
     location.pathname.split('/')[location.pathname.split('/').length - 1],
   )
   const {
-    data: likedSongs,
+    data: likedData,
     isLoading: isLikedSongs,
     isError: isLikedError,
-    refetch: refetchLikedSongs,
-  } = useGetLikedSongsQuery()
+    refetch: refetchLikes,
+  } = useGetAllLikedItemsQuery()
+  const [likeArtist] = useLikeArtistMutation()
 
   const artist = useMemo(() => data?.data, [data])
 
@@ -35,7 +36,7 @@ function Artist() {
         <Tooltip
           type="danger"
           noMargin
-          message={error?.data?.message || error.error}
+          message={error?.data?.message || error.message}
           css={{position: 'fixed', top: 63, left: 242, right: 0}}
         />
       </FixedPositionContent>
@@ -52,9 +53,11 @@ function Artist() {
     <ContentContainer>
       <EntityInfo data={artist} kind="artist" />
       <SongList
-        data={artist.Songs}
-        likedSongs={likedSongs.data}
-        refetchLikedSongs={refetchLikedSongs}
+        data={artist}
+        likedSongs={likedData.data.songs}
+        likedEntities={likedData.data.artists}
+        refetchLikes={refetchLikes}
+        likeEntity={likeArtist}
       />
     </ContentContainer>
   )
@@ -62,9 +65,6 @@ function Artist() {
 
 const ContentContainer = styled.div({
   color: colors.white,
-  display: 'flex',
-  flexDirection: 'column',
-  minHeight: '100vh',
   userSelect: 'none',
   background: colors.background,
 })
