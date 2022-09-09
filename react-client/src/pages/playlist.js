@@ -7,6 +7,7 @@ import Spinner from 'components/spinner'
 import EntityInfo from 'components/entity-info'
 import colors from 'utils/colors'
 import {useGetPlaylistByIdQuery} from 'store/api/playlist'
+import {useGetLikedSongsQuery} from 'store/api/like'
 import * as mq from 'utils/media-query'
 import SongList from 'components/song-list'
 
@@ -15,6 +16,12 @@ function Playlist() {
   const {data, isLoading, isError, error} = useGetPlaylistByIdQuery(
     location.pathname.split('/')[location.pathname.split('/').length - 1],
   )
+  const {
+    data: likedSongs,
+    isLoading: isLikedSongs,
+    isError: isLikedError,
+    refetch: refetchLikedSongs,
+  } = useGetLikedSongsQuery()
 
   const playlist = useMemo(() => data?.data, [data])
 
@@ -22,7 +29,7 @@ function Playlist() {
     window.scrollTo(0, 0)
   }, [])
 
-  if (isError)
+  if (isError || isLikedError)
     return (
       <FixedPositionContent>
         <Tooltip
@@ -34,7 +41,7 @@ function Playlist() {
       </FixedPositionContent>
     )
 
-  if (isLoading)
+  if (isLoading || isLikedSongs)
     return (
       <CenteredContent>
         <Spinner />
@@ -44,7 +51,12 @@ function Playlist() {
   return (
     <ContentContainer>
       <EntityInfo data={playlist} />
-      <SongList data={playlist.Songs} color={playlist.Color.code2} />
+      <SongList
+        data={playlist.Songs}
+        color={playlist.Color.code2}
+        likedSongs={likedSongs.data}
+        refetchLikedSongs={refetchLikedSongs}
+      />
     </ContentContainer>
   )
 }

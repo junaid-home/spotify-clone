@@ -9,12 +9,19 @@ import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 import SongList from 'components/song-list'
 import {useGetArtistByIdQuery} from 'store/api/artist'
+import {useGetLikedSongsQuery} from 'store/api/like'
 
 function Artist() {
   const location = useLocation()
   const {data, isLoading, isError, error} = useGetArtistByIdQuery(
     location.pathname.split('/')[location.pathname.split('/').length - 1],
   )
+  const {
+    data: likedSongs,
+    isLoading: isLikedSongs,
+    isError: isLikedError,
+    refetch: refetchLikedSongs,
+  } = useGetLikedSongsQuery()
 
   const artist = useMemo(() => data?.data, [data])
 
@@ -22,7 +29,7 @@ function Artist() {
     window.scrollTo(0, 0)
   }, [])
 
-  if (isError)
+  if (isError || isLikedError)
     return (
       <FixedPositionContent>
         <Tooltip
@@ -34,7 +41,7 @@ function Artist() {
       </FixedPositionContent>
     )
 
-  if (isLoading)
+  if (isLoading || isLikedSongs)
     return (
       <CenteredContent>
         <Spinner />
@@ -44,7 +51,11 @@ function Artist() {
   return (
     <ContentContainer>
       <EntityInfo data={artist} kind="artist" />
-      <SongList data={artist.Songs} />
+      <SongList
+        data={artist.Songs}
+        likedSongs={likedSongs.data}
+        refetchLikedSongs={refetchLikedSongs}
+      />
     </ContentContainer>
   )
 }

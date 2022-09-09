@@ -9,6 +9,7 @@ function HeartOutlineIcon({...props}) {
       height="16"
       width="16"
       viewBox="0 0 16 16"
+      cursor="pointer"
       {...props}
     >
       <path

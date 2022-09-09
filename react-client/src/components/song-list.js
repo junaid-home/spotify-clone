@@ -2,28 +2,52 @@
 import {useCallback, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {css} from '@emotion/react/macro'
+import {toast} from 'react-toastify'
+
 import Typography from 'components/typography'
+import SongMenuDropdown from 'components/song-menu-dropdown'
+
 import PlayIcon from 'icons/play'
 import PauseIcon from 'icons/pause'
 import ClockIcon from 'icons/clock'
-import MoreIcon from 'icons/more'
 import HeartIcon from 'icons/heart'
-// import HeartOutlineIcon from 'icons/heart-outline'
+import HeartOutlineIcon from 'icons/heart-outline'
+
 import colors from 'utils/colors'
 import formatDate from 'utils/date-formatter'
-import SongMenuDropdown from './song-menu-dropdown'
 
-function SongList({color = '#7367F0', data}) {
+import {useLikeSongMutation} from 'store/api/song'
+
+function SongList({color = '#7367F0', data, likedSongs, refetchLikedSongs}) {
   const [isPlaying, setIsplaying] = useState(false)
   const [focustedSong, setFocusedSong] = useState(null)
+  const [likeSong] = useLikeSongMutation()
+
   const formatDateMemoized = useCallback(isoString => formatDate(isoString), [])
 
   const handleSongFocus = index => {
     setFocusedSong(index)
   }
-  const handleSongUnFocus = index => {
+  const handleSongUnFocus = _index => {
     setFocusedSong(null)
   }
+
+  const isLikedSong = useCallback(
+    (likedSongs, song) => likedSongs.some(s => s.id === song.id),
+    [],
+  )
+
+  const handleLikeSong = async id => {
+    const result = await likeSong(id)
+    if (result.data.data) {
+      toast.success(result.data.data.message)
+    } else {
+      toast.error(result.error?.data?.message || result.error.error)
+    }
+
+    refetchLikedSongs()
+  }
+
   return (
     <SongListSection
       css={{
@@ -98,17 +122,23 @@ function SongList({color = '#7367F0', data}) {
             </Typography>
           </SongListDateItem>
           <SongListDurationItem>
-            <HeartIcon css={{marginRight: 25}} />
-            <Typography variant="label">{s.duration}</Typography>
-            <SongMenuDropdown song={s.id}>
-              <MoreIcon
-                css={{
-                  marginLeft: 20,
-                  cursor: 'pointer',
-                  opacity: focustedSong === i ? 1 : 0,
-                }}
+            {isLikedSong(likedSongs, s) ? (
+              <HeartIcon
+                css={{marginRight: 25}}
+                onClick={() => handleLikeSong(s.id)}
               />
-            </SongMenuDropdown>
+            ) : (
+              <HeartOutlineIcon
+                css={{marginRight: 25}}
+                onClick={() => handleLikeSong(s.id)}
+              />
+            )}
+            <Typography variant="label">{s.duration}</Typography>
+            <SongMenuDropdown
+              song={s.id}
+              focustedSong={focustedSong}
+              isFocused={focustedSong === i}
+            />
           </SongListDurationItem>
         </SongListContainer>
       ))}

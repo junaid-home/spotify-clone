@@ -7,7 +7,8 @@ async function addLike(req, res) {
   const { error } = validateSongLike(req.body)
   if (error) throw new errors.BadRequestError(error.message)
 
-  const { userId, songId } = req.body
+  const { songId } = req.body
+  const userId = req.session.user.id
 
   const songCount = await songModel.count({ where: { id: songId } })
   if (!songCount) {

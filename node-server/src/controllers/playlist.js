@@ -119,7 +119,8 @@ async function addLike(req, res) {
   const { error } = validatePlaylistLike(req.body)
   if (error) throw new errors.BadRequestError(error.message)
 
-  const { userId, playlistId } = req.body
+  const { playlistId } = req.body
+  const userId = req.session.user.id
 
   const playlistCount = await playlistModel.count({ where: { id: playlistId } })
   if (!playlistCount) {

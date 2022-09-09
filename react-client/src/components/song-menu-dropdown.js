@@ -6,9 +6,10 @@ import {toast} from 'react-toastify'
 import PlusIcon from 'icons/plus'
 import Dropdown from 'rc-dropdown'
 import colors from 'utils/colors'
+import MoreIcon from 'icons/more'
 import {useAddSongToPlaylistMutation} from 'store/api/playlist'
 
-function SongMenuDropdown({children, song}) {
+function SongMenuDropdown({isFocused, song}) {
   const playlists = useSelector(s => s.auth.user.playlists)
   const [addSongToPlaylist] = useAddSongToPlaylistMutation()
 
@@ -50,7 +51,15 @@ function SongMenuDropdown({children, song}) {
 
   return (
     <Dropdown trigger={['click']} overlay={menu} animation="slide-up">
-      {children}
+      <span
+        css={{
+          marginLeft: 20,
+          cursor: 'pointer',
+          opacity: isFocused ? 1 : 0,
+        }}
+      >
+        <MoreIcon />
+      </span>
     </Dropdown>
   )
 }
