@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 export const songApi = createApi({
   reducerPath: 'songApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_API_URL}/song`,
+    baseUrl: `/song`,
     mode: 'cors',
   }),
   endpoints: builder => ({

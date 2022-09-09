@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 export const likeApi = createApi({
   reducerPath: 'likeApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_API_URL}/liked`,
+    baseUrl: `/liked`,
     mode: 'cors',
   }),
   endpoints: builder => ({
