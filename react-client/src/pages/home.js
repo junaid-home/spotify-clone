@@ -40,13 +40,13 @@ function Home() {
         background: colors.background,
       }}
     >
-      <Typography variant="h1">Made for {user.name}</Typography>
+      <Typography variant="h2">Made for {user.name}</Typography>
       <ListContainer>
         {data.data.special.map(song => (
           <Card key={song.id} data={song} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Popular albums
       </Typography>
       <ListContainer>
@@ -54,7 +54,7 @@ function Home() {
           <Card key={song.id} data={song} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Trending now
       </Typography>
       <ListContainer>
@@ -62,7 +62,7 @@ function Home() {
           <Card key={song.id} data={song} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Mood
       </Typography>
       <ListContainer>
@@ -70,7 +70,7 @@ function Home() {
           <Card key={song.id} data={song} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Popular new releases
       </Typography>
       <ListContainer>
@@ -78,7 +78,7 @@ function Home() {
           <Card key={song.id} data={song} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Late night listenings
       </Typography>
       <ListContainer>
@@ -86,7 +86,7 @@ function Home() {
           <Card key={song.id} data={song} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Popular artists
       </Typography>
       <ListContainer>
@@ -94,7 +94,7 @@ function Home() {
           <Card key={artist.id} kind="artist" data={artist} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         International emerging artists
       </Typography>
       <ListContainer>
@@ -102,7 +102,7 @@ function Home() {
           <Card key={artist.id} kind="artist" data={artist} />
         ))}
       </ListContainer>
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Sleep
       </Typography>
       <ListContainer>
@@ -112,7 +112,7 @@ function Home() {
       </ListContainer>
       {data.data?.playlists?.length ? (
         <Fragment>
-          <Typography css={{marginTop: 40}} variant="h1">
+          <Typography css={{marginTop: 40}} variant="h2">
             Your playlists
           </Typography>
           <ListContainer>
@@ -122,7 +122,7 @@ function Home() {
           </ListContainer>
         </Fragment>
       ) : null}
-      <Typography css={{marginTop: 40}} variant="h1">
+      <Typography css={{marginTop: 40}} variant="h2">
         Focus
       </Typography>
       <ListContainer>

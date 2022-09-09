@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
-import {useSelector} from 'react-redux'
 
 import Logo from './logo'
 import NavLink from './nav-link'
@@ -19,9 +18,7 @@ import * as mq from 'utils/media-query'
 import Typography from './typography'
 import {Link} from 'react-router-dom'
 
-function SidebarNavigation({openMenu, setOpenMenu, setOpenModal}) {
-  const playlists = useSelector(s => s.auth.user.playlists)
-
+function SidebarNavigation({openMenu, setOpenMenu, setOpenModal, playlists}) {
   return (
     <Wrapper openMenu={openMenu}>
       <Logo

@@ -5,7 +5,7 @@ import Typography from './typography'
 
 function FormGroup({label, placeholder, value, onChange, type, ...props}) {
   return (
-    <Wrapper {...props}>
+    <Wrapper>
       <Typography variant="label" as="label" css={{marginBottom: 3}}>
         {label}
       </Typography>
@@ -14,6 +14,7 @@ function FormGroup({label, placeholder, value, onChange, type, ...props}) {
         value={value}
         type={type}
         onChange={onChange}
+        {...props}
       />
     </Wrapper>
   )

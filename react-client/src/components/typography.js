@@ -29,7 +29,7 @@ const Typography = styled.p(
   ({variant}) =>
     variant === 'h1'
       ? {
-          fontSize: 22,
+          fontSize: 50,
           fontWeight: 900,
           letterSpacing: 0.3,
           color: 'inherit',
@@ -38,7 +38,7 @@ const Typography = styled.p(
   ({variant}) =>
     variant === 'h2'
       ? {
-          fontSize: 18,
+          fontSize: 25,
           fontWeight: 600,
           letterSpacing: 0.3,
           color: 'inherit',

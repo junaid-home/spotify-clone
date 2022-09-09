@@ -17,7 +17,10 @@ import {useQueryDataMutation} from 'store/api/search'
 
 function Header({setOpenModal}) {
   const location = useLocation()
+
   const isAuth = useSelector(s => s.auth.isAuthenticated)
+  const playlists = useSelector(s => s.auth.user.playlists)
+
   const [openSideMenu, setOpenSideMenu] = useState(false)
   const [solidHeader, setSolidHeader] = useState(false)
   const deferredSolidHeaderValue = useDeferredValue(solidHeader)
@@ -53,6 +56,7 @@ function Header({setOpenModal}) {
         openMenu={openSideMenu}
         setOpenMenu={setOpenSideMenu}
         setOpenModal={setOpenModal}
+        playlists={playlists}
       />
       <AuthWrapper
         css={{

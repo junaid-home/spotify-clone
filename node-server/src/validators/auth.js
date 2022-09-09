@@ -38,4 +38,20 @@ function validateLoginCredentials(obj) {
   return schema.validate(obj)
 }
 
-module.exports = { validateNewUser, validateLoginCredentials }
+function validateUserUpdate(obj) {
+  const schema = joi.object({
+    email: validEmail,
+    name: joi.string().min(3).max(30).required(),
+    country: joi.string().min(3).max(30).required(),
+    gender: joi.string().valid('male', 'female').required(),
+    dob: joi.date().timestamp().required(),
+  })
+
+  return schema.validate(obj)
+}
+
+module.exports = {
+  validateNewUser,
+  validateLoginCredentials,
+  validateUserUpdate,
+}

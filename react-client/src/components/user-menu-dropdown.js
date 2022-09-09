@@ -21,7 +21,7 @@ function UserMenuDropDown() {
 
   async function onSelect({key}) {
     if (key !== '/logout') {
-      navigate(key)
+      return navigate(key)
     }
     await logout().unwrap()
   }
@@ -30,7 +30,7 @@ function UserMenuDropDown() {
     <ClassNames>
       {({cx, css}) => (
         <Menu rootClassName={cx(css(menuStyles))} onSelect={onSelect}>
-          <MenuItem key="/accounts" className={cx(css(menuItemStyles))}>
+          <MenuItem key="/account" className={cx(css(menuItemStyles))}>
             My Account
           </MenuItem>
           <MenuItem key="/profile" className={cx(css(menuItemStyles))}>

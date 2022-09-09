@@ -25,6 +25,12 @@ const authSlice = createSlice({
     resetError: (state, _action) => {
       state.error = null
     },
+
+    updateUser: (state, action) => {
+      localStorage.setItem('user', JSON.stringify(action.payload))
+
+      state.user = action.payload
+    },
   },
   extraReducers: builder => {
     builder
@@ -94,5 +100,5 @@ const authSlice = createSlice({
   },
 })
 
-export const {restoreUser, resetError} = authSlice.actions
+export const {restoreUser, resetError, updateUser} = authSlice.actions
 export default authSlice.reducer

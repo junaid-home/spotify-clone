@@ -8,5 +8,6 @@ router.get('/google/uri', authController.getGoogleOauth2URI)
 router.post('/google/login', authController.authenticateWithGoogleAccount)
 router.get('/facebook/uri', authController.getFacebookOauth2URI)
 router.post('/facebook/login', authController.authenticateWithFacebookAccount)
+router.put('/update/user', authController.updateUserData)
 
 module.exports = router

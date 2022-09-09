@@ -162,11 +162,7 @@ const authenticateWithFacebookAccount = async (req, res) => {
   }
 
   if (isUserAlreadyExist) {
-    const playlists = await playlistModel.findAll({
-      where: { user_id: isUserAlreadyExist.id },
-      include: ['Color', 'User'],
-    })
-    newUser.playlists = playlists
+    newUser.playlists = []
     newUser.id = isUserAlreadyExist.id
   }
 
@@ -181,6 +177,35 @@ const authenticateWithFacebookAccount = async (req, res) => {
   return serializeResponse(res, { user: newUser })
 }
 
+async function updateUserData(req, res) {
+  const { error } = validator.validateUserUpdate(req.body)
+  if (error) throw new errors.BadRequestError(error.message)
+
+  const user = await userModel.findOne({
+    where: { id: req.session.user.id },
+  })
+  if (!user) {
+    throw new errors.NotFoundError("User don't exist!")
+  }
+
+  const newUser = await userModel.update(req.body, {
+    where: { id: req.session.user.id },
+  })
+  if (!newUser.length) {
+    throw new errors.NotFoundError('User update Failed!')
+  }
+
+  const playlists = await playlistModel.findAll({
+    where: { user_id: req.session.user.id },
+    include: ['Color', 'User'],
+  })
+
+  const userSlice = safeUser({ ...req.session.user, ...req.body })
+  req.session.user = userSlice
+
+  return serializeResponse(res, { user: { ...userSlice, playlists } })
+}
+
 module.exports = {
   createNewUser,
   authenticateUser,
@@ -189,4 +214,5 @@ module.exports = {
   authenticateWithGoogleAccount,
   getFacebookOauth2URI,
   authenticateWithFacebookAccount,
+  updateUserData,
 }
