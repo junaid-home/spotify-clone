@@ -17,8 +17,8 @@ import useDropzoneImage from 'hooks/use-dropzone-image'
 function CreatePlaylistModal({open, onClose}) {
   const navigate = useNavigate()
   const [name, setName] = useState('')
-  const [color1, setColor1] = useState('')
-  const [color2, setColor2] = useState('')
+  const [color1, setColor1] = useState('#FFFFFF')
+  const [color2, setColor2] = useState('#FFFFFF')
   const {onDrop, image, imageSrc} = useDropzoneImage()
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
@@ -84,17 +84,34 @@ function CreatePlaylistModal({open, onClose}) {
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="Playlist Name"
+              css={{marginTop: 20}}
             />
-            <StyledInput
-              value={color1}
-              onChange={e => setColor1(e.target.value)}
-              placeholder="Color code 1 (e.g #FFFFFF)"
-            />
-            <StyledInput
-              value={color2}
-              onChange={e => setColor2(e.target.value)}
-              placeholder="Color code 2 (e.g #000000)"
-            />
+            <InputContainer>
+              <StyledInput
+                value={color1}
+                onChange={e => setColor1(e.target.value)}
+                placeholder="Color code 1 (e.g #ABC123)"
+                css={{
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderRight: 'none',
+                }}
+              />
+              <ColorDisplay css={{background: color1}} />
+            </InputContainer>
+            <InputContainer>
+              <StyledInput
+                value={color2}
+                onChange={e => setColor2(e.target.value)}
+                placeholder="Color code 2 (e.g #DEF345)"
+                css={{
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderRight: 'none',
+                }}
+              />
+              <ColorDisplay css={{background: color2}} />
+            </InputContainer>
           </div>
           <Button
             type="submit"
@@ -125,6 +142,30 @@ const customStyles = {
   },
 }
 
+const InputContainer = styled.div({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'stretch',
+  marginTop: 20,
+})
+
+const ColorDisplay = styled.span({
+  display: 'inline-block',
+  width: 60,
+  zIndex: 10,
+  color: '#FFF',
+  marginRight: -20,
+  borderTopRightRadius: 5,
+  borderBottomRightRadius: 5,
+  borderColor: colors.lightGrey,
+  borderStyle: 'solid',
+  borderWidth: 1,
+  borderLeft: 'none',
+
+  [mq.md]: {
+    marginRight: 0,
+  },
+})
 const FilledCloseIcon = styled(CloseIcon)({
   width: 30,
   height: 30,
@@ -155,7 +196,7 @@ const DropZoneSection = styled.section({
 })
 
 const StyledInput = styled(Input)({
-  marginTop: 20,
+  flex: 1,
   marginLeft: 20,
   color: colors.lightGrey,
   [mq.md]: {marginLeft: 0},

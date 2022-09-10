@@ -108,12 +108,11 @@ function SongList({
         }}
       />
       {data.Songs.map((s, i) => (
-        <Fragment>
+        <Fragment key={s.id}>
           <SongListContainer
             onMouseEnter={() => handleSongFocus(i)}
             onMouseLeave={() => handleSongUnFocus(i)}
             css={{marginBottom: 10, [mq.xl]: {marginBottom: 0}}}
-            key={s.id}
           >
             <SongListIndexItem>
               {focustedSong === i ? (
