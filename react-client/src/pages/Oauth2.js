@@ -3,6 +3,7 @@ import {Navigate} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import Spinner from 'components/spinner'
 import {useLoginWithOauth2Mutation} from 'store/api/auth'
+import colors from 'utils/colors'
 
 function Oauth2() {
   const requested = useRef(false)
@@ -48,10 +49,9 @@ function Oauth2() {
 }
 
 const Overlay = styled.div({
-  width: '100vw',
   height: '100vh',
   overflow: 'hidden',
-  background: 'rgba(0, 0, 0, 0.6)',
+  background: colors.background,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

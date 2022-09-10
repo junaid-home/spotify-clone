@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import * as React from 'react'
 import styled from '@emotion/styled/macro'
 
 import Logo from './logo'
@@ -76,16 +77,17 @@ function SidebarNavigation({openMenu, setOpenMenu, setOpenModal, playlists}) {
         }}
       />
       <div css={{color: colors.grey, padding: 20}}>
-        {playlists.map(p => (
-          <Link key={p.id} to={`/playlist/${p.id}`}>
-            <Typography
-              css={{cursor: 'pointer', marginBottom: 15}}
-              variant="label"
-            >
-              #{p.name}
-            </Typography>
-          </Link>
-        ))}
+        {playlists?.data &&
+          playlists.data.map(p => (
+            <Link key={p.id} to={`/playlist/${p.id}`}>
+              <Typography
+                css={{cursor: 'pointer', marginBottom: 15}}
+                variant="label"
+              >
+                #{p.name}
+              </Typography>
+            </Link>
+          ))}
       </div>
     </Wrapper>
   )
@@ -135,4 +137,4 @@ const HeartFilledIcon = styled(HeartIcon)({
   borderRadius: 2,
 })
 
-export default SidebarNavigation
+export default React.memo(SidebarNavigation)

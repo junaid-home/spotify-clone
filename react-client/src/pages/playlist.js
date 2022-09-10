@@ -77,10 +77,11 @@ const ContentContainer = styled.div({
 
 const CenteredContent = styled.div({
   width: '100%',
-  height: '90vh',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  background: colors.background,
+  minHeight: '100vh',
 })
 
 const FixedPositionContent = styled.div({

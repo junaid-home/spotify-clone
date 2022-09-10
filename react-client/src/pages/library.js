@@ -106,10 +106,11 @@ const FixedPositionContent = styled.div({
 
 const CenteredContent = styled.div({
   width: '100%',
-  height: '90vh',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  background: colors.background,
+  minHeight: '100vh',
 })
 
 export default Library

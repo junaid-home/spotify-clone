@@ -3,7 +3,7 @@ const serializeResponse = require('../utils/response-serializer')
 const validator = require('../validators/auth')
 const errors = require('../utils/error')
 const hasher = require('../utils/hasher')
-const { userModel, playlistModel } = require('../models')
+const { userModel } = require('../models')
 const googleOauth2 = require('../utils/google-Oath2.0')
 const fbOauth2 = require('../utils/facebook-Oauth2.0')
 const safeUser = require('../utils/safe-user')
@@ -33,7 +33,7 @@ const createNewUser = async (req, res) => {
   const userSlice = safeUser(newUser)
   req.session.user = userSlice
 
-  return serializeResponse(res, { user: { ...userSlice, playlists: [] } })
+  return serializeResponse(res, { user: { ...userSlice } })
 }
 
 // Login handler
@@ -48,11 +48,6 @@ const authenticateUser = async (req, res) => {
     throw new errors.NotFoundError("User don't exist, please signup!")
   }
 
-  const playlists = await playlistModel.findAll({
-    where: { user_id: user.id },
-    include: ['Color', 'User'],
-  })
-
   const hashedPassword = hasher.hashify(req.body.password, user.salt)
   if (hashedPassword.hash !== user.password) {
     throw new errors.BadRequestError('Invalid password!')
@@ -61,7 +56,7 @@ const authenticateUser = async (req, res) => {
   const userSlice = safeUser(user)
   req.session.user = userSlice
 
-  return serializeResponse(res, { user: { ...userSlice, playlists } })
+  return serializeResponse(res, { user: { ...userSlice } })
 }
 
 // Logout handler
@@ -103,17 +98,11 @@ const authenticateWithGoogleAccount = async (req, res) => {
   const newUser = { email, name, picture }
 
   if (isUserAlreadyExist) {
-    const playlists = await playlistModel.findAll({
-      where: { user_id: isUserAlreadyExist.id },
-      include: ['Color', 'User'],
-    })
-    newUser.playlists = playlists
     newUser.id = isUserAlreadyExist.id
   }
 
   if (user?.email && !isUserAlreadyExist) {
     const createdUser = await userModel.create(newUser)
-    newUser.playlists = []
     newUser.id = createdUser.id
   }
 
@@ -162,13 +151,11 @@ const authenticateWithFacebookAccount = async (req, res) => {
   }
 
   if (isUserAlreadyExist) {
-    newUser.playlists = []
     newUser.id = isUserAlreadyExist.id
   }
 
   if (user?.id && !isUserAlreadyExist) {
     const createdUser = await userModel.create(newUser)
-    newUser.playlists = []
     newUser.id = createdUser.id
   }
 
@@ -195,15 +182,10 @@ async function updateUserData(req, res) {
     throw new errors.NotFoundError('User update Failed!')
   }
 
-  const playlists = await playlistModel.findAll({
-    where: { user_id: req.session.user.id },
-    include: ['Color', 'User'],
-  })
-
   const userSlice = safeUser({ ...req.session.user, ...req.body })
   req.session.user = userSlice
 
-  return serializeResponse(res, { user: { ...userSlice, playlists } })
+  return serializeResponse(res, { user: { ...userSlice } })
 }
 
 module.exports = {

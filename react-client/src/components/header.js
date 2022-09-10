@@ -14,12 +14,13 @@ import Logo from './logo'
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 import {useQueryDataMutation} from 'store/api/search'
+import {useGetAllMyPlaylistsQuery} from 'store/api/playlist'
 
 function Header({setOpenModal}) {
   const location = useLocation()
 
   const isAuth = useSelector(s => s.auth.isAuthenticated)
-  const playlists = useSelector(s => s.auth.user.playlists)
+  const {data: playlists} = useGetAllMyPlaylistsQuery()
 
   const [openSideMenu, setOpenSideMenu] = useState(false)
   const [solidHeader, setSolidHeader] = useState(false)
@@ -29,12 +30,14 @@ function Header({setOpenModal}) {
   const [searchQuery] = useQueryDataMutation()
 
   useEffect(() => {
-    searchQuery({query: defferedQuery.toLowerCase()})
+    if (defferedQuery.length) {
+      searchQuery({query: defferedQuery.toLowerCase()})
+    }
   }, [defferedQuery, searchQuery])
 
   useEffect(() => {
     function scrollHandler(e) {
-      if (window.scrollY > 60) {
+      if (window.scrollY > 65) {
         setSolidHeader(true)
       } else {
         setSolidHeader(false)

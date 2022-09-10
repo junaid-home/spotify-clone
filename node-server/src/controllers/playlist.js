@@ -78,6 +78,18 @@ async function getPlaylistById(req, res) {
   })
 }
 
+async function getAllUserPlaylists(req, res) {
+  const playlists = await playlistModel.findAll({
+    where: { user_id: req.session.user.id },
+    include: ['Color'],
+  })
+  if (!playlists) {
+    throw new errors.BadRequestError('No playlists found!')
+  }
+
+  return serializeResponse(res, playlists)
+}
+
 async function addSongToPlaylist(req, res) {
   const { error } = validateSongPlaylist(req.body)
   if (error) throw new errors.BadRequestError(error.message)
@@ -154,4 +166,10 @@ async function addLike(req, res) {
   return responseSerializer(res, { message: 'liked successfully!' })
 }
 
-module.exports = { createPlaylist, getPlaylistById, addSongToPlaylist, addLike }
+module.exports = {
+  createPlaylist,
+  getPlaylistById,
+  addSongToPlaylist,
+  addLike,
+  getAllUserPlaylists,
+}

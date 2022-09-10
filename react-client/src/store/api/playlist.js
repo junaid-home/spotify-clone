@@ -24,6 +24,14 @@ export const playlistApi = createApi({
       }),
     }),
 
+    getAllMyPlaylists: builder.query({
+      query: () => ({
+        url: `/get/all`,
+        method: 'GET',
+        credentials: 'include',
+      }),
+    }),
+
     addSongToPlaylist: builder.mutation({
       query: data => ({
         url: '/add-song',
@@ -49,4 +57,5 @@ export const {
   useGetPlaylistByIdQuery,
   useAddSongToPlaylistMutation,
   useLikePlaylistMutation,
+  useGetAllMyPlaylistsQuery,
 } = playlistApi

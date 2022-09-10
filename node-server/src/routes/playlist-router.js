@@ -9,6 +9,7 @@ router.post(
   upload.single('picture'),
   playlistController.createPlaylist
 )
+router.get('/get/all', checkAuth, playlistController.getAllUserPlaylists)
 router.get('/get/:id', checkAuth, playlistController.getPlaylistById)
 router.post('/add-song', checkAuth, playlistController.addSongToPlaylist)
 router.post('/like', checkAuth, playlistController.addLike)

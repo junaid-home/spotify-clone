@@ -35,8 +35,10 @@ function App() {
         <Route path="/" element={<UnAuthRoute />}>
           <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/signup" element={<SignupPage />} />
-          <Route exact path="/facebook/redirect" element={<Oauth2Page />} />
-          <Route exact path="/google/redirect" element={<Oauth2Page />} />
+          <Route path="/" element={<Layout />}>
+            <Route exact path="/facebook/redirect" element={<Oauth2Page />} />
+            <Route exact path="/google/redirect" element={<Oauth2Page />} />
+          </Route>
         </Route>
       </Routes>
     </Router>
