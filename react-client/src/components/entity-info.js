@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
+
 import Typography from 'components/typography'
+
 import * as mq from 'utils/media-query'
 
 function EntityInfo({kind = 'playlist', data}) {

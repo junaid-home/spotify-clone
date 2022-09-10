@@ -1,18 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import 'rc-dropdown/assets/index.css'
+
 import {useEffect, useState, useDeferredValue, Fragment} from 'react'
-import {useSelector} from 'react-redux'
 import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
+import {useSelector} from 'react-redux'
+
+import SidebarNavigation from './sidebar-navigation'
+import UserMenuDropDown from './user-menu-dropdown'
+import Input from './input'
+import Logo from './logo'
+
 import LeftArrowIcon from 'icons/left-arrow'
 import RightArrowIcon from 'icons/right-arrow'
 import MenuIcon from 'icons/menu'
-import Input from './input'
-import SidebarNavigation from './sidebar-navigation'
-import UserMenuDropDown from './user-menu-dropdown'
-import Logo from './logo'
+
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+
 import {useQueryDataMutation} from 'store/api/search'
 import {useGetAllMyPlaylistsQuery} from 'store/api/playlist'
 

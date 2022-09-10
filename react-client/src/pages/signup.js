@@ -1,16 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import {useState, useLayoutEffect} from 'react'
 import styled from '@emotion/styled/macro'
-import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
 import {Link, useNavigate} from 'react-router-dom'
-import colors from 'utils/colors'
+import {useDispatch, useSelector} from 'react-redux'
+import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
+
 import Header from 'components/header'
 import Typography from 'components/typography'
 import Button from 'components/button'
 import SectionSeparator from 'components/section-separator'
 import FormGroup from 'components/form-group'
 import Tooltip from 'components/tooltip'
-import {useDispatch, useSelector} from 'react-redux'
+
+import colors from 'utils/colors'
+
 import {resetError} from 'store/reducers/auth'
 import {
   useGetFbLoginUriMutation,

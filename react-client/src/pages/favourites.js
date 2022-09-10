@@ -1,12 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import {Fragment} from 'react'
 import styled from '@emotion/styled/macro'
+
 import Typography from 'components/typography'
 import Spinner from 'components/spinner'
 import Card from 'components/card'
 import Tooltip from 'components/tooltip'
+
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+
 import {useGetLikedSongsQuery} from 'store/api/like'
 
 function Favourites() {

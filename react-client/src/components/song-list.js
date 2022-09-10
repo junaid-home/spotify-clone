@@ -13,11 +13,11 @@ import ClockIcon from 'icons/clock'
 import HeartIcon from 'icons/heart'
 import HeartOutlineIcon from 'icons/heart-outline'
 
-import {useLikeSongMutation} from 'store/api/song'
-
 import colors from 'utils/colors'
 import formatDate from 'utils/date-formatter'
 import * as mq from 'utils/media-query'
+
+import {useLikeSongMutation} from 'store/api/song'
 
 function SongList({
   color = '#7367F0',

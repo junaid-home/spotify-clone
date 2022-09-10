@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
+import {useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 
 import Typography from 'components/typography'
 import Button from 'components/button'
 
 import colors from 'utils/colors'
-import {useSelector} from 'react-redux'
 
 function Account() {
   const navigate = useNavigate()

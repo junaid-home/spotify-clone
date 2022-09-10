@@ -2,12 +2,15 @@
 import {useLayoutEffect, useMemo} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
+
 import Tooltip from 'components/tooltip'
 import Spinner from 'components/spinner'
 import EntityInfo from 'components/entity-info'
+import SongList from 'components/song-list'
+
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
-import SongList from 'components/song-list'
+
 import {useGetArtistByIdQuery, useLikeArtistMutation} from 'store/api/artist'
 import {useGetAllLikedItemsQuery} from 'store/api/like'
 

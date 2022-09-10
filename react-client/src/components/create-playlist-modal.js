@@ -1,18 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {toast} from 'react-toastify'
-import styled from '@emotion/styled/macro'
 import Modal from 'react-modal'
+import styled from '@emotion/styled/macro'
+import {useNavigate} from 'react-router-dom'
 import {useDropzone} from 'react-dropzone'
-import colors from 'utils/colors'
-import CloseIcon from 'icons/close'
+import {toast} from 'react-toastify'
+
 import Input from './input'
 import Button from './button'
 import Tooltip from './tooltip'
+
+import CloseIcon from 'icons/close'
+
+import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
-import {useCreatePlaylistMutation} from 'store/api/playlist'
+
 import useDropzoneImage from 'hooks/use-dropzone-image'
+
+import {useCreatePlaylistMutation} from 'store/api/playlist'
 
 function CreatePlaylistModal({open, onClose}) {
   const navigate = useNavigate()

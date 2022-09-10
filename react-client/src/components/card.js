@@ -1,12 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import {useState} from 'react'
-import {Link} from 'react-router-dom'
 import {css, keyframes} from '@emotion/react/macro'
 import styled from '@emotion/styled/macro'
-import colors from 'utils/colors'
+import {Link} from 'react-router-dom'
+
 import Typography from './typography'
+
 import PlayIcon from 'icons/play'
 import PauseIcon from 'icons/pause'
+
+import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
 function Card({data, kind = 'song'}) {

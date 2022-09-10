@@ -1,8 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import AlertIcon from 'icons/alert'
 import styled from '@emotion/styled/macro'
-import colors from 'utils/colors'
+
 import Typography from './typography'
+
+import AlertIcon from 'icons/alert'
+
+import colors from 'utils/colors'
 
 function Tooltip({message, type, noMargin, ...props}) {
   return (

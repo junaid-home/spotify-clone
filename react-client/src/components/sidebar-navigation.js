@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import * as React from 'react'
 import styled from '@emotion/styled/macro'
+import {Link} from 'react-router-dom'
 
 import Logo from './logo'
 import NavLink from './nav-link'
+import Typography from './typography'
 
 import HomeIcon from 'icons/home'
 import HomeActiveIcon from 'icons/home-active'
@@ -16,8 +18,6 @@ import HeartIcon from 'icons/heart'
 
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
-import Typography from './typography'
-import {Link} from 'react-router-dom'
 
 function SidebarNavigation({openMenu, setOpenMenu, setOpenModal, playlists}) {
   return (

@@ -1,9 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
-import colors from 'utils/colors'
+
+import Spinner from './spinner'
+
 import FbIcon from 'icons/fb'
 import GoogleIcon from 'icons/google'
-import Spinner from './spinner'
+
+import colors from 'utils/colors'
 
 function Button({children, variant, loading, ...props}) {
   return (

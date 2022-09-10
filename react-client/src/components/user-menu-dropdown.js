@@ -4,13 +4,17 @@ import {useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import styled from '@emotion/styled/macro'
 import {ClassNames, css} from '@emotion/react/macro'
-import Menu, {Item as MenuItem} from 'rc-menu'
 import Dropdown from 'rc-dropdown'
+import Menu, {Item as MenuItem} from 'rc-menu'
+
+import Typography from './typography'
+
 import PersonIcon from 'icons/person'
 import ArrowDownIcon from 'icons/arrow-down'
 import ArrowUpIcon from 'icons/arrow-up'
-import Typography from './typography'
+
 import colors from 'utils/colors'
+
 import {useLogoutMutation} from 'store/api/auth'
 
 function UserMenuDropDown() {

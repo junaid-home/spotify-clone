@@ -2,14 +2,17 @@
 import {useLayoutEffect, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {Link, useNavigate} from 'react-router-dom'
-import colors from 'utils/colors'
-import Header from 'components/header'
-import Typography from 'components/typography'
-import Button from 'components/button'
-import SectionSeparator from 'components/section-separator'
-import FormGroup from 'components/form-group'
-import Tooltip from 'components/tooltip'
 import {useDispatch, useSelector} from 'react-redux'
+
+import Header from 'components/header'
+import Button from 'components/button'
+import Tooltip from 'components/tooltip'
+import Typography from 'components/typography'
+import FormGroup from 'components/form-group'
+import SectionSeparator from 'components/section-separator'
+
+import colors from 'utils/colors'
+
 import {resetError} from 'store/reducers/auth'
 import {
   useGetFbLoginUriMutation,

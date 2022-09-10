@@ -1,12 +1,15 @@
 /** @jsxImportSource @emotion/react */
+import {toast} from 'react-toastify'
 import {ClassNames, css} from '@emotion/react/macro'
 import Menu, {Item as MenuItem} from 'rc-menu'
 import {useSelector} from 'react-redux'
-import {toast} from 'react-toastify'
+
 import PlusIcon from 'icons/plus'
 import Dropdown from 'rc-dropdown'
-import colors from 'utils/colors'
 import MoreIcon from 'icons/more'
+
+import colors from 'utils/colors'
+
 import {useAddSongToPlaylistMutation} from 'store/api/playlist'
 
 function SongMenuDropdown({isFocused, song}) {

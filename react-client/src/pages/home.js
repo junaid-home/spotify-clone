@@ -1,14 +1,17 @@
 /** @jsxImportSource @emotion/react */
+import {Fragment} from 'react'
 import {useSelector} from 'react-redux'
 import styled from '@emotion/styled/macro'
+
 import Typography from 'components/typography'
 import Card from 'components/card'
-import colors from 'utils/colors'
-import {useGetHomeDataQuery} from 'store/api/home'
 import Tooltip from 'components/tooltip'
 import Spinner from 'components/spinner'
-import {Fragment} from 'react'
+
+import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+
+import {useGetHomeDataQuery} from 'store/api/home'
 
 function Home() {
   const user = useSelector(s => s.auth.user)

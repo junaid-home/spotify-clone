@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
-import colors from 'utils/colors'
+
 import SearchIcon from 'icons/search'
+
+import colors from 'utils/colors'
 
 function Input({variant, placeholder, onChange, value, ...props}) {
   return variant === 'search' ? (

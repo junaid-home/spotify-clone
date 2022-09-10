@@ -1,8 +1,12 @@
 import 'the-new-css-reset/css/reset.css'
 import 'react-toastify/dist/ReactToastify.css'
+
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+
+import Layout from 'components/layout'
 import PrivateRoute from 'components/private-route'
 import UnAuthRoute from 'components/un-auth-route'
+
 import LoginPage from 'pages/login'
 import SignupPage from 'pages/signup'
 import Oauth2Page from 'pages/Oauth2'
@@ -14,7 +18,6 @@ import FavouritesPage from 'pages/favourites'
 import LibraryPage from 'pages/library'
 import AccountPage from 'pages/account'
 import ProfilePage from 'pages/profile'
-import Layout from 'components/layout'
 
 function App() {
   return (

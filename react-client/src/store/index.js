@@ -1,14 +1,16 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {setupListeners} from '@reduxjs/toolkit/query'
+
 import {authApi} from './api/auth'
 import {homeApi} from './api/home'
 import {searchApi} from './api/search'
 import {playlistApi} from './api/playlist'
-import authReducer from './reducers/auth'
-import searchReducer from './reducers/search'
 import {artistApi} from './api/artist'
 import {likeApi} from './api/like'
 import {songApi} from './api/song'
+
+import authReducer from './reducers/auth'
+import searchReducer from './reducers/search'
 
 export const store = configureStore({
   reducer: {

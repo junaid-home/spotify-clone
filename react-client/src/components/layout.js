@@ -1,3 +1,4 @@
+import {Fragment, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {Outlet} from 'react-router-dom'
 
@@ -5,7 +6,6 @@ import Header from './header'
 import CreatePlaylistModal from './create-playlist-modal'
 
 import * as mq from 'utils/media-query'
-import {Fragment, useState} from 'react'
 
 function Layout() {
   const [openModal, setOpenModal] = useState()

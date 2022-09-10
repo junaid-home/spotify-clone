@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
-import React from 'react'
 import {Link, useLocation} from 'react-router-dom'
+
 import Typography from './typography'
 
 function NavLink({icon: Icon, activeIcon: ActiveIcon, text, link, ...props}) {

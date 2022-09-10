@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled/macro'
-import colors from 'utils/colors'
+
 import Typography from './typography'
+
+import colors from 'utils/colors'
 
 function SectionSeparator({text, ...props}) {
   return (

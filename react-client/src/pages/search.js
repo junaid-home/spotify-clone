@@ -2,12 +2,15 @@
 import {useState, useDeferredValue, useEffect, Fragment} from 'react'
 import styled from '@emotion/styled/macro'
 import {useSelector} from 'react-redux'
-import Input from 'components/input'
-import Typography from 'components/typography'
-import Spinner from 'components/spinner'
+
 import Card from 'components/card'
+import Input from 'components/input'
+import Spinner from 'components/spinner'
+import Typography from 'components/typography'
+
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
+
 import {useQueryDataMutation} from 'store/api/search'
 
 function Search() {

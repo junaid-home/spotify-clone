@@ -2,8 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {Provider} from 'react-redux'
 import {ToastContainer} from 'react-toastify'
-import {store} from 'store/index'
+
 import App from 'App'
+
+import {store} from 'store/index'
 import {restoreUser} from 'store/reducers/auth'
 
 store.dispatch(restoreUser())

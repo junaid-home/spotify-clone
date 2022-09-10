@@ -1,4 +1,5 @@
 import styled from '@emotion/styled/macro'
+
 import colors from 'utils/colors'
 
 const Typography = styled.p(
