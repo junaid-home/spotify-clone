@@ -1,9 +1,12 @@
-import {Fragment, useState} from 'react'
+import {useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {Outlet} from 'react-router-dom'
 
 import Header from './header'
 import CreatePlaylistModal from './create-playlist-modal'
+import MusicPlayer from './music-player'
+
+import {AudioInstanceProvider} from 'context/audio-instance'
 
 import * as mq from 'utils/media-query'
 
@@ -11,7 +14,7 @@ function Layout() {
   const [openModal, setOpenModal] = useState()
 
   return (
-    <Fragment>
+    <AudioInstanceProvider>
       <CreatePlaylistModal
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -22,7 +25,8 @@ function Layout() {
           <Outlet />
         </MainArea>
       </Wrapper>
-    </Fragment>
+      <MusicPlayer />
+    </AudioInstanceProvider>
   )
 }
 

@@ -11,6 +11,7 @@ import {songApi} from './api/song'
 
 import authReducer from './reducers/auth'
 import searchReducer from './reducers/search'
+import playerReducer from './reducers/player'
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     [songApi.reducerPath]: songApi.reducer,
     auth: authReducer,
     search: searchReducer,
+    player: playerReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(

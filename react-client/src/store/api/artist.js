@@ -15,6 +15,14 @@ export const artistApi = createApi({
       }),
     }),
 
+    fetchArtistById: builder.mutation({
+      query: id => ({
+        url: `/get/${id}`,
+        method: 'GET',
+        credentials: 'include',
+      }),
+    }),
+
     likeArtist: builder.mutation({
       query: data => ({
         url: '/like',
@@ -26,4 +34,8 @@ export const artistApi = createApi({
   }),
 })
 
-export const {useGetArtistByIdQuery, useLikeArtistMutation} = artistApi
+export const {
+  useGetArtistByIdQuery,
+  useLikeArtistMutation,
+  useFetchArtistByIdMutation,
+} = artistApi

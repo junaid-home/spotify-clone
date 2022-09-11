@@ -7,15 +7,15 @@ import App from 'App'
 
 import {store} from 'store/index'
 import {restoreUser} from 'store/reducers/auth'
+import {restorePlaying} from 'store/reducers/player'
 
 store.dispatch(restoreUser())
+store.dispatch(restorePlaying())
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-      <ToastContainer />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+    <ToastContainer />
+  </Provider>,
 )
