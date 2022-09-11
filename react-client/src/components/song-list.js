@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import {Fragment, useCallback, useState} from 'react'
+import {Fragment, useCallback, useEffect, useState} from 'react'
 import styled from '@emotion/styled/macro'
+import {useDispatch, useSelector} from 'react-redux'
 import {css} from '@emotion/react/macro'
 import {toast} from 'react-toastify'
 
@@ -17,7 +18,10 @@ import colors from 'utils/colors'
 import formatDate from 'utils/date-formatter'
 import * as mq from 'utils/media-query'
 
+import {useAudioInstance} from 'context/audio-instance'
+
 import {useLikeSongMutation} from 'store/api/song'
+import {playSong, setPlayingId, setPlayingStatus} from 'store/reducers/player'
 
 function SongList({
   color = '#7367F0',
@@ -27,19 +31,16 @@ function SongList({
   likedEntities,
   likeEntity,
 }) {
+  const songInstanceRef = useAudioInstance()
+  const dispatch = useDispatch()
+  const playingId = useSelector(s => s.player.playingId)
+  const playing = useSelector(s => s.player.isPlaying)
+  const playingSrc = useSelector(s => s.player.playingSrc)
   const [isPlaying, setIsplaying] = useState(false)
   const [focustedSong, setFocusedSong] = useState(null)
   const [likeSong] = useLikeSongMutation()
 
   const formatDateMemoized = useCallback(isoString => formatDate(isoString), [])
-
-  const handleSongFocus = index => {
-    setFocusedSong(index)
-  }
-  const handleSongUnFocus = _index => {
-    setFocusedSong(null)
-  }
-
   const isLiked = useCallback(
     (items, item) => items.some(x => x.id === item.id),
     [],
@@ -56,6 +57,32 @@ function SongList({
     refetchLikes()
   }
 
+  const handlePlay = (index = 0) => {
+    dispatch(setPlayingId(data.id))
+    dispatch(setPlayingStatus({status: true, src: data.Songs[0].id}))
+    dispatch(playSong(data.Songs))
+
+    setTimeout(() => {
+      songInstanceRef.current.play()
+      songInstanceRef.current.updatePlayIndex(index)
+    }, 200)
+  }
+
+  const handlePause = () => {
+    dispatch(setPlayingStatus({status: false, src: data.Songs[0].id}))
+    setTimeout(() => {
+      songInstanceRef.current.pause()
+    }, 200)
+  }
+
+  useEffect(() => {
+    if (playing && playingId === data.id) {
+      setIsplaying(true)
+    } else {
+      setIsplaying(false)
+    }
+  }, [data.id, playingId, playing, data.Songs])
+
   return (
     <SongListSection
       css={{
@@ -64,9 +91,9 @@ function SongList({
     >
       <IconsContainer>
         {isPlaying ? (
-          <PauseFilledIcon onClick={() => setIsplaying(false)} />
+          <PauseFilledIcon onClick={handlePause} />
         ) : (
-          <PlayFilledIcon onClick={() => setIsplaying(true)} />
+          <PlayFilledIcon onClick={handlePlay} />
         )}
         {isLiked(likedEntities, data) ? (
           <HeartFilledIcon onClick={() => handleLike(likeEntity, data.id)} />
@@ -110,13 +137,24 @@ function SongList({
       {data.Songs.map((s, i) => (
         <Fragment key={s.id}>
           <SongListContainer
-            onMouseEnter={() => handleSongFocus(i)}
-            onMouseLeave={() => handleSongUnFocus(i)}
+            onMouseEnter={() => setFocusedSong(i)}
+            onMouseLeave={() => setFocusedSong(null)}
             css={{marginBottom: 10, [mq.xl]: {marginBottom: 0}}}
           >
             <SongListIndexItem>
               {focustedSong === i ? (
-                <PlayIcon css={{fill: 'white', cursor: 'pointer'}} />
+                data.Songs.findIndex(x => x.src === playingSrc) ===
+                  focustedSong && playing ? (
+                  <PauseIcon
+                    onClick={() => handlePause()}
+                    css={{fill: 'white', cursor: 'pointer'}}
+                  />
+                ) : (
+                  <PlayIcon
+                    onClick={() => handlePlay(i)}
+                    css={{fill: 'white', cursor: 'pointer'}}
+                  />
+                )
               ) : (
                 <Typography variant="label">{i + 1}</Typography>
               )}
