@@ -33,6 +33,7 @@ function MusicPlayer() {
           autoPlayInitLoadPlayList={false}
           audioLists={audioLists}
           className={cx(css(playerPanelStyles))}
+          defaultPosition={{bottom: 15, right: 15}}
           getAudioInstance={instance => {
             audioInstanceRef.current = instance
           }}
