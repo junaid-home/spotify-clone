@@ -2,7 +2,6 @@
 import {toast} from 'react-toastify'
 import {ClassNames, css} from '@emotion/react/macro'
 import Menu, {Item as MenuItem} from 'rc-menu'
-import {useSelector} from 'react-redux'
 
 import PlusIcon from 'icons/plus'
 import Dropdown from 'rc-dropdown'
@@ -10,10 +9,13 @@ import MoreIcon from 'icons/more'
 
 import colors from 'utils/colors'
 
-import {useAddSongToPlaylistMutation} from 'store/api/playlist'
+import {
+  useAddSongToPlaylistMutation,
+  useGetAllMyPlaylistsQuery,
+} from 'store/api/playlist'
 
 function SongMenuDropdown({isFocused, song}) {
-  const playlists = useSelector(s => s.auth.user.playlists)
+  const {data: playlists} = useGetAllMyPlaylistsQuery()
   const [addSongToPlaylist] = useAddSongToPlaylistMutation()
 
   async function onSelect({key}) {
@@ -42,7 +44,7 @@ function SongMenuDropdown({isFocused, song}) {
             />{' '}
             Add To Playlist
           </MenuItem>
-          {playlists.map(p => (
+          {playlists.data.map(p => (
             <MenuItem key={p.id} className={cx(css(menuItemStyles))}>
               {p.name}
             </MenuItem>

@@ -69,7 +69,6 @@ function Artist() {
 const ContentContainer = styled.div({
   color: colors.white,
   userSelect: 'none',
-  background: colors.background,
 })
 
 const CenteredContent = styled.div({

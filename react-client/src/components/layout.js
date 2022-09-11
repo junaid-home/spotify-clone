@@ -9,6 +9,7 @@ import MusicPlayer from './music-player'
 import {AudioInstanceProvider} from 'context/audio-instance'
 
 import * as mq from 'utils/media-query'
+import colors from 'utils/colors'
 
 function Layout() {
   const [openModal, setOpenModal] = useState()
@@ -38,6 +39,8 @@ const MainArea = styled.div({
   flex: 1,
   position: 'relative',
   marginLeft: 242,
+  paddingBottom: 80,
+  background: colors.background,
 
   [mq.md]: {
     marginLeft: 0,

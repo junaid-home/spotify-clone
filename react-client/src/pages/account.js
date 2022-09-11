@@ -73,7 +73,6 @@ function Account() {
 const ContentContainer = styled.div({
   color: colors.white,
   userSelect: 'none',
-  background: colors.background,
   minHeight: '100vh',
   paddingTop: 80,
   paddingLeft: 40,

@@ -217,7 +217,6 @@ const MobileButton = styled.div({
 const SongListSection = styled.div({
   flex: 1,
   padding: 30,
-  paddingBottom: 80,
 })
 
 const playPauseIconStyles = css({

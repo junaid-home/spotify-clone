@@ -26,14 +26,7 @@ function Search() {
   }, [defferedQuery, searchQuery])
 
   return (
-    <div
-      css={{
-        color: colors.white,
-        padding: '80px 30px',
-        background: `linear-gradient(0deg, rgba(18,18,18,1) 50%, rgba(33,33,33,1) 95%)`,
-        minHeight: '100vh',
-      }}
-    >
+    <Wrapper>
       <Input
         value={query}
         variant="search"
@@ -92,7 +85,7 @@ function Search() {
           </ListContainer>
         </Fragment>
       ) : null}
-    </div>
+    </Wrapper>
   )
 }
 
@@ -122,6 +115,12 @@ const CenteredContent = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+})
+
+const Wrapper = styled.div({
+  color: colors.white,
+  padding: '80px 30px',
+  minHeight: '100vh',
 })
 
 export default Search
