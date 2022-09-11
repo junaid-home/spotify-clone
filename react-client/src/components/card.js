@@ -17,7 +17,7 @@ import {useAudioInstance} from 'context/audio-instance'
 
 import {useFetchArtistByIdMutation} from 'store/api/artist'
 import {useFeatchPlaylistDataByIdMutation} from 'store/api/playlist'
-import {playSong, setPlayingStatus} from 'store/reducers/player'
+import {playSong, setPlayingId, setPlayingStatus} from 'store/reducers/player'
 
 function Card({data, kind = 'song'}) {
   const audioInstanceRef = useAudioInstance()
@@ -27,7 +27,7 @@ function Card({data, kind = 'song'}) {
 
   const dispatch = useDispatch()
   const playing = useSelector(s => s.player.isPlaying)
-  const [playlist, setPlaylist] = useState([])
+  const playingId = useSelector(s => s.player.playingId)
   const playingSrc = useSelector(s => s.player.playingSrc)
   const [getArtistData] = useFetchArtistByIdMutation()
   const [getPlaylistData] = useFeatchPlaylistDataByIdMutation()
@@ -46,9 +46,9 @@ function Card({data, kind = 'song'}) {
     if (kind === 'song' || kind === 'artist') {
       const result = await getArtistData(displayData.id)
 
+      dispatch(setPlayingId(result.data.data.id))
       let songs = result.data.data.Songs
 
-      setPlaylist(() => songs)
       if (kind === 'song' && songs.length) {
         const sortedSongs = [...result.data.data.Songs]
 
@@ -67,8 +67,8 @@ function Card({data, kind = 'song'}) {
       const result = await getPlaylistData(displayData.id)
       const songs = result.data.data.Songs
 
-      setPlaylist(() => songs)
       dispatch(playSong(songs))
+      dispatch(setPlayingId(result.data.data.id))
     }
   }
 
@@ -89,13 +89,21 @@ function Card({data, kind = 'song'}) {
         setIsPlaying(false)
       }
     } else {
-      if (playing && playlist.findIndex(x => x.src === playingSrc) > -1) {
+      if (playing && playingId === displayData.id) {
         setIsPlaying(true)
       } else {
         setIsPlaying(false)
       }
     }
-  }, [audioInstanceRef, data.src, kind, playing, playingSrc, playlist])
+  }, [
+    audioInstanceRef,
+    data.src,
+    displayData.id,
+    kind,
+    playing,
+    playingId,
+    playingSrc,
+  ])
 
   const playPauseIcons = isPlaying ? (
     <FilledPauseIcon

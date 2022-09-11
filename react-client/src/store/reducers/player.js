@@ -3,7 +3,8 @@ import {createSlice} from '@reduxjs/toolkit'
 const initialState = {
   playing: [],
   isPlaying: false,
-  playingSrc: '',
+  playingSrc: null,
+  playingId: null,
 }
 
 const playerSlice = createSlice({
@@ -36,9 +37,14 @@ const playerSlice = createSlice({
       state.isPlaying = action.payload.status
       state.playingSrc = action.payload.src
     },
+
+    setPlayingId: (state, action) => {
+      state.playingId = action.payload
+    },
   },
   extraReducers: builder => {},
 })
 
-export const {restorePlaying, playSong, setPlayingStatus} = playerSlice.actions
+export const {restorePlaying, playSong, setPlayingStatus, setPlayingId} =
+  playerSlice.actions
 export default playerSlice.reducer
