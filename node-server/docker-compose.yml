@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile.dev
-    restart: always
+    # restart: always
     depends_on:
       - db
     ports:
@@ -17,7 +17,7 @@ services:
   db:
     container_name: postgres
     image: postgres
-    restart: always
+    # restart: always
     environment:
       POSTGRES_PASSWORD: abc123
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -29,7 +29,7 @@ services:
   adminer:
     container_name: adminer
     image: adminer
-    restart: always
+    # restart: always
     depends_on:
       - db
     ports:
