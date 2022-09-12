@@ -141,7 +141,7 @@ function SongList({
             onMouseLeave={() => setFocusedSong(null)}
             css={{marginBottom: 10, [mq.xl]: {marginBottom: 0}}}
           >
-            <SongListIndexItem>
+            <SongListIndexItem css={{[mq.lg]: {display: 'inline-block'}}}>
               {focustedSong === i ? (
                 data.Songs.findIndex(x => x.src === playingSrc) ===
                   focustedSong && playing ? (
@@ -280,6 +280,7 @@ const SongListContainer = styled.div({
   display: 'flex',
   width: '100%',
   padding: 8,
+  alignItems: 'center',
   color: colors.lightGrey,
 })
 const SongListIndexItem = styled.div({
