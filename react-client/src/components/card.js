@@ -108,7 +108,9 @@ function Card({data, kind = 'song'}) {
   const playPauseIcons = isPlaying ? (
     <FilledPauseIcon
       css={
-        displayPlayPause || isPlaying ? buttonStyles : {[mq.md]: {opacity: 1}}
+        displayPlayPause || isPlaying
+          ? buttonStyles
+          : {[mq.md]: {...buttonStyles}}
       }
       onClick={handlePause}
     />
@@ -117,7 +119,7 @@ function Card({data, kind = 'song'}) {
       css={
         displayPlayPause
           ? {...buttonStyles, animation: shouldAnimate && `${slideUpward} 0.5s`}
-          : null
+          : {[mq.md]: {...buttonStyles}}
       }
       onClick={handlePlay}
     />

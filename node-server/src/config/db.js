@@ -1,11 +1,20 @@
 const { Sequelize } = require('sequelize')
 const logger = require('../utils/console')
 
+// const $IS_PRODUCTION = process.env.NODE_ENV !== 'production'
 const $POSTGRES_DATABASE_URL =
   process.env.POSTGRES_DATABASE_URL ||
   'postgres://postgres:abc123@postgres:5432/postgres'
 
-const sequelize = new Sequelize($POSTGRES_DATABASE_URL)
+const sequelize = new Sequelize($POSTGRES_DATABASE_URL, {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true, // $IS_PRODUCTION,
+      rejectUnauthorized: false,
+    },
+  },
+})
 
 const authenticate = async () => {
   try {
