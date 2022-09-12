@@ -176,7 +176,7 @@ function SongList({
                   css={{
                     fontWeight: 'normal',
                     maxWidth: 350,
-                    [mq.xl]: {maxWidth: '65vw'},
+                    [mq.xl]: {maxWidth: '55vw'},
                   }}
                 >
                   {s.description}
