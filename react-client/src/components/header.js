@@ -18,17 +18,19 @@ import MenuIcon from 'icons/menu'
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
+import useSolidHeader from 'hooks/use-solid-header'
+
 import {useQueryDataMutation} from 'store/api/search'
 import {useGetAllMyPlaylistsQuery} from 'store/api/playlist'
 
 function Header({setOpenModal}) {
   const location = useLocation()
+  const solidHeader = useSolidHeader()
 
   const isAuth = useSelector(s => s.auth.isAuthenticated)
   const {data: playlists} = useGetAllMyPlaylistsQuery()
 
   const [openSideMenu, setOpenSideMenu] = useState(false)
-  const [solidHeader, setSolidHeader] = useState(false)
   const deferredSolidHeaderValue = useDeferredValue(solidHeader)
   const [query, setQuery] = useState('')
   const defferedQuery = useDeferredValue(query)
@@ -39,19 +41,6 @@ function Header({setOpenModal}) {
       searchQuery({query: defferedQuery.toLowerCase()})
     }
   }, [defferedQuery, searchQuery])
-
-  useEffect(() => {
-    function scrollHandler(e) {
-      if (window.scrollY > 65) {
-        setSolidHeader(true)
-      } else {
-        setSolidHeader(false)
-      }
-    }
-    window.addEventListener('scroll', scrollHandler)
-
-    return () => window.removeEventListener('scroll', scrollHandler)
-  }, [])
 
   return !isAuth ? (
     <UnAuthWrapper>
