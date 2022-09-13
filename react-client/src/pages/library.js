@@ -4,7 +4,7 @@ import styled from '@emotion/styled/macro'
 
 import Typography from 'components/typography'
 import Tooltip from 'components/tooltip'
-import Spinner from 'components/spinner'
+import {FullPageSpinner} from 'components/spinner'
 import Card from 'components/card'
 
 import colors from 'utils/colors'
@@ -27,11 +27,7 @@ function Library() {
       </FixedPositionContent>
     )
   if (isLoading) {
-    return (
-      <CenteredContent>
-        <Spinner />
-      </CenteredContent>
-    )
+    return <FullPageSpinner />
   }
 
   return (
@@ -104,15 +100,6 @@ const FixedPositionContent = styled.div({
   [mq.md]: {
     left: 0,
   },
-})
-
-const CenteredContent = styled.div({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  background: colors.background,
-  minHeight: '100vh',
 })
 
 export default Library

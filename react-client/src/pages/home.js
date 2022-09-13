@@ -6,7 +6,7 @@ import styled from '@emotion/styled/macro'
 import Typography from 'components/typography'
 import Card from 'components/card'
 import Tooltip from 'components/tooltip'
-import Spinner from 'components/spinner'
+import {FullPageSpinner} from 'components/spinner'
 
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
@@ -28,12 +28,7 @@ function Home() {
         />
       </FixedPositionContent>
     )
-  if (isLoading)
-    return (
-      <CenteredContent>
-        <Spinner />
-      </CenteredContent>
-    )
+  if (isLoading) return <FullPageSpinner />
 
   return (
     <div
@@ -155,15 +150,6 @@ const ListContainer = styled.div({
   [mq.sm]: {
     gridTemplateColumns: 'repeat(1, 1fr)',
   },
-})
-
-const CenteredContent = styled.div({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  background: colors.background,
-  minHeight: '100vh',
 })
 
 const FixedPositionContent = styled.div({

@@ -4,7 +4,7 @@ import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 
 import Tooltip from 'components/tooltip'
-import Spinner from 'components/spinner'
+import {FullPageSpinner} from 'components/spinner'
 import SongList from 'components/song-list'
 import EntityInfo from 'components/entity-info'
 
@@ -48,12 +48,7 @@ function Playlist() {
       </FixedPositionContent>
     )
 
-  if (isLoading || isLikedSongs)
-    return (
-      <CenteredContent>
-        <Spinner />
-      </CenteredContent>
-    )
+  if (isLoading || isLikedSongs) return <FullPageSpinner />
 
   return (
     <ContentContainer>
@@ -76,15 +71,6 @@ const ContentContainer = styled.div({
   flexDirection: 'column',
   minHeight: '100vh',
   userSelect: 'none',
-})
-
-const CenteredContent = styled.div({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  background: colors.background,
-  minHeight: '100vh',
 })
 
 const FixedPositionContent = styled.div({

@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux'
 
 import Card from 'components/card'
 import Input from 'components/input'
-import Spinner from 'components/spinner'
+import {FullPageSpinner} from 'components/spinner'
 import Typography from 'components/typography'
 
 import colors from 'utils/colors'
@@ -39,11 +39,7 @@ function Search() {
           },
         }}
       />
-      {isLoading ? (
-        <CenteredContent>
-          <Spinner />
-        </CenteredContent>
-      ) : null}
+      {isLoading ? <FullPageSpinner /> : null}
       {error && query ? (
         <CenteredContent>
           <Typography>{error}</Typography>
@@ -110,11 +106,13 @@ const ListContainer = styled.div({
 })
 
 const CenteredContent = styled.div({
-  width: '100%',
-  height: '90vh',
+  flex: 1,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  background: colors.background,
+  minHeight: '100vh',
+  textAlign: 'center',
 })
 
 const Wrapper = styled.div({

@@ -3,7 +3,7 @@ import {Fragment} from 'react'
 import styled from '@emotion/styled/macro'
 
 import Typography from 'components/typography'
-import Spinner from 'components/spinner'
+import {FullPageSpinner} from 'components/spinner'
 import Card from 'components/card'
 import Tooltip from 'components/tooltip'
 
@@ -27,11 +27,7 @@ function Favourites() {
       </FixedPositionContent>
     )
   if (isLoading) {
-    return (
-      <CenteredContent>
-        <Spinner />
-      </CenteredContent>
-    )
+    return <FullPageSpinner />
   }
 
   return (
@@ -79,12 +75,13 @@ const ListContainer = styled.div({
 })
 
 const CenteredContent = styled.div({
-  width: '100%',
+  flex: 1,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   background: colors.background,
   minHeight: '100vh',
+  textAlign: 'center',
 })
 
 const FixedPositionContent = styled.div({

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled/macro'
 import {keyframes} from '@emotion/react/macro'
+import colors from 'utils/colors'
 
 function Spinner(props) {
   return (
@@ -9,6 +10,14 @@ function Spinner(props) {
       <div></div>
       <div></div>
     </Wrapper>
+  )
+}
+
+export const FullPageSpinner = ({whiteBg}) => {
+  return (
+    <CenteredContent color={!whiteBg ? colors.black : colors.white}>
+      <Spinner color={!whiteBg ? colors.white : colors.black} />
+    </CenteredContent>
   )
 }
 
@@ -75,5 +84,16 @@ const Wrapper = styled.div(({color}) => ({
     animation: `${ellipsis3} 0.6s infinite`,
   },
 }))
+
+const CenteredContent = styled.data(
+  {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+  },
+  ({color}) => ({background: color}),
+)
 
 export default Spinner
