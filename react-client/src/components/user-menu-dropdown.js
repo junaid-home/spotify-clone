@@ -25,6 +25,7 @@ function UserMenuDropDown() {
 
   async function onSelect({key}) {
     if (key !== '/logout') {
+      setOpen(false)
       return navigate(key)
     }
     await logout().unwrap()
