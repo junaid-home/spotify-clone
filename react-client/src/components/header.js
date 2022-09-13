@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import 'rc-dropdown/assets/index.css'
 
-import {useEffect, useState, useDeferredValue, Fragment} from 'react'
+import {useState, Fragment} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import {useSelector} from 'react-redux'
@@ -19,33 +19,24 @@ import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
 import useSolidHeader from 'hooks/use-solid-header'
+import useSearchQuery from 'hooks/use-search-query'
 
-import {useQueryDataMutation} from 'store/api/search'
 import {useGetAllMyPlaylistsQuery} from 'store/api/playlist'
 
 function Header({setOpenModal}) {
   const location = useLocation()
   const solidHeader = useSolidHeader()
 
+  const [query, setQuery] = useSearchQuery()
+  const [openSideMenu, setOpenSideMenu] = useState(false)
+
   const isAuth = useSelector(s => s.auth.isAuthenticated)
   const {data: playlists} = useGetAllMyPlaylistsQuery()
 
-  const [openSideMenu, setOpenSideMenu] = useState(false)
-  const deferredSolidHeaderValue = useDeferredValue(solidHeader)
-  const [query, setQuery] = useState('')
-  const defferedQuery = useDeferredValue(query)
-  const [searchQuery] = useQueryDataMutation()
-
-  useEffect(() => {
-    if (defferedQuery.length) {
-      searchQuery({query: defferedQuery.toLowerCase()})
-    }
-  }, [defferedQuery, searchQuery])
-
   return !isAuth ? (
-    <UnAuthWrapper>
+    <UnAuthenticatedHeader>
       <Logo />
-    </UnAuthWrapper>
+    </UnAuthenticatedHeader>
   ) : (
     <Fragment>
       <Overlay open={openSideMenu} onClick={() => setOpenSideMenu(false)} />
@@ -55,11 +46,7 @@ function Header({setOpenModal}) {
         setOpenModal={setOpenModal}
         playlists={playlists}
       />
-      <AuthWrapper
-        css={{
-          background: deferredSolidHeaderValue ? colors.darkest : 'transparent',
-        }}
-      >
+      <AuthenticatedHeader solid={solidHeader}>
         <ContentContainer>
           <MenuFilledIcon onClick={() => setOpenSideMenu(true)} />
           <FilledLeftArrowIcon css={{marginRight: 25}} />
@@ -82,12 +69,12 @@ function Header({setOpenModal}) {
           )}
         </ContentContainer>
         <UserMenuDropDown />
-      </AuthWrapper>
+      </AuthenticatedHeader>
     </Fragment>
   )
 }
 
-const UnAuthWrapper = styled.div({
+const UnAuthenticatedHeader = styled.div({
   minWidth: '100%',
   borderBottom: `1px solid ${colors.lightGrey}`,
   padding: 25,
@@ -96,23 +83,28 @@ const UnAuthWrapper = styled.div({
   alignItems: 'center',
 })
 
-const AuthWrapper = styled.div({
-  padding: '13px 40px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  color: colors.white,
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  zIndex: 98,
-  width: '100%',
-  userSelect: 'none',
+const AuthenticatedHeader = styled.div(
+  {
+    padding: '13px 40px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    color: colors.white,
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    zIndex: 98,
+    width: '100%',
+    userSelect: 'none',
 
-  [mq.md]: {
-    padding: '13px 30px',
+    [mq.md]: {
+      padding: '13px 30px',
+    },
   },
-})
+  ({solid}) => ({
+    background: solid ? colors.darkest : 'transparent',
+  }),
+)
 
 const ContentContainer = styled.div({
   marginLeft: 232,

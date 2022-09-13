@@ -1,29 +1,21 @@
 /** @jsxImportSource @emotion/react */
-import {useState, useDeferredValue, useEffect, Fragment} from 'react'
+import {Fragment} from 'react'
 import styled from '@emotion/styled/macro'
 import {useSelector} from 'react-redux'
 
 import Card from 'components/card'
 import Input from 'components/input'
-import {FullPageSpinner} from 'components/spinner'
+import Spinner from 'components/spinner'
 import Typography from 'components/typography'
 
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
-import {useQueryDataMutation} from 'store/api/search'
+import useSearchQuery from 'hooks/use-search-query'
 
 function Search() {
-  const [query, setQuery] = useState('')
-  const defferedQuery = useDeferredValue(query)
+  const [query, setQuery] = useSearchQuery()
   const {data, isLoading, error} = useSelector(s => s.search)
-  const [searchQuery] = useQueryDataMutation()
-
-  useEffect(() => {
-    if (defferedQuery.length) {
-      searchQuery({query: defferedQuery.toLowerCase()})
-    }
-  }, [defferedQuery, searchQuery])
 
   return (
     <Wrapper>
@@ -39,50 +31,36 @@ function Search() {
           },
         }}
       />
-      {isLoading ? <FullPageSpinner /> : null}
+      {isLoading ? (
+        <CenteredContent>
+          <Spinner />
+        </CenteredContent>
+      ) : null}
       {error && query ? (
         <CenteredContent>
           <Typography>{error}</Typography>
         </CenteredContent>
       ) : null}
-      {data?.songs?.length ? (
-        <Fragment>
-          <Typography css={{marginTop: 20}} variant="h1">
-            Songs
-          </Typography>
-          <ListContainer>
-            {data.songs.map(song => (
-              <Card key={song.id} data={song} />
-            ))}
-          </ListContainer>
-        </Fragment>
-      ) : null}
-      {data?.artists?.length ? (
-        <Fragment>
-          <Typography css={{marginTop: 40}} variant="h1">
-            Artists
-          </Typography>
-          <ListContainer>
-            {data.artists.map(artist => (
-              <Card kind="artist" key={artist.id} data={artist} />
-            ))}
-          </ListContainer>
-        </Fragment>
-      ) : null}
-      {data?.playlists?.length ? (
-        <Fragment>
-          <Typography css={{marginTop: 40}} variant="h1">
-            Playlists
-          </Typography>
-          <ListContainer>
-            {data.playlists.map(playlist => (
-              <Card kind="playlist" key={playlist.id} data={playlist} />
-            ))}
-          </ListContainer>
-        </Fragment>
-      ) : null}
+      <CardList title="Songs" kind="song" data={data.songs} />
+      <CardList title="Artists" kind="artist" data={data.artists} />
+      <CardList title="Playlists" kind="playlist" data={data.playlists} />
     </Wrapper>
   )
+}
+
+function CardList({title, kind, data}) {
+  return data?.length ? (
+    <Fragment>
+      <Typography css={{marginTop: 40}} variant="h2">
+        {title}
+      </Typography>
+      <ListContainer>
+        {data.map(x => (
+          <Card kind={kind} key={x.id} data={x} />
+        ))}
+      </ListContainer>
+    </Fragment>
+  ) : null
 }
 
 const ListContainer = styled.div({
@@ -110,15 +88,13 @@ const CenteredContent = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  background: colors.background,
-  minHeight: '100vh',
+  minHeight: '90vh',
   textAlign: 'center',
 })
 
 const Wrapper = styled.div({
   color: colors.white,
   padding: '80px 30px',
-  minHeight: '100vh',
 })
 
 export default Search
