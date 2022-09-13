@@ -64,6 +64,12 @@ const playerPanelStyles = {
   '& .music-player-panel .panel-content .img-content': {
     backgroundSize: 'cover',
   },
+  '& .react-jinke-music-player-mobile-cover .cover': {
+    height: '100%',
+  },
+  '& .music-player-controller': {
+    backgroundSize: 'cover',
+  },
 }
 
 export default MusicPlayer

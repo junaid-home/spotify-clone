@@ -1,6 +1,7 @@
 import styled from '@emotion/styled/macro'
 
 import colors from 'utils/colors'
+import * as mq from 'utils/media-query'
 
 const Typography = styled.p(
   {
@@ -25,6 +26,9 @@ const Typography = styled.p(
           fontWeight: 900,
           letterSpacing: 0.3,
           color: 'inherit',
+          [mq.md]: {
+            fontSize: 70,
+          },
         }
       : null,
   ({variant}) =>
