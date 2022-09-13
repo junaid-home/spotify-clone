@@ -14,7 +14,11 @@ function EntityInfo({kind = 'playlist', data}) {
         background: `linear-gradient(0deg, ${displayData.code2} 20%, ${displayData.code1} 110%)`,
       }}
     >
-      <PlaylistImage src={displayData.picture} alt={displayData.title} />
+      <PlaylistImage
+        loading="lazy"
+        src={displayData.picture}
+        alt={displayData.title}
+      />
       <div
         css={{
           paddingLeft: 30,

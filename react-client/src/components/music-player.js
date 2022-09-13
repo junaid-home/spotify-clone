@@ -26,7 +26,7 @@ function MusicPlayer() {
       {({cx, css}) => (
         <ReactJkMusicPlayer
           mode={isMobile ? 'mini' : 'full'}
-          preload="auto"
+          preload={false}
           glassBg
           spaceBar
           showMediaSession

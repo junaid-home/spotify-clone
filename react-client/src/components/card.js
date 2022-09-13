@@ -144,6 +144,7 @@ function Card({data, kind = 'song'}) {
           artist={kind === 'artist'}
           src={displayData.picture}
           alt={displayData.title}
+          loading="lazy"
         />
         <Typography variant="one-line" css={{marginTop: 15}}>
           {displayData.title}

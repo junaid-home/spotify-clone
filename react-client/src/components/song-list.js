@@ -160,7 +160,7 @@ function SongList({
               )}
             </SongListIndexItem>
             <SongListTitleItem>
-              <SongImage src={s.thumbnail} alt={s.title} />
+              <SongImage loading="lazy" src={s.thumbnail} alt={s.title} />
               <div css={{marginLeft: 15}}>
                 <Typography
                   variant="link"

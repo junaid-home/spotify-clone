@@ -32,9 +32,11 @@ function Library() {
   return (
     <Wrapper>
       <Fragment>
-        <Typography css={{marginTop: 20}} variant="h1">
-          Songs
-        </Typography>
+        {data?.data?.songs?.length ? (
+          <Typography css={{marginTop: 20}} variant="h1">
+            Songs
+          </Typography>
+        ) : null}
         <ListContainer>
           {data?.data?.songs.map(song => (
             <Card key={song.id} data={song} />
@@ -42,9 +44,11 @@ function Library() {
         </ListContainer>
       </Fragment>
       <Fragment>
-        <Typography css={{marginTop: 40}} variant="h1">
-          Artists
-        </Typography>
+        {data?.data?.artists?.length ? (
+          <Typography css={{marginTop: 40}} variant="h1">
+            Artists
+          </Typography>
+        ) : null}
         <ListContainer>
           {data?.data?.artists.map(artist => (
             <Card kind="artist" key={artist.id} data={artist} />
@@ -52,9 +56,11 @@ function Library() {
         </ListContainer>
       </Fragment>
       <Fragment>
-        <Typography css={{marginTop: 40}} variant="h1">
-          Playlists
-        </Typography>
+        {data?.data?.playlists?.length ? (
+          <Typography css={{marginTop: 40}} variant="h1">
+            Playlists
+          </Typography>
+        ) : null}
         <ListContainer>
           {data?.data?.playlists.map(playlist => (
             <Card kind="playlist" key={playlist.id} data={playlist} />

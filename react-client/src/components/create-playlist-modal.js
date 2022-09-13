@@ -81,7 +81,12 @@ function CreatePlaylistModal({open, onClose}) {
       </DropZoneSection>
       <Form onSubmit={handleFormSubmission}>
         {imageSrc ? (
-          <PlaylistImage src={imageSrc} alt="Playlist" css={{marginTop: 20}} />
+          <PlaylistImage
+            loading="lazy"
+            src={imageSrc}
+            alt="Playlist"
+            css={{marginTop: 20}}
+          />
         ) : null}
         <div css={{flex: 1, paddingRight: 20, [mq.md]: {paddingRight: 0}}}>
           <div>
