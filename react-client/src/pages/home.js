@@ -5,7 +5,7 @@ import styled from '@emotion/styled/macro'
 
 import Typography from 'components/typography'
 import Card from 'components/card'
-import Tooltip from 'components/tooltip'
+import {ErrorTooltip} from 'components/tooltip'
 import {FullPageSpinner} from 'components/spinner'
 
 import colors from 'utils/colors'
@@ -17,16 +17,7 @@ function Home() {
   const user = useSelector(s => s.auth.user)
   const {data, isLoading, isError, error} = useGetHomeDataQuery()
 
-  if (isError)
-    return (
-      <FixedPositionContent>
-        <Tooltip
-          type="danger"
-          noMargin
-          message={error?.data?.message || error.error}
-        />
-      </FixedPositionContent>
-    )
+  if (isError) return <ErrorTooltip error={error} />
   if (isLoading) return <FullPageSpinner />
 
   return (
@@ -148,20 +139,6 @@ const ListContainer = styled.div({
   },
   [mq.sm]: {
     gridTemplateColumns: 'repeat(1, 1fr)',
-  },
-})
-
-const FixedPositionContent = styled.div({
-  background: colors.background,
-  minHeight: '120vh',
-  color: colors.white,
-  left: 242,
-  position: 'fixed',
-  top: 63,
-  right: 0,
-
-  [mq.md]: {
-    left: 0,
   },
 })
 

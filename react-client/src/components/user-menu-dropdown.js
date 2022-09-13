@@ -20,12 +20,12 @@ import {useLogoutMutation} from 'store/api/auth'
 function UserMenuDropDown() {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const [logout] = useLogoutMutation()
   const user = useSelector(s => s.auth.user)
+  const [logout] = useLogoutMutation()
 
   async function onSelect({key}) {
     if (key !== '/logout') {
-      setOpen(false)
+      setOpen(prev => !prev)
       return navigate(key)
     }
     await logout().unwrap()

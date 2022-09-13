@@ -3,7 +3,7 @@ import {Fragment} from 'react'
 import styled from '@emotion/styled/macro'
 
 import Typography from 'components/typography'
-import Tooltip from 'components/tooltip'
+import {ErrorTooltip} from 'components/tooltip'
 import {FullPageSpinner} from 'components/spinner'
 import Card from 'components/card'
 
@@ -15,16 +15,7 @@ import {useGetAllLikedItemsQuery} from 'store/api/like'
 function Library() {
   const {data, isLoading, isError, error} = useGetAllLikedItemsQuery()
 
-  if (isError)
-    return (
-      <FixedPositionContent>
-        <Tooltip
-          type="danger"
-          noMargin
-          message={error?.data?.message || error.error}
-        />
-      </FixedPositionContent>
-    )
+  if (isError) return <ErrorTooltip error={error} />
   if (isLoading) {
     return <FullPageSpinner />
   }
@@ -94,20 +85,6 @@ const ListContainer = styled.div({
   },
   [mq.sm]: {
     gridTemplateColumns: 'repeat(1, 1fr)',
-  },
-})
-
-const FixedPositionContent = styled.div({
-  background: colors.background,
-  minHeight: '120vh',
-  color: colors.white,
-  left: 242,
-  position: 'fixed',
-  top: 63,
-  right: 0,
-
-  [mq.md]: {
-    left: 0,
   },
 })
 

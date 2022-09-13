@@ -3,13 +3,12 @@ import {useMemo, useLayoutEffect} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 
-import Tooltip from 'components/tooltip'
+import {ErrorTooltip} from 'components/tooltip'
 import {FullPageSpinner} from 'components/spinner'
 import SongList from 'components/song-list'
 import EntityInfo from 'components/entity-info'
 
 import colors from 'utils/colors'
-import * as mq from 'utils/media-query'
 
 import {useGetAllLikedItemsQuery} from 'store/api/like'
 import {
@@ -36,16 +35,7 @@ function Playlist() {
     window.scrollTo(0, 0)
   }, [])
 
-  if (isError || isLikedError)
-    return (
-      <FixedPositionContent>
-        <Tooltip
-          type="danger"
-          noMargin
-          message={error?.data?.message || error.error}
-        />
-      </FixedPositionContent>
-    )
+  if (isError || isLikedError) return <ErrorTooltip error={error} />
 
   if (isLoading || isLikedSongs) return <FullPageSpinner />
 
@@ -70,20 +60,6 @@ const ContentContainer = styled.div({
   flexDirection: 'column',
   minHeight: '100vh',
   userSelect: 'none',
-})
-
-const FixedPositionContent = styled.div({
-  background: colors.background,
-  minHeight: '120vh',
-  color: colors.white,
-  left: 242,
-  position: 'fixed',
-  top: 63,
-  right: 0,
-
-  [mq.md]: {
-    left: 0,
-  },
 })
 
 export default Playlist

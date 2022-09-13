@@ -6,6 +6,7 @@ import Typography from './typography'
 import AlertIcon from 'icons/alert'
 
 import colors from 'utils/colors'
+import * as mq from 'utils/media-query'
 
 function Tooltip({message, type, noMargin, ...props}) {
   return (
@@ -15,6 +16,18 @@ function Tooltip({message, type, noMargin, ...props}) {
         {message}
       </Typography>
     </Container>
+  )
+}
+
+export const ErrorTooltip = ({error}) => {
+  return (
+    <FixedPositionContent>
+      <Tooltip
+        type="danger"
+        noMargin
+        message={error?.data?.message || error.message}
+      />
+    </FixedPositionContent>
   )
 }
 
@@ -30,5 +43,19 @@ const Container = styled.div(
   ({type}) => (type === 'danger' ? {backgroundColor: colors.danger} : null),
   ({noMargin}) => (noMargin ? {borderRadius: 0} : null),
 )
+
+const FixedPositionContent = styled.div({
+  background: colors.background,
+  minHeight: '120vh',
+  color: colors.white,
+  left: 242,
+  position: 'fixed',
+  top: 63,
+  right: 0,
+
+  [mq.md]: {
+    left: 0,
+  },
+})
 
 export default Tooltip
