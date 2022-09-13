@@ -7,6 +7,7 @@ import Typography from 'components/typography'
 import Button from 'components/button'
 
 import colors from 'utils/colors'
+import * as mq from 'utils/media-query'
 
 function Account() {
   const navigate = useNavigate()
@@ -25,7 +26,15 @@ function Account() {
           <Typography>User Id</Typography>
         </ListItem>
         <ListItem>
-          <Typography css={{color: colors.white}}>{user.id}</Typography>
+          <Typography
+            css={{
+              color: colors.white,
+              maxWidth: '70vw',
+              wordWrap: 'break-word',
+            }}
+          >
+            {user.id}
+          </Typography>
         </ListItem>
       </List>
       <List>
@@ -41,7 +50,15 @@ function Account() {
           <Typography>Email</Typography>
         </ListItem>
         <ListItem>
-          <Typography css={{color: colors.white}}>{user.email}</Typography>
+          <Typography
+            css={{
+              color: colors.white,
+              maxWidth: '70vw',
+              wordWrap: 'break-word',
+            }}
+          >
+            {user.email}
+          </Typography>
         </ListItem>
       </List>
       <List>
@@ -86,6 +103,12 @@ const List = styled.div({
   borderBottom: `1px solid ${colors.grey}`,
   width: '100%',
   marginTop: 20,
+
+  [mq.sm]: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
 })
 
 const ListItem = styled.div({
