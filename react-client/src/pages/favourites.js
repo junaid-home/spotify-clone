@@ -22,7 +22,6 @@ function Favourites() {
           type="danger"
           noMargin
           message={error?.data?.message || error.error}
-          css={{position: 'fixed', top: 63, left: 242, right: 0}}
         />
       </FixedPositionContent>
     )
@@ -88,6 +87,10 @@ const FixedPositionContent = styled.div({
   background: colors.background,
   minHeight: '120vh',
   color: colors.white,
+  left: 242,
+  position: 'fixed',
+  top: 63,
+  right: 0,
 
   [mq.md]: {
     left: 0,

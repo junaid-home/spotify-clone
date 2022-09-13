@@ -1,5 +1,6 @@
 import 'react-jinke-music-player/assets/index.css'
 
+import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import ReactJkMusicPlayer from 'react-jinke-music-player'
 import {ClassNames} from '@emotion/react'
@@ -10,14 +11,23 @@ import {setPlayingStatus} from 'store/reducers/player'
 
 function MusicPlayer() {
   const dispatch = useDispatch()
+  const [isMobile, setIsMobile] = useState(false)
   const audioLists = useSelector(s => s.player.playing)
   const audioInstanceRef = useAudioInstance()
+
+  useEffect(() => {
+    if (document.body.clientWidth < 587) {
+      setIsMobile(true)
+    } else {
+      setIsMobile(false)
+    }
+  }, [])
 
   return (
     <ClassNames>
       {({cx, css}) => (
         <ReactJkMusicPlayer
-          mode="full"
+          mode={isMobile ? 'mini' : 'full'}
           preload="auto"
           glassBg
           spaceBar
@@ -51,6 +61,9 @@ function MusicPlayer() {
 
 const playerPanelStyles = {
   '& .music-player-panel': {zIndex: 1000},
+  '& .music-player-panel .panel-content .img-content': {
+    backgroundSize: 'cover',
+  },
 }
 
 export default MusicPlayer
