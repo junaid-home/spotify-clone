@@ -11,7 +11,7 @@ import {AudioInstanceProvider} from 'context/audio-instance'
 import * as mq from 'utils/media-query'
 import colors from 'utils/colors'
 
-function Layout() {
+function Layout({showPlayer}) {
   const [openModal, setOpenModal] = useState()
 
   return (
@@ -26,7 +26,7 @@ function Layout() {
           <Outlet />
         </MainArea>
       </Wrapper>
-      <MusicPlayer />
+      {showPlayer ? <MusicPlayer /> : null}
     </AudioInstanceProvider>
   )
 }

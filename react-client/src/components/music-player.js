@@ -1,5 +1,3 @@
-import 'react-jinke-music-player/assets/index.css'
-
 import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import ReactJkMusicPlayer from 'react-jinke-music-player'
