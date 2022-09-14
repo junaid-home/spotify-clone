@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {css, keyframes} from '@emotion/react/macro'
 import styled from '@emotion/styled/macro'
 import {Link} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
 
 import Typography from './typography'
 
@@ -13,89 +12,21 @@ import PauseIcon from 'icons/pause'
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
-import {useAudioInstance} from 'context/audio-instance'
-
-import {useFetchArtistByIdMutation} from 'store/api/artist'
-import {useFeatchPlaylistDataByIdMutation} from 'store/api/playlist'
-import {playSong, setPlayingId, setPlayingStatus} from 'store/reducers/player'
+import useCard from 'hooks/use-card'
 
 function Card({data, kind = 'song'}) {
-  const audioInstanceRef = useAudioInstance()
   const [displayPlayPause, setDisplayPlayPause] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(true)
-  const [isPlaying, setIsPlaying] = useState(false)
 
-  const dispatch = useDispatch()
-  const playing = useSelector(s => s.player.isPlaying)
-  const playingId = useSelector(s => s.player.playingId)
-  const playingSrc = useSelector(s => s.player.playingSrc)
-  const [getArtistData] = useFetchArtistByIdMutation()
-  const [getPlaylistData] = useFeatchPlaylistDataByIdMutation()
-
-  const displayData = _getDisplayableData(kind, data)
+  const displayData = __getDisplayableData(kind, data)
   const buttonStyles = {display: 'inline-block', opacity: 1}
 
-  const handlePlay = async () => {
-    dispatch(
-      setPlayingStatus({status: true, src: audioInstanceRef.current.src}),
-    )
-    setTimeout(() => {
-      audioInstanceRef.current.play()
-    }, 200)
-
-    if (kind === 'song' || kind === 'artist') {
-      const result = await getArtistData(displayData.id)
-
-      dispatch(setPlayingId(result.data.data.id))
-      let songs = result.data.data.Songs
-
-      if (kind === 'song' && songs.length) {
-        const sortedSongs = [...result.data.data.Songs]
-
-        const songId = data.id
-        const songIndex = sortedSongs.findIndex(x => x.id === songId)
-
-        const temp = sortedSongs[0]
-        sortedSongs[0] = sortedSongs[songIndex]
-        sortedSongs[songIndex] = temp
-
-        songs = sortedSongs
-      }
-
-      dispatch(playSong(songs))
-    } else {
-      const result = await getPlaylistData(displayData.id)
-      const songs = result.data.data.Songs
-
-      dispatch(playSong(songs))
-      dispatch(setPlayingId(result.data.data.id))
-    }
-  }
-
-  const handlePause = () => {
-    dispatch(
-      setPlayingStatus({status: false, src: audioInstanceRef.current.src}),
-    )
-    setTimeout(() => {
-      audioInstanceRef.current.pause()
-    }, 200)
-  }
-
-  useEffect(() => {
-    if (kind === 'song') {
-      if (playing && data.src === playingSrc) {
-        setIsPlaying(true)
-      } else {
-        setIsPlaying(false)
-      }
-    } else {
-      if (playing && playingId === displayData.id) {
-        setIsPlaying(true)
-      } else {
-        setIsPlaying(false)
-      }
-    }
-  }, [data.src, displayData.id, kind, playing, playingId, playingSrc])
+  const {handlePause, handlePlay, isPlaying} = useCard(
+    kind,
+    displayData.id,
+    data.id,
+    data.src,
+  )
 
   const playPauseIcons = isPlaying ? (
     <FilledPauseIcon
@@ -157,7 +88,7 @@ const __formatSongDesc = desc => {
   else return desc
 }
 
-const _getDisplayableData = (kind, data) => {
+const __getDisplayableData = (kind, data) => {
   const isSong = kind === 'song'
   const isArtist = kind === 'artist'
   const isPlaylist = kind === 'playlist'

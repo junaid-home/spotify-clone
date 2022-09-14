@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import React, {Fragment, useCallback, useEffect, useState} from 'react'
+import React, {Fragment, useCallback, useState} from 'react'
 import styled from '@emotion/styled/macro'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {css} from '@emotion/react/macro'
-import {toast} from 'react-toastify'
 
 import Typography from 'components/typography'
 import SongMenuDropdown from 'components/song-menu-dropdown'
@@ -18,10 +17,8 @@ import colors from 'utils/colors'
 import formatDate from 'utils/date-formatter'
 import * as mq from 'utils/media-query'
 
-import {useAudioInstance} from 'context/audio-instance'
-
 import {useLikeSongMutation} from 'store/api/song'
-import {playSong, setPlayingId, setPlayingStatus} from 'store/reducers/player'
+import useSongList from 'hooks/use-song-list'
 
 function SongList({
   color = '#7367F0',
@@ -31,14 +28,15 @@ function SongList({
   likedEntities,
   likeEntity,
 }) {
-  const songInstanceRef = useAudioInstance()
-  const dispatch = useDispatch()
-  const playingId = useSelector(s => s.player.playingId)
   const playing = useSelector(s => s.player.isPlaying)
   const playingSrc = useSelector(s => s.player.playingSrc)
-  const [isPlaying, setIsplaying] = useState(false)
   const [focustedSong, setFocusedSong] = useState(null)
   const [likeSong] = useLikeSongMutation()
+
+  const {handleLike, handlePause, handlePlay, isPlaying} = useSongList(
+    data,
+    refetchLikes,
+  )
 
   const formatDateMemoized = useCallback(isoString => formatDate(isoString), [])
   const isLiked = useCallback(
@@ -46,42 +44,22 @@ function SongList({
     [],
   )
 
-  const handleLike = async (func, id) => {
-    const result = await func(id)
-    if (result.data.data) {
-      toast.success(result.data.data.message)
-    } else {
-      toast.error(result.error?.data?.message || result.error.error)
-    }
-
-    refetchLikes()
-  }
-
-  const handlePlay = (index = 0) => {
-    dispatch(setPlayingId(data.id))
-    dispatch(setPlayingStatus({status: true, src: data.Songs[0].id}))
-    dispatch(playSong(data.Songs))
-
-    setTimeout(() => {
-      songInstanceRef.current.play()
-      songInstanceRef.current.updatePlayIndex(index)
-    }, 200)
-  }
-
-  const handlePause = () => {
-    dispatch(setPlayingStatus({status: false, src: data.Songs[0].id}))
-    setTimeout(() => {
-      songInstanceRef.current.pause()
-    }, 200)
-  }
-
-  useEffect(() => {
-    if (playing && playingId === data.id) {
-      setIsplaying(true)
-    } else {
-      setIsplaying(false)
-    }
-  }, [data.id, playingId, playing, data.Songs])
+  const CTOButtons = (
+    <IconsContainer>
+      {isPlaying ? (
+        <PauseFilledIcon onClick={handlePause} />
+      ) : (
+        <PlayFilledIcon onClick={handlePlay} />
+      )}
+      {isLiked(likedEntities, data) ? (
+        <HeartFilledIcon onClick={() => handleLike(likeEntity, data.id)} />
+      ) : (
+        <HeartOutlineFilledIcon
+          onClick={() => handleLike(likeEntity, data.id)}
+        />
+      )}
+    </IconsContainer>
+  )
 
   return (
     <SongListSection
@@ -89,51 +67,9 @@ function SongList({
         background: `linear-gradient(0deg, rgba(0,0,0,.9) 20%, ${color} 200%)`,
       }}
     >
-      <IconsContainer>
-        {isPlaying ? (
-          <PauseFilledIcon onClick={handlePause} />
-        ) : (
-          <PlayFilledIcon onClick={handlePlay} />
-        )}
-        {isLiked(likedEntities, data) ? (
-          <HeartFilledIcon onClick={() => handleLike(likeEntity, data.id)} />
-        ) : (
-          <HeartOutlineFilledIcon
-            onClick={() => handleLike(likeEntity, data.id)}
-          />
-        )}
-      </IconsContainer>
-
-      <SongListContainer
-        css={{
-          marginTop: 40,
-          [mq.xl]: {opacity: 0},
-        }}
-      >
-        <SongListIndexItem>
-          <Typography variant="label">#</Typography>
-        </SongListIndexItem>
-        <SongListTitleItem>
-          <Typography variant="label">TITLE</Typography>
-        </SongListTitleItem>
-        <SongListTypeItem>
-          <Typography variant="label">ALBUM</Typography>
-        </SongListTypeItem>
-        <SongListDateItem>
-          <Typography variant="label">TIME ADDED</Typography>
-        </SongListDateItem>
-        <SongListDurationItem>
-          <ClockIcon css={{marginRight: 40}} />
-        </SongListDurationItem>
-      </SongListContainer>
-      <div
-        css={{
-          width: '100%',
-          marginBottom: 20,
-          height: 1,
-          borderBottom: '1px solid #999',
-        }}
-      />
+      {CTOButtons}
+      <SongListLabels />
+      <Seperator />
       {data.Songs.map((s, i) => (
         <Fragment key={s.id}>
           <SongListContainer
@@ -232,6 +168,40 @@ function SongList({
   )
 }
 
+function SongListLabels() {
+  return (
+    <SongListContainer
+      css={{
+        marginTop: 40,
+        [mq.xl]: {display: 'none'},
+      }}
+    >
+      <SongListIndexItem>
+        <Typography variant="label">#</Typography>
+      </SongListIndexItem>
+      <SongListTitleItem>
+        <Typography variant="label">TITLE</Typography>
+      </SongListTitleItem>
+      <SongListTypeItem>
+        <Typography variant="label">ALBUM</Typography>
+      </SongListTypeItem>
+      <SongListDateItem>
+        <Typography variant="label">TIME ADDED</Typography>
+      </SongListDateItem>
+      <SongListDurationItem>
+        <ClockIcon css={{marginRight: 40}} />
+      </SongListDurationItem>
+    </SongListContainer>
+  )
+}
+
+const Seperator = styled.div({
+  width: '100%',
+  marginBottom: 20,
+  height: 1,
+  borderBottom: '1px solid #999',
+})
+
 const MobileButtonsContainer = styled.div({
   display: 'none',
   justifyContent: 'center',
@@ -283,6 +253,7 @@ const SongListContainer = styled.div({
   alignItems: 'center',
   color: colors.lightGrey,
 })
+
 const SongListIndexItem = styled.div({
   flex: 1,
   display: 'flex',
@@ -293,11 +264,13 @@ const SongListIndexItem = styled.div({
     display: 'none',
   },
 })
+
 const SongListTitleItem = styled.div({
   flex: 9,
   display: 'flex',
   alignItems: 'center',
 })
+
 const SongListTypeItem = styled.div({
   flex: 3,
   display: 'flex',
@@ -316,6 +289,7 @@ const SongListDateItem = styled.div({
     display: 'none',
   },
 })
+
 const SongListDurationItem = styled.div({
   flex: 4,
   display: 'flex',
