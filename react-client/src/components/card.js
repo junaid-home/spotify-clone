@@ -32,7 +32,7 @@ function Card({data, kind = 'song'}) {
   const [getArtistData] = useFetchArtistByIdMutation()
   const [getPlaylistData] = useFeatchPlaylistDataByIdMutation()
 
-  const displayData = getDisplayableData(kind, data)
+  const displayData = _getDisplayableData(kind, data)
   const buttonStyles = {display: 'inline-block', opacity: 1}
 
   const handlePlay = async () => {
@@ -83,7 +83,7 @@ function Card({data, kind = 'song'}) {
 
   useEffect(() => {
     if (kind === 'song') {
-      if (data.src === playingSrc && playing) {
+      if (playing && data.src === playingSrc) {
         setIsPlaying(true)
       } else {
         setIsPlaying(false)
@@ -152,12 +152,12 @@ function Card({data, kind = 'song'}) {
   )
 }
 
-const formatSongDesc = desc => {
+const __formatSongDesc = desc => {
   if (desc.length > 40) return `${desc.slice(0, 39)}...`
   else return desc
 }
 
-const getDisplayableData = (kind, data) => {
+const _getDisplayableData = (kind, data) => {
   const isSong = kind === 'song'
   const isArtist = kind === 'artist'
   const isPlaylist = kind === 'playlist'
@@ -166,7 +166,7 @@ const getDisplayableData = (kind, data) => {
     picture: isSong ? data.thumbnail : data.picture,
     title: isSong ? data.title : isPlaylist ? `#${data.name}` : data.name,
     desc: isSong
-      ? formatSongDesc(data.description)
+      ? __formatSongDesc(data.description)
       : isArtist
       ? 'Artist'
       : `By: ${data.User.name}`,

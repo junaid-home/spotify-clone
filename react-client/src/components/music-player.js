@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
+import {ClassNames} from '@emotion/react'
 import {useDispatch, useSelector} from 'react-redux'
 import ReactJkMusicPlayer from 'react-jinke-music-player'
-import {ClassNames} from '@emotion/react'
 
 import {useAudioInstance} from 'context/audio-instance'
 

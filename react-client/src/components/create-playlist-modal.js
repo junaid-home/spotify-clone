@@ -1,10 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import {useState} from 'react'
 import Modal from 'react-modal'
 import styled from '@emotion/styled/macro'
-import {useNavigate} from 'react-router-dom'
 import {useDropzone} from 'react-dropzone'
-import {toast} from 'react-toastify'
 
 import Input from './input'
 import Button from './button'
@@ -16,44 +13,16 @@ import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
 
 import useDropzoneImage from 'hooks/use-dropzone-image'
-
-import {useCreatePlaylistMutation} from 'store/api/playlist'
+import useCreatePlaylist from 'hooks/use-create-playlist'
 
 function CreatePlaylistModal({open, onClose}) {
-  const navigate = useNavigate()
-  const [name, setName] = useState('')
-  const [color1, setColor1] = useState('#FFFFFF')
-  const [color2, setColor2] = useState('#FFFFFF')
   const {onDrop, image, imageSrc} = useDropzoneImage()
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
     maxFiles: 1,
   })
-  const [createPlaylist, {isLoading, isError, error}] =
-    useCreatePlaylistMutation()
-
-  const handleFormSubmission = async e => {
-    e.preventDefault()
-
-    const formData = new FormData()
-
-    formData.append('name', name)
-    formData.append('code1', color1)
-    formData.append('code2', color2)
-    formData.append('picture', image)
-
-    const result = await createPlaylist(formData)
-    if (result.data?.data.id) {
-      setColor1('')
-      setColor2('')
-      setName('')
-      toast.success('Song added to the playlist')
-      onClose()
-      navigate(`/playlist/${result.data?.data?.id}`)
-    } else {
-      toast.error(result.error?.data?.message || result.error.error)
-    }
-  }
+  const {handleFormSubmission, isLoading, isError, error, data, setData} =
+    useCreatePlaylist(image, onClose)
 
   return (
     <Modal
@@ -91,15 +60,17 @@ function CreatePlaylistModal({open, onClose}) {
         <div css={{flex: 1, paddingRight: 20, [mq.md]: {paddingRight: 0}}}>
           <div>
             <StyledInput
-              value={name}
-              onChange={e => setName(e.target.value)}
+              value={data.name}
+              onChange={e => setData(prev => ({...prev, name: e.target.value}))}
               placeholder="Playlist Name"
               css={{marginTop: 20}}
             />
             <InputContainer>
               <StyledInput
-                value={color1}
-                onChange={e => setColor1(e.target.value)}
+                value={data.color1}
+                onChange={e =>
+                  setData(prev => ({...prev, color1: e.target.value}))
+                }
                 placeholder="Color code 1 (e.g #ABC123)"
                 css={{
                   borderTopRightRadius: 0,
@@ -107,12 +78,14 @@ function CreatePlaylistModal({open, onClose}) {
                   borderRight: 'none',
                 }}
               />
-              <ColorDisplay css={{background: color1}} />
+              <ColorDisplay css={{background: data.color1}} />
             </InputContainer>
             <InputContainer>
               <StyledInput
-                value={color2}
-                onChange={e => setColor2(e.target.value)}
+                value={data.color2}
+                onChange={e =>
+                  setData(prev => ({...prev, color2: e.target.value}))
+                }
                 placeholder="Color code 2 (e.g #DEF345)"
                 css={{
                   borderTopRightRadius: 0,
@@ -120,7 +93,7 @@ function CreatePlaylistModal({open, onClose}) {
                   borderRight: 'none',
                 }}
               />
-              <ColorDisplay css={{background: color2}} />
+              <ColorDisplay css={{background: data.color2}} />
             </InputContainer>
           </div>
           <Button
