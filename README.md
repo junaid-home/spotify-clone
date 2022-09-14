@@ -65,3 +65,16 @@ npm run migrate
 ```bash
 npm start
 ```
+
+<p align="center">
+  <img src="https://github.com/junaid-home/spotify-clone/blob/main/screenshots/home.png" />
+</p>
+<p align="center">
+  <img src="https://github.com/junaid-home/spotify-clone/blob/main/screenshots/playlist.png" />
+</p>
+<p align="center">
+  <img src="https://github.com/junaid-home/spotify-clone/blob/main/screenshots/login.png" />
+</p>
+<p align="center">
+  <img src="https://github.com/junaid-home/spotify-clone/blob/main/screenshots/mobile.png" />
+</p>
