@@ -5,31 +5,31 @@ import {toast} from 'react-toastify'
 import {useUpdateUserMutation} from 'store/api/auth'
 import {updateUser as updateUserInStore} from 'store/reducers/auth'
 
+const __getProfileData = user => {
+  let dob = user.dob
+  if (dob) {
+    const date = new Date(user.dob).toISOString()
+    dob = date.slice(0, 10)
+  } else {
+    const now = new Date(Date.now()).toISOString()
+    dob = now.slice(0, 10)
+  }
+
+  return {
+    name: user.name,
+    dob,
+    email: user.email,
+    gender: user.gender || 'male',
+    country: user.country,
+  }
+}
+
 export default function useProfileUpdate() {
   const dispatch = useDispatch()
   const user = useSelector(s => s.auth.user)
-  const [data, setData] = useState(() => __getProfileData())
+  const [data, setData] = useState(() => __getProfileData(user))
 
   const [updateUser, {isLoading}] = useUpdateUserMutation()
-
-  const __getProfileData = () => {
-    let dob = user.dob
-    if (dob) {
-      const date = new Date(user.dob).toISOString()
-      dob = date.slice(0, 10)
-    } else {
-      const now = new Date(Date.now()).toISOString()
-      dob = now.slice(0, 10)
-    }
-
-    return {
-      name: user.name,
-      dob,
-      email: user.email,
-      gender: user.gender || 'male',
-      country: user.country,
-    }
-  }
 
   const isEmailNotChangeable = Boolean(
     data.email.endsWith('@facebook.com') || data.email.endsWith('@google.com'),
