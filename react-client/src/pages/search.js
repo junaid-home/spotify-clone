@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import {Fragment} from 'react'
 import styled from '@emotion/styled/macro'
 import {useSelector} from 'react-redux'
 
-import Card from 'components/card'
 import Input from 'components/input'
 import Spinner from 'components/spinner'
 import Typography from 'components/typography'
+import CardList from 'components/card-list'
 
 import colors from 'utils/colors'
 import * as mq from 'utils/media-query'
@@ -48,41 +47,6 @@ function Search() {
   )
 }
 
-function CardList({title, kind, data}) {
-  return data?.length ? (
-    <Fragment>
-      <Typography css={{marginTop: 40}} variant="h2">
-        {title}
-      </Typography>
-      <ListContainer>
-        {data.map(x => (
-          <Card kind={kind} key={x.id} data={x} />
-        ))}
-      </ListContainer>
-    </Fragment>
-  ) : null
-}
-
-const ListContainer = styled.div({
-  paddingTop: 20,
-  display: 'grid',
-  gridTemplateColumns: 'repeat(5, 1fr)',
-  gap: 20,
-
-  [mq.xl]: {
-    gridTemplateColumns: 'repeat(4, 1fr)',
-  },
-  [mq.lg]: {
-    gridTemplateColumns: 'repeat(3, 1fr)',
-  },
-  [mq.md]: {
-    gridTemplateColumns: 'repeat(2, 1fr)',
-  },
-  [mq.sm]: {
-    gridTemplateColumns: 'repeat(1, 1fr)',
-  },
-})
-
 const CenteredContent = styled.div({
   flex: 1,
   display: 'flex',
@@ -95,6 +59,7 @@ const CenteredContent = styled.div({
 const Wrapper = styled.div({
   color: colors.white,
   padding: '80px 30px',
+  minHeight: '100vh',
 })
 
 export default Search

@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import {useState, useLayoutEffect} from 'react'
 import styled from '@emotion/styled/macro'
-import {Link, useNavigate} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
+import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
 
 import Header from 'components/header'
@@ -14,65 +13,14 @@ import Tooltip from 'components/tooltip'
 
 import colors from 'utils/colors'
 
-import {resetError} from 'store/reducers/auth'
-import {
-  useGetFbLoginUriMutation,
-  useGetGoogleLoginUriMutation,
-  useSignUpWithPersonalDetailsMutation,
-} from 'store/api/auth'
+import useSocialLogin from 'hooks/use-social-login'
+import useSignup from 'hooks/use-signup'
 
 function Login() {
   const error = useSelector(state => state.auth.error)
-  const dispatch = useDispatch()
-  const [name, setName] = useState('')
-  const [dob, setDob] = useState('')
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const [gender, setGender] = useState('male')
-  const [country, setCountry] = useState('')
-  const navigate = useNavigate()
-  const [getFbLoginUri, {isLoading: isLoadingFbUri}] =
-    useGetFbLoginUriMutation()
-  const [getGoogleLoginUri, {isLoading: isLoadingGoogleUri}] =
-    useGetGoogleLoginUriMutation()
-  const [signUpWithPersonalDetails, {isLoading: isSigningUp}] =
-    useSignUpWithPersonalDetailsMutation()
-
-  const handleFormSubmission = async e => {
-    e.preventDefault()
-    dispatch(resetError())
-
-    const date = dob.split('-')
-    const jsDate = new Date(date[0], date[1], date[2])
-
-    const result = await signUpWithPersonalDetails({
-      email,
-      password: pass,
-      name,
-      country,
-      gender,
-      dob: jsDate.getTime(),
-    })
-
-    if (result?.data?.data?.user) {
-      return navigate('/', {replace: true})
-    }
-  }
-
-  const handleFbLogin = async e => {
-    const result = await getFbLoginUri().unwrap()
-    window.location.href = result.data
-  }
-
-  const handleGoogleLogin = async e => {
-    const result = await getGoogleLoginUri().unwrap()
-    window.location.href = result.data
-  }
-
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0)
-    dispatch(resetError())
-  }, [dispatch])
+  const {loginWithFB, loginWithGoogle, isFbLoggingIn, isGoogleLoggingIn} =
+    useSocialLogin()
+  const {handleFormSubmission, isSigningUp, data, setData} = useSignup()
 
   return (
     <div>
@@ -85,18 +33,18 @@ function Login() {
           <Tooltip css={{marginBottom: 12}} message={error} type="danger" />
         )}
         <Button
-          onClick={handleFbLogin}
-          loading={isLoadingFbUri}
-          disabled={isLoadingFbUri}
+          onClick={loginWithFB}
+          loading={isFbLoggingIn}
+          disabled={isFbLoggingIn}
           fullWidth
           variant="fb"
         >
           SIGN UP WITH FACEBOOK
         </Button>
         <Button
-          onClick={handleGoogleLogin}
-          loading={isLoadingGoogleUri}
-          disabled={isLoadingGoogleUri}
+          onClick={loginWithGoogle}
+          loading={isGoogleLoggingIn}
+          disabled={isGoogleLoggingIn}
           fullWidth
           variant="google"
           css={{marginTop: 8}}
@@ -109,32 +57,36 @@ function Login() {
             label="What's your email?"
             placeholder="Email address or username."
             type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={data.email}
+            onChange={e => setData(prev => ({...prev, email: e.target.value}))}
           />
           <FormGroup
             label="Create a password"
             placeholder="Create a password."
             type="password"
             css={{marginTop: 12}}
-            value={pass}
-            onChange={e => setPass(e.target.value)}
+            value={data.password}
+            onChange={e =>
+              setData(prev => ({...prev, password: e.target.value}))
+            }
           />
           <FormGroup
             label="What should we call you?"
             placeholder="Enter your profile name."
             type="text"
             css={{marginTop: 12}}
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={data.name}
+            onChange={e => setData(prev => ({...prev, name: e.target.value}))}
           />
           <FormGroup
             label="What are you from?"
             placeholder="Enter your country name."
             type="text"
             css={{marginTop: 12}}
-            value={country}
-            onChange={e => setCountry(e.target.value)}
+            value={data.country}
+            onChange={e =>
+              setData(prev => ({...prev, country: e.target.value}))
+            }
           />
           <Typography
             variant="label"
@@ -144,8 +96,8 @@ function Login() {
             What's your gender?
           </Typography>
           <RadioGroup
-            value={gender}
-            onChange={value => setGender(value)}
+            value={data.gender}
+            onChange={value => setData(prev => ({...prev, gender: value}))}
             horizontal
           >
             <ReversedRadioButton value="male">Male</ReversedRadioButton>
@@ -156,8 +108,8 @@ function Login() {
             placeholder="Enter your date of birth."
             type="date"
             css={{marginTop: 12}}
-            value={dob}
-            onChange={e => setDob(e.target.value)}
+            value={data.dob}
+            onChange={e => setData(prev => ({...prev, dob: e.target.value}))}
           />
           <ButtonArea>
             <Button

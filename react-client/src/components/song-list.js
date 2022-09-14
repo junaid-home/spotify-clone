@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {Fragment, useCallback, useEffect, useState} from 'react'
+import React, {Fragment, useCallback, useEffect, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {useDispatch, useSelector} from 'react-redux'
 import {css} from '@emotion/react/macro'
@@ -340,4 +340,4 @@ const IconsContainer = styled.div({
   paddingRight: 20,
 })
 
-export default SongList
+export default React.memo(SongList)

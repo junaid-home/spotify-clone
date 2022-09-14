@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import {useLayoutEffect, useState} from 'react'
 import styled from '@emotion/styled/macro'
-import {Link, useNavigate} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
+import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 
 import Header from 'components/header'
 import Button from 'components/button'
@@ -13,50 +12,15 @@ import SectionSeparator from 'components/section-separator'
 
 import colors from 'utils/colors'
 
-import {resetError} from 'store/reducers/auth'
-import {
-  useGetFbLoginUriMutation,
-  useGetGoogleLoginUriMutation,
-  useLoginWithEmailAndPasswordMutation,
-} from 'store/api/auth'
+import useLogin from 'hooks/use-login'
+import useSocialLogin from 'hooks/use-social-login'
 
 function Login() {
   const error = useSelector(state => state.auth.error)
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const navigate = useNavigate()
-  const [getFbLoginUri, {isLoading: isLoadingFbUri}] =
-    useGetFbLoginUriMutation()
-  const [getGoogleLoginUri, {isLoading: isLoadingGoogleUri}] =
-    useGetGoogleLoginUriMutation()
-  const [loginWithEmailAndPassword, {isLoading: isLoggingIn}] =
-    useLoginWithEmailAndPasswordMutation()
-
-  const handleFormSubmission = async e => {
-    e.preventDefault()
-    dispatch(resetError())
-
-    const result = await loginWithEmailAndPassword({email, password: pass})
-    if (result?.data?.data?.user) {
-      navigate('/', {replace: true})
-    }
-  }
-
-  const handleFbLogin = async e => {
-    const result = await getFbLoginUri().unwrap()
-    window.location.href = result.data
-  }
-
-  const handleGoogleLogin = async e => {
-    const result = await getGoogleLoginUri().unwrap()
-    window.location.href = result.data
-  }
-
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0)
-    dispatch(resetError())
-  }, [dispatch])
+  const {email, setEmail, pass, setPass, handleFormSubmission, isLoggingIn} =
+    useLogin()
+  const {loginWithFB, loginWithGoogle, isFbLoggingIn, isGoogleLoggingIn} =
+    useSocialLogin()
 
   return (
     <div>
@@ -69,18 +33,18 @@ function Login() {
           <Tooltip css={{marginBottom: 12}} message={error} type="danger" />
         )}
         <Button
-          onClick={handleFbLogin}
-          loading={isLoadingFbUri}
-          disabled={isLoadingFbUri}
+          onClick={loginWithFB}
+          loading={isFbLoggingIn}
+          disabled={isFbLoggingIn}
           fullWidth
           variant="fb"
         >
           CONTINUE WITH FACEBOOK
         </Button>
         <Button
-          onClick={handleGoogleLogin}
-          loading={isLoadingGoogleUri}
-          disabled={isLoadingGoogleUri}
+          onClick={loginWithGoogle}
+          loading={isGoogleLoggingIn}
+          disabled={isGoogleLoggingIn}
           fullWidth
           variant="google"
           css={{marginTop: 8}}

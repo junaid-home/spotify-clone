@@ -95,15 +95,7 @@ function Card({data, kind = 'song'}) {
         setIsPlaying(false)
       }
     }
-  }, [
-    audioInstanceRef,
-    data.src,
-    displayData.id,
-    kind,
-    playing,
-    playingId,
-    playingSrc,
-  ])
+  }, [data.src, displayData.id, kind, playing, playingId, playingSrc])
 
   const playPauseIcons = isPlaying ? (
     <FilledPauseIcon

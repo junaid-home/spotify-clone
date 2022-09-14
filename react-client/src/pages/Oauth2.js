@@ -15,7 +15,7 @@ function Oauth2() {
   const [query] = useState(() => window.location.href.split('?')[1])
   const [loginWithOauth2] = useLoginWithOauth2Mutation()
 
-  const saveAndRedirect = result => {
+  const __saveAndRedirect = result => {
     const data = result.data
     if (data?.data?.user) {
       return setRedirect(true)
@@ -30,11 +30,11 @@ function Oauth2() {
     if (!requested.current) {
       if (window.location.href.includes('facebook/redirect')) {
         loginWithOauth2({uri: '/facebook/login', data: query}).then(result =>
-          saveAndRedirect(result),
+          __saveAndRedirect(result),
         )
       } else if (window.location.href.includes('google/redirect')) {
         loginWithOauth2({uri: '/google/login', data: query}).then(result =>
-          saveAndRedirect(result),
+          __saveAndRedirect(result),
         )
       }
     }

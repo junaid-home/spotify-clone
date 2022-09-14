@@ -1,8 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {useState} from 'react'
-import {toast} from 'react-toastify'
 import styled from '@emotion/styled/macro'
-import {useDispatch, useSelector} from 'react-redux'
 import {RadioGroup, ReversedRadioButton} from 'react-radio-buttons'
 
 import Typography from 'components/typography'
@@ -10,53 +7,11 @@ import Button from 'components/button'
 import FormGroup from 'components/form-group'
 
 import colors from 'utils/colors'
-
-import {useUpdateUserMutation} from 'store/api/auth'
-import {updateUser as updateUserInStore} from 'store/reducers/auth'
+import useProfileUpdate from 'hooks/use-update-profile'
 
 function Profile() {
-  const user = useSelector(s => s.auth.user)
-  const dispatch = useDispatch()
-
-  const [name, setName] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
-  const [country, setCountry] = useState(user.country)
-  const [gender, setGender] = useState(user.gender || 'male')
-  const [dob, setDob] = useState(() => {
-    if (user.dob) {
-      const date = new Date(user.dob).toISOString()
-      return date.slice(0, 10)
-    } else {
-      const now = new Date(Date.now()).toISOString()
-      return now.slice(0, 10)
-    }
-  })
-  const [updateUser, {isLoading}] = useUpdateUserMutation()
-
-  const isEmailNotChangeable = Boolean(
-    email.endsWith('@facebook.com') || email.endsWith('@google.com'),
-  )
-
-  const handleFormSubmission = async e => {
-    e.preventDefault()
-
-    const date = dob?.split('-')
-    const jsDate = new Date(date[0], date[1], date[2])
-
-    const data = {name, email, country, gender, dob: jsDate.getTime()}
-
-    if (isEmailNotChangeable && email !== user.email) {
-      return toast.error("this Email couldn't be changed!")
-    }
-
-    const result = await updateUser(data)
-    if (result.data.data.user) {
-      dispatch(updateUserInStore(result.data.data.user))
-      toast.success('User Successfully updated!')
-    } else {
-      toast.error(result.error?.data?.message || result.error.error)
-    }
-  }
+  const {data, setData, isEmailNotChangeable, isLoading, handleFormSubmission} =
+    useProfileUpdate()
 
   return (
     <ContentContainer>
@@ -69,16 +24,16 @@ function Profile() {
           placeholder="Enter your profile name."
           type="text"
           css={{marginTop: 12}}
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={data.name}
+          onChange={e => setData(prev => ({...prev, name: e.target.value}))}
         />
         <FormGroup
           label="Email Address"
           placeholder="Email address or username."
           type="email"
-          value={email}
+          value={data.email}
           disabled={isEmailNotChangeable}
-          onChange={e => setEmail(e.target.value)}
+          onChange={e => setData(prev => ({...prev, email: e.target.value}))}
           css={{
             '&:hover': {
               cursor: isEmailNotChangeable ? 'not-allowed' : 'default',
@@ -90,8 +45,8 @@ function Profile() {
           placeholder="Enter your country name."
           type="text"
           css={{marginTop: 12}}
-          value={country}
-          onChange={e => setCountry(e.target.value)}
+          value={data.country}
+          onChange={e => setData(prev => ({...prev, country: e.target.value}))}
         />
         <Typography
           variant="label"
@@ -101,8 +56,8 @@ function Profile() {
           Gender
         </Typography>
         <RadioGroup
-          value={gender}
-          onChange={value => setGender(value)}
+          value={data.gender}
+          onChange={value => setData(prev => ({...prev, gender: value}))}
           horizontal
         >
           <ReversedRadioButton value="male">Male</ReversedRadioButton>
@@ -113,8 +68,8 @@ function Profile() {
           placeholder="Enter your date of birth."
           type="date"
           css={{marginTop: 12}}
-          value={dob}
-          onChange={e => setDob(e.target.value)}
+          value={data.dob}
+          onChange={e => setData(prev => ({...prev, dob: e.target.value}))}
         />
         <Button loading={isLoading} css={{marginTop: 30}}>
           SAVE

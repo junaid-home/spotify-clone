@@ -30,13 +30,15 @@ function Playlist() {
   const [likePlaylist] = useLikePlaylistMutation()
 
   const playlist = useMemo(() => data?.data, [data])
+  const color = useMemo(() => playlist?.Color?.code2, [playlist])
+  const likedSongs = useMemo(() => likedData?.data?.songs, [likedData])
+  const likedEntities = useMemo(() => likedData?.data?.playlists, [likedData])
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   if (isError || isLikedError) return <ErrorTooltip error={error} />
-
   if (isLoading || isLikedSongs) return <FullPageSpinner />
 
   return (
@@ -44,9 +46,9 @@ function Playlist() {
       <EntityInfo data={playlist} />
       <SongList
         data={playlist}
-        color={playlist.Color.code2}
-        likedSongs={likedData.data.songs}
-        likedEntities={likedData.data.playlists}
+        color={color}
+        likedSongs={likedSongs}
+        likedEntities={likedEntities}
         refetchLikes={refetchLikes}
         likeEntity={likePlaylist}
       />

@@ -27,6 +27,8 @@ function Artist() {
   const [likeArtist] = useLikeArtistMutation()
 
   const artist = useMemo(() => data?.data, [data])
+  const likedSongs = useMemo(() => likedData?.data?.songs, [likedData])
+  const likedItems = useMemo(() => likedData?.data?.artists, [likedData])
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
@@ -40,8 +42,8 @@ function Artist() {
       <EntityInfo data={artist} kind="artist" />
       <SongList
         data={artist}
-        likedSongs={likedData.data.songs}
-        likedEntities={likedData.data.artists}
+        likedSongs={likedSongs}
+        likedEntities={likedItems}
         refetchLikes={refetchLikes}
         likeEntity={likeArtist}
       />

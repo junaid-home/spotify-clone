@@ -16,9 +16,7 @@ function Favourites() {
   const {data, isLoading, isError, error} = useGetLikedSongsQuery()
 
   if (isError) return <ErrorTooltip error={error} />
-  if (isLoading) {
-    return <FullPageSpinner />
-  }
+  if (isLoading) return <FullPageSpinner />
 
   return (
     <Wrapper>
