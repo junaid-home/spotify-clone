@@ -51,6 +51,7 @@ const MainArea = styled.div({
 
   [mq.md]: {
     marginLeft: 0,
+    paddingBottom: 0,
   },
 })
 
