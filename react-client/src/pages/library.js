@@ -20,11 +20,17 @@ function Library() {
   return (
     <Wrapper>
       <CardList title="Songs" kind="song" data={data?.data?.songs} />
-      <CardList title="Artists" kind="artist" data={data?.data?.artists} />
+      <CardList
+        title="Artists"
+        kind="artist"
+        data={data?.data?.artists}
+        css={{marginTop: 40}}
+      />
       <CardList
         title="Playlists"
         kind="playlist"
         data={data?.data?.playlists}
+        css={{marginTop: 40}}
       />
     </Wrapper>
   )
