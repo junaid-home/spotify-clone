@@ -40,9 +40,24 @@ function Search() {
           <Typography>{error}</Typography>
         </CenteredContent>
       ) : null}
-      <CardList title="Songs" kind="song" data={data.songs} />
-      <CardList title="Artists" kind="artist" data={data.artists} />
-      <CardList title="Playlists" kind="playlist" data={data.playlists} />
+      <CardList
+        title="Songs"
+        kind="song"
+        data={data.songs}
+        css={{marginTop: 40}}
+      />
+      <CardList
+        title="Artists"
+        kind="artist"
+        data={data.artists}
+        css={{marginTop: 40}}
+      />
+      <CardList
+        title="Playlists"
+        kind="playlist"
+        data={data.playlists}
+        css={{marginTop: 40}}
+      />
     </Wrapper>
   )
 }
